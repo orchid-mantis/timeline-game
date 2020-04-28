@@ -1,0 +1,14 @@
+version: '3'
+services:
+  web:
+    container_name: "timeline-game-dev"
+    volumes:
+      - ..:/workspaces/timeline-game:cached
+    build: .
+
+    ports:
+      - '9090:9090' # shadow-cljs - HTTP server available at http://localhost:9090
+      - '9630:9630' # shadow-cljs - server running at http://localhost:9630
+      - '8777:8777' # shadow-cljs - nREPL server running at http://localhost:9630
+
+    command: tail -f /dev/null
