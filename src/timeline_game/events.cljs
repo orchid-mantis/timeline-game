@@ -37,12 +37,12 @@
   (or (empty? xs) (apply <= xs)))
 
 (rf/reg-event-fx
- :validate-card-position
+ :validate-card-placement
  (fn [{:keys [db]} _]
    (let [timeline (get-in db [:timeline :ids])
          valid? (ordered? timeline)
          id (get-in db [:user-action :selected-card-id])]
-     {:db (assoc-in db [:timeline :status] {:id id :valid-position? valid? :active? true})
+     {:db (assoc-in db [:timeline :status] {:id id :valid? valid? :active? true})
       :timeout [1000 [:remove-misplaced-card id valid?]]})))
 
 (rf/reg-event-db

@@ -16,7 +16,7 @@
    (vec (map cards timeline))))
 
 (rf/reg-sub
- :place-card-status
+ :card-placement-status
  (fn [db]
    (get-in db [:timeline :status])))
 
@@ -32,7 +32,7 @@
         :on-drop (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:place-card (/ pos 2)])
-                   (rf/dispatch [:validate-card-position])
+                   (rf/dispatch [:validate-card-placement])
                    (swap! s update-in [:drag-enter pos] (fn [] false)))
 
         :style {:display :table-cell
@@ -45,7 +45,7 @@
   (let [s (reagent/atom {})]
     (fn []
       (let [cards @(rf/subscribe [:timeline/cards])
-            status @(rf/subscribe [:place-card-status])
+            status @(rf/subscribe [:card-placement-status])
             items (concat [:drop-zone] (interpose :drop-zone cards) [:drop-zone])]
         [:div
          [:ul
@@ -61,7 +61,7 @@
                              :width 100
                              :border "2px solid blue"
                              :background-color (when (and (:active? status) (= id (:id status)))
-                                                 (if (:valid-position? status)
+                                                 (if (:valid? status)
                                                    :green
                                                    :red))}}
                 (:title item)])))]
