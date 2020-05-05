@@ -60,9 +60,10 @@
                              :padding 5
                              :width 100
                              :border "2px solid blue"
-                             :background-color (when (= id (:id status)) (if (:valid-position? status)
-                                                                           :green
-                                                                           :red))}}
+                             :background-color (when (and (:active? status) (= id (:id status)))
+                                                 (if (:valid-position? status)
+                                                   :green
+                                                   :red))}}
                 (:title item)])))]
          ;[:p (pr-str @s)]
          ]))))

@@ -42,7 +42,7 @@
    (let [timeline (get-in db [:timeline :ids])
          valid? (ordered? timeline)
          id (get-in db [:user-action :selected-card-id])]
-     {:db (assoc-in db [:timeline :status] {:id id :valid-position? valid?})
+     {:db (assoc-in db [:timeline :status] {:id id :valid-position? valid? :active? true})
       :timeout [1000 [:remove-misplaced-card id valid?]]})))
 
 (rf/reg-event-db
@@ -56,4 +56,4 @@
 
                                        :else
                                        ids)))
-       (assoc-in [:timeline :status] {}))))
+       (update-in [:timeline :status] update :active? not))))
