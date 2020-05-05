@@ -6,6 +6,11 @@
  (fn [[time event]]
    (js/setTimeout #(rf/dispatch event) time)))
 
+(rf/reg-fx
+ :dispatch
+ (fn [event]
+   (rf/dispatch event)))
+
 (rf/reg-event-db
  :select-card
  (fn [db [_ id]]
@@ -43,17 +48,28 @@
          valid? (ordered? timeline)
          id (get-in db [:user-action :selected-card-id])]
      {:db (assoc-in db [:timeline :status] {:id id :valid? valid? :active? true})
-      :timeout [1000 [:remove-misplaced-card id valid?]]})))
+      :timeout [300 [:remove-misplaced-card id valid?]]})))
+
+(rf/reg-event-fx
+ :remove-misplaced-card
+ (fn [{:keys [db]} [_ id valid?]]
+   {:db (-> db
+            (update-in [:timeline :ids] (fn [ids]
+                                          (cond
+                                            (not valid?)
+                                            (remove-card ids id)
+
+                                            :else
+                                            ids)))
+            (update-in [:timeline :status] update :active? not))
+    :dispatch [:activate-player]}))
 
 (rf/reg-event-db
- :remove-misplaced-card
- (fn [db [_ id valid?]]
-   (-> db
-       (update-in [:timeline :ids] (fn [ids]
-                                     (cond
-                                       (not valid?)
-                                       (remove-card ids id)
+ :disable-player
+ (fn [db]
+   (assoc-in db [:player :active?] false)))
 
-                                       :else
-                                       ids)))
-       (update-in [:timeline :status] update :active? not))))
+(rf/reg-event-db
+ :activate-player
+ (fn [db]
+   (assoc-in db [:player :active?] true)))

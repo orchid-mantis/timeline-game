@@ -18,6 +18,11 @@
         (assoc :hand cards-ids)
         (update :deck #(drop hand-size %)))))
 
+(defn init-player [db]
+  (-> db
+      (assoc :player {:active? true})
+      init-hand))
+
 (defn init-timeline [db]
   (let [cards-ids (take 1 (:deck db))]
     (-> db
@@ -29,8 +34,8 @@
  (fn [{:keys [db]} _]
    {:db (merge db (-> db/default-db
                       init-deck
-                      init-hand
-                      init-timeline))}))
+                      init-timeline
+                      init-player))}))
 
 (rf/reg-sub
  :deck
@@ -41,6 +46,11 @@
  :cards
  (fn [db]
    (:cards db)))
+
+(rf/reg-sub
+ :player-turn?
+ (fn [db]
+   (get-in db [:player :active?])))
 
 (defn ^:dev/after-load render []
   (rf/clear-subscription-cache!)
