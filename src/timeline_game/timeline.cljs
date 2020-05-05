@@ -32,7 +32,7 @@
         :on-drop (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:place-card (/ pos 2)])
-                   (rf/dispatch [:validate-timeline])
+                   (rf/dispatch [:validate-card-position])
                    (swap! s update-in [:drag-enter pos] (fn [] false)))
 
         :style {:display :table-cell
@@ -60,7 +60,7 @@
                              :padding 5
                              :width 100
                              :border "2px solid blue"
-                             :background-color (when (= id (:id status)) (if (:valid status)
+                             :background-color (when (= id (:id status)) (if (:valid-position? status)
                                                                            :green
                                                                            :red))}}
                 (:title item)])))]
