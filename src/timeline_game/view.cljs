@@ -6,10 +6,10 @@
   [:div
    [:h1 "Timeline Game"]
 
-   [:div.hand
-    [:h2 "Hand"]
-    [hand/cards-in-hand]]
-
    [:div.timeline
     [:h2 "Timeline"]
-    [timeline/cards-in-timeline]]])
+    [timeline/cards-in-timeline]]
+
+   [:div.hand
+    [:h2 "Hand"]
+    [hand/cards-in-hand]]])
