@@ -22,13 +22,16 @@
         tail (drop pos items)]
     (vec (concat head [item] tail))))
 
+(defn remove-card [ids id]
+  (remove #(= % id) ids))
+
 (rf/reg-event-db
  :place-card
  (fn [db [_ pos]]
    (let [id (get-in db [:user-action :selected-card-id])]
      (-> db
          (update-in [:timeline :ids] put-before pos id)
-         (update-in [:hand] (fn [ids] (remove #(= % id) ids)))))))
+         (update-in [:hand] remove-card id)))))
 
 (defn ordered? [xs]
   (or (empty? xs) (apply <= xs)))
@@ -41,9 +44,6 @@
          id (get-in db [:user-action :selected-card-id])]
      {:db (assoc-in db [:timeline :status] {:id id :valid-position? valid?})
       :timeout [1000 [:remove-misplaced-card id valid?]]})))
-
-(defn remove-card [ids id]
-  (remove #(= % id) ids))
 
 (rf/reg-event-db
  :remove-misplaced-card
