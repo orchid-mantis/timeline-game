@@ -3,15 +3,15 @@
             [reagent.core :as reagent]))
 
 (rf/reg-sub
- :timeline
+ :timeline-ids
  (fn [db]
-   (:timeline db)))
+   (get-in db [:timeline :ids])))
 
 (rf/reg-sub
  :timeline/cards
  (fn []
    [(rf/subscribe [:cards])
-    (rf/subscribe [:timeline])])
+    (rf/subscribe [:timeline-ids])])
  (fn [[cards timeline]]
    (vec (map cards timeline))))
 

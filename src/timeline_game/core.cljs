@@ -21,7 +21,7 @@
 (defn init-timeline [db]
   (let [cards-ids (take 1 (:deck db))]
     (-> db
-        (assoc :timeline (vec cards-ids))
+        (assoc-in [:timeline :ids] (vec cards-ids))
         (update :deck #(drop 1 %)))))
 
 (rf/reg-event-db

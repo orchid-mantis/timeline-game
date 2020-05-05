@@ -22,6 +22,5 @@
  (fn [db [_ pos]]
    (let [id (get-in db [:user-action :selected-card-id])]
      (-> db
-         (update-in [:timeline] put-before pos id)
-         (update-in [:hand] (fn [ids] (remove #(= % id) ids)))
-         ))))
+         (update-in [:timeline :ids] put-before pos id)
+         (update-in [:hand] (fn [ids] (remove #(= % id) ids)))))))
