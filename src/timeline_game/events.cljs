@@ -40,9 +40,20 @@
          valid? (ordered? timeline)
          id (get-in db [:user-action :selected-card-id])]
      {:db (assoc-in db [:timeline :status] {:id id :valid valid?})
-      :timeout [1000 [:clear-status]]})))
+      :timeout [1000 [:remove-misplaced-card id valid?]]})))
+
+(defn remove-card [ids id]
+  (remove #(= % id) ids))
 
 (rf/reg-event-db
- :clear-status
- (fn [db]
-   (assoc-in db [:timeline :status] {})))
+ :remove-misplaced-card
+ (fn [db [_ id valid?]]
+   (-> db
+       (update-in [:timeline :ids] (fn [ids]
+                                     (cond
+                                       (not valid?)
+                                       (remove-card ids id)
+
+                                       :else
+                                       ids)))
+       (assoc-in [:timeline :status] {}))))
