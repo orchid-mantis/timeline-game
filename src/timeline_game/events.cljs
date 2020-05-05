@@ -1,6 +1,11 @@
 (ns timeline-game.events
   (:require [re-frame.core :as rf]))
 
+(rf/reg-fx
+ :timeout
+ (fn [[time event]]
+   (js/setTimeout #(rf/dispatch event) time)))
+
 (rf/reg-event-db
  :select-card
  (fn [db [_ id]]
@@ -24,3 +29,20 @@
      (-> db
          (update-in [:timeline :ids] put-before pos id)
          (update-in [:hand] (fn [ids] (remove #(= % id) ids)))))))
+
+(defn ordered? [xs]
+  (or (empty? xs) (apply <= xs)))
+
+(rf/reg-event-fx
+ :validate-timeline
+ (fn [{:keys [db]} _]
+   (let [timeline (get-in db [:timeline :ids])
+         valid? (ordered? timeline)
+         id (get-in db [:user-action :selected-card-id])]
+     {:db (assoc-in db [:timeline :status] {:id id :valid valid?})
+      :timeout [1000 [:clear-status]]})))
+
+(rf/reg-event-db
+ :clear-status
+ (fn [db]
+   (assoc-in db [:timeline :status] {})))
