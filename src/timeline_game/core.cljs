@@ -15,7 +15,7 @@
 (defn init-hand [db]
   (let [cards-ids (take hand-size (:deck db))]
     (-> db
-        (assoc :hand cards-ids)
+        (assoc-in [:player :hand] cards-ids)
         (update :deck #(drop hand-size %)))))
 
 (defn init-player [db]

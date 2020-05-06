@@ -14,12 +14,12 @@
 (rf/reg-event-db
  :select-card
  (fn [db [_ id]]
-   (assoc-in db [:user-action :selected-card-id] id)))
+   (assoc-in db [:player :selected-card-id] id)))
 
 (rf/reg-event-db
- :clear-card-selection
+ :deselect-card
  (fn [db]
-   (assoc-in db [:user-action :selected-card-id] :nothing)))
+   (assoc-in db [:player :selected-card-id] :nothing)))
 
 (defn put-before [items pos item]
   (let [items (remove #{item} items)
@@ -33,10 +33,10 @@
 (rf/reg-event-db
  :place-card
  (fn [db [_ pos]]
-   (let [id (get-in db [:user-action :selected-card-id])]
+   (let [id (get-in db [:player :selected-card-id])]
      (-> db
          (update-in [:timeline :ids] put-before pos id)
-         (update-in [:hand] remove-card id)))))
+         (update-in [:player :hand] remove-card id)))))
 
 (defn ordered? [xs]
   (or (empty? xs) (apply <= xs)))
@@ -46,7 +46,7 @@
  (fn [{:keys [db]} _]
    (let [timeline (get-in db [:timeline :ids])
          valid? (ordered? timeline)
-         id (get-in db [:user-action :selected-card-id])]
+         id (get-in db [:player :selected-card-id])]
      {:db (assoc-in db [:timeline :status] {:id id :valid? valid? :active? true})
       :timeout [300 [:remove-misplaced-card id valid?]]})))
 

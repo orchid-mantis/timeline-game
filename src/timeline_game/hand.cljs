@@ -4,7 +4,7 @@
 (rf/reg-sub
  :hand
  (fn [db]
-   (:hand db)))
+   (get-in db [:player :hand])))
 
 (rf/reg-sub
  :hand/cards
@@ -26,7 +26,7 @@
             :draggable (when @player-turn? true)
             :on-drag-start #(rf/dispatch [:select-card id])
             :on-drag-end (fn []
-                           (rf/dispatch [:clear-card-selection]))
+                           (rf/dispatch [:deselect-card]))
 
             :style {:display :inline-block
                     :margin 5
