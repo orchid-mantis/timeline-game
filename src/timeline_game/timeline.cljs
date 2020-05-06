@@ -32,7 +32,6 @@
         :on-drop (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:place-card (/ pos 2)])
-                   (rf/dispatch [:validate-card-placement])
                    (swap! s update-in [:drag-enter pos] (fn [] false)))
 
         :style {:display :table-cell

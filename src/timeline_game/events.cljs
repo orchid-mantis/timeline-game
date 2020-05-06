@@ -1,16 +1,6 @@
 (ns timeline-game.events
   (:require [re-frame.core :as rf]))
 
-(rf/reg-fx
- :timeout
- (fn [[time event]]
-   (js/setTimeout #(rf/dispatch event) time)))
-
-(rf/reg-fx
- :dispatch
- (fn [event]
-   (rf/dispatch event)))
-
 (rf/reg-event-db
  :select-card
  (fn [db [_ id]]
@@ -36,37 +26,44 @@
 (defn activate-player [db]
   (assoc-in db [:player :active?] true))
 
-(rf/reg-event-db
- :place-card
- (fn [db [_ pos]]
-   (let [id (get-in db [:player :selected-card-id])]
-     (-> db
-         (update-in [:timeline :ids] put-before pos id)
-         (update-in [:player :hand] remove-card id)
-         deactivate-player))))
-
 (defn ordered? [xs]
   (or (empty? xs) (apply <= xs)))
 
-(rf/reg-event-fx
- :validate-card-placement
- (fn [{:keys [db]} _]
-   (let [timeline (get-in db [:timeline :ids])
-         valid? (ordered? timeline)
-         id (get-in db [:player :selected-card-id])]
-     {:db (assoc-in db [:timeline :status] {:id id :valid? valid? :active? true})
-      :timeout [300 [:remove-misplaced-card id valid?]]})))
+(defn valid-placement? [timeline]
+  (ordered? timeline))
+
+(defn validate-card-placement [db id]
+  (let [timeline (get-in db [:timeline :ids])
+        valid? (valid-placement? timeline)]
+    (assoc-in db [:timeline :status] {:id id :valid? valid? :active? true})))
 
 (rf/reg-event-fx
+ :place-card
+ (fn [{:keys [db]} [_ pos]]
+   (let [id (get-in db [:player :selected-card-id])]
+     {:db (-> db
+              (update-in [:timeline :ids] put-before pos id)
+              (update-in [:player :hand] remove-card id)
+              (validate-card-placement id)
+              deactivate-player)
+      :timeout [300 [:remove-misplaced-card id]]})))
+
+(rf/reg-fx
+ :timeout
+ (fn [[time event]]
+   (js/setTimeout #(rf/dispatch event) time)))
+
+(rf/reg-event-db
  :remove-misplaced-card
- (fn [{:keys [db]} [_ id valid?]]
-   {:db (-> db
-            (update-in [:timeline :ids] (fn [ids]
-                                          (cond
-                                            (not valid?)
-                                            (remove-card ids id)
+ (fn [db [_ id]]
+   (let [status (get-in db [:timeline :status])]
+     (-> db
+         (update-in [:timeline :ids] (fn [ids]
+                                       (cond
+                                         (not (:valid? status))
+                                         (remove-card ids id)
 
-                                            :else
-                                            ids)))
-            (update-in [:timeline :status] update :active? not)
-            activate-player)}))
+                                         :else
+                                         ids)))
+         (update-in [:timeline :status] update :active? not)
+         activate-player))))
