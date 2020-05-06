@@ -41,11 +41,11 @@
    "*"])
 
 (defn cards-in-timeline []
-  (let [s (reagent/atom {})]
+  (let [cards (rf/subscribe [:timeline/cards])
+        status (rf/subscribe [:card-placement-status])
+        s (reagent/atom {})]
     (fn []
-      (let [cards @(rf/subscribe [:timeline/cards])
-            status @(rf/subscribe [:card-placement-status])
-            items (concat [:drop-zone] (interpose :drop-zone cards) [:drop-zone])]
+      (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
         [:div
          [:ul
           (doall
@@ -59,8 +59,8 @@
                              :padding 5
                              :width 100
                              :border "2px solid blue"
-                             :background-color (when (and (:active? status) (= id (:id status)))
-                                                 (if (:valid? status)
+                             :background-color (when (and (:active? @status) (= id (:id @status)))
+                                                 (if (:valid? @status)
                                                    :green
                                                    :red))}}
                 (:title item)])))]

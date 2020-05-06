@@ -15,11 +15,12 @@
    (map cards hand)))
 
 (defn cards-in-hand []
-  (let [player-turn? (rf/subscribe [:player-turn?])]
+  (let [player-turn? (rf/subscribe [:player-turn?])
+        cards (rf/subscribe [:hand/cards])]
     (fn []
       [:ul
        (doall
-        (for [card @(rf/subscribe [:hand/cards])
+        (for [card @cards
               :let [id (:id card)]]
           [:li
            {:key id
