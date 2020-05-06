@@ -59,11 +59,8 @@
    (let [status (get-in db [:timeline :status])]
      (-> db
          (update-in [:timeline :ids] (fn [ids]
-                                       (cond
-                                         (not (:valid? status))
-                                         (remove-card ids id)
-
-                                         :else
-                                         ids)))
+                                       (if (:valid? status)
+                                         ids
+                                         (remove-card ids id))))
          (assoc-in [:timeline :status :active?] false)
          activate-player))))
