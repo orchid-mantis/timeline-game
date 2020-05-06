@@ -31,7 +31,6 @@
                          (swap! s update-in [:drag-enter pos] (fn [] false)))
         :on-drop (fn [e]
                    (.preventDefault e)
-                   (rf/dispatch [:disable-player])
                    (rf/dispatch [:place-card (/ pos 2)])
                    (rf/dispatch [:validate-card-placement])
                    (swap! s update-in [:drag-enter pos] (fn [] false)))

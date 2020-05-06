@@ -30,13 +30,20 @@
 (defn remove-card [ids id]
   (remove #(= % id) ids))
 
+(defn deactivate-player [db]
+  (assoc-in db [:player :active?] false))
+
+(defn activate-player [db]
+  (assoc-in db [:player :active?] true))
+
 (rf/reg-event-db
  :place-card
  (fn [db [_ pos]]
    (let [id (get-in db [:player :selected-card-id])]
      (-> db
          (update-in [:timeline :ids] put-before pos id)
-         (update-in [:player :hand] remove-card id)))))
+         (update-in [:player :hand] remove-card id)
+         deactivate-player))))
 
 (defn ordered? [xs]
   (or (empty? xs) (apply <= xs)))
@@ -61,15 +68,5 @@
 
                                             :else
                                             ids)))
-            (update-in [:timeline :status] update :active? not))
-    :dispatch [:activate-player]}))
-
-(rf/reg-event-db
- :disable-player
- (fn [db]
-   (assoc-in db [:player :active?] false)))
-
-(rf/reg-event-db
- :activate-player
- (fn [db]
-   (assoc-in db [:player :active?] true)))
+            (update-in [:timeline :status] update :active? not)
+            activate-player)}))
