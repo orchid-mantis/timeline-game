@@ -65,5 +65,5 @@
 
                                          :else
                                          ids)))
-         (update-in [:timeline :status] update :active? not)
+         (assoc-in [:timeline :status :active?] false)
          activate-player))))
