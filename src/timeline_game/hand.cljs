@@ -33,7 +33,7 @@
                     :margin 5
                     :padding 5
                     :width 100
-                    :border "2px solid green"
+                    :border "2px solid blue"
                     :user-select (when (not @player-turn?) :none)
                     :background-color (when (not @player-turn?) :grey)}}
            (:title card)]))])))
