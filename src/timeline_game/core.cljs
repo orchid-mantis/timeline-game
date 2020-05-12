@@ -21,7 +21,7 @@
 (defn init-player [db]
   (-> db
       (assoc :player {:active? true})
-      (assoc-in [:player :misplaced-cards] '())
+      (assoc-in [:player :history] {:ids '() :validity {}})
       init-hand))
 
 (defn init-timeline [db]
