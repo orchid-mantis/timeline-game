@@ -14,7 +14,7 @@
  (fn [[cards hand]]
    (map cards hand)))
 
-(defn cards-in-hand []
+(defn view []
   (let [player-turn? (rf/subscribe [:player-turn?])
         cards (rf/subscribe [:hand/cards])]
     (fn []

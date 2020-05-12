@@ -40,7 +40,7 @@
                 :width 20}}
    "*"])
 
-(defn cards-in-timeline []
+(defn view []
   (let [cards (rf/subscribe [:timeline/cards])
         status (rf/subscribe [:card-placement-status])
         s (reagent/atom {})]

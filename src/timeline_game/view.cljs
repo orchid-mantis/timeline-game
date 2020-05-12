@@ -11,8 +11,8 @@
 
    [:div.timeline
     [:h2 "Timeline"]
-    [timeline/cards-in-timeline]]
+    [timeline/view]]
 
    [:div.hand
     [:h2 "Hand"]
-    [hand/cards-in-hand]]])
+    [hand/view]]])
