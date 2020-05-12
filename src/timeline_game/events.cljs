@@ -72,6 +72,7 @@
               db
               (-> db
                   (update-in [:timeline :ids] #(remove-card % id))
+                  (update-in [:player :misplaced-cards] conj id)
                   (draw-card)))))
          (assoc-in [:timeline :status :active?] false)
          activate-player))))
