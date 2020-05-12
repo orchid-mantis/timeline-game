@@ -46,7 +46,7 @@
               (update-in [:player :hand] remove-card id)
               (validate-card-placement id)
               deactivate-player)
-      :timeout [300 [:remove-misplaced-card id]]})))
+      :timeout [300 [:finish-place-card id]]})))
 
 (rf/reg-fx
  :timeout
@@ -54,7 +54,7 @@
    (js/setTimeout #(rf/dispatch event) time)))
 
 (rf/reg-event-db
- :remove-misplaced-card
+ :finish-place-card
  (fn [db [_ id]]
    (let [status (get-in db [:timeline :status])]
      (-> db
