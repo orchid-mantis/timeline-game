@@ -53,14 +53,25 @@
  (fn [[time event]]
    (js/setTimeout #(rf/dispatch event) time)))
 
+(defn draw-card [db]
+  (let [card-id (first (:deck db))]
+    (if card-id
+      (-> db
+          (update-in [:player :hand] conj card-id)
+          (update :deck #(drop 1 %)))
+      db)))
+
 (rf/reg-event-db
  :finish-place-card
  (fn [db [_ id]]
-   (let [status (get-in db [:timeline :status])]
+   (let [status (get-in db [:timeline :status])
+         valid-placement? (:valid? status)]
      (-> db
-         (update-in [:timeline :ids] (fn [ids]
-                                       (if (:valid? status)
-                                         ids
-                                         (remove-card ids id))))
+         ((fn [db]
+            (if valid-placement?
+              db
+              (-> db
+                  (update-in [:timeline :ids] #(remove-card % id))
+                  (draw-card)))))
          (assoc-in [:timeline :status :active?] false)
          activate-player))))
