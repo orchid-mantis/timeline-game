@@ -12,7 +12,7 @@
       (let [show? (not= @game-result :await)
             display-data (case @game-result
                            :player-won {:text "You won!" :color :green}
-                           :player-lost {:text "Game over!" :color :red}
+                           :player-lost {:text "Game over" :color :red}
                            nil)]
         [:div {:style {:position :fixed
                        :display (if show? :block :none)
