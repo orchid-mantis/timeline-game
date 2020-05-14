@@ -1,12 +1,14 @@
 (ns timeline-game.view
   (:require [timeline-game.hand :as hand]
             [timeline-game.timeline :as timeline]
-            [timeline-game.history :as history]))
+            [timeline-game.history :as history]
+            [timeline-game.game-result :as game-result]))
 
 (defn root []
   [:div
    [:h1 "Timeline Game"]
 
+   [game-result/view]
    [history/view]
 
    [:div.timeline
