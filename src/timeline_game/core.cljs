@@ -30,13 +30,17 @@
         (assoc-in [:timeline :ids] (vec cards-ids))
         (update :deck #(drop 1 %)))))
 
+(defn init-game [db]
+  (-> db
+      init-deck
+      init-timeline
+      init-player))
+
 (rf/reg-event-fx
  ::load-app
  (fn [{:keys [db]} _]
    {:db (merge db (-> db/default-db
-                      init-deck
-                      init-timeline
-                      init-player))}))
+                      init-game))}))
 
 (rf/reg-sub
  :deck
