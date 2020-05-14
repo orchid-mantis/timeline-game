@@ -40,6 +40,11 @@
       init-timeline
       init-player))
 
+(rf/reg-event-db
+ :new-game
+ (fn [db]
+   (init-game db)))
+
 (rf/reg-event-fx
  ::load-app
  (fn [{:keys [db]} _]

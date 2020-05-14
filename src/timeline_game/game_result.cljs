@@ -25,10 +25,18 @@
                        :background-color "rgba(255,255,255,0.9)"
                        :z-index 2}}
          [:div {:style {:position :absolute
-                        :top "50%"
+                        :top "40%"
                         :left "50%"
-                        :font-size "50px"
-                        :color (:color display-data)
                         :transform "translate(-50%,-50%)"
                         :-ms-transform "translate(-50%,-50%)"}}
-          (:text display-data)]]))))
+          [:h1 {:style {:font-size "50px"
+                        :color (:color display-data)}}
+           (:text display-data)]
+
+          [:button
+           {:on-click #(rf/dispatch [:new-game])
+            :style {:width 150
+                    :padding "10px 20px"
+                    :display :block
+                    :margin "10px auto 0px auto"}}
+           "Start a new game"]]]))))
