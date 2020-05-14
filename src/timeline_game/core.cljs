@@ -30,8 +30,12 @@
         (assoc-in [:timeline :ids] (vec cards-ids))
         (update :deck #(drop 1 %)))))
 
+(defn init-game-state [db]
+  (assoc db :game {:result :await}))
+
 (defn init-game [db]
   (-> db
+      init-game-state
       init-deck
       init-timeline
       init-player))

@@ -61,6 +61,12 @@
           (update :deck #(drop 1 %)))
       db)))
 
+(defn eval-turn [hand error-count]
+  (cond
+    (> error-count 3) [false :player-lost]
+    (empty? hand) [false :player-won]
+    :else [true nil]))
+
 (rf/reg-event-db
  :finish-place-card
  (fn [db [_ id]]
@@ -72,8 +78,15 @@
               db
               (-> db
                   (update-in [:timeline :ids] #(remove-card % id))
+                  (update-in [:player :error-count] (fnil inc 0))
                   (draw-card)))))
          (update-in [:player :history :ids] conj id)
          (assoc-in [:player :history :validity id] valid-placement?)
          (assoc-in [:timeline :status :active?] false)
-         activate-player))))
+         ((fn [db]
+            (let [hand (get-in db [:player :hand])
+                  error-count (get-in db [:player :error-count])
+                  [next-round? game-result] (eval-turn hand error-count)]
+              (if next-round?
+                (activate-player db)
+                (assoc-in db [:game :result] game-result)))))))))
