@@ -38,5 +38,6 @@
             :style {:width 150
                     :padding "10px 20px"
                     :display :block
-                    :margin "10px auto 0px auto"}}
+                    :margin "10px auto 0px auto"
+                    :cursor :pointer}}
            "Start a new game"]]]))))
