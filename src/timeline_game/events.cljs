@@ -102,7 +102,8 @@
               [card-id new-hand] (select-card hand)]
           (-> db
               (assoc-in [:bot :hand] new-hand)
-              (update-in [:timeline :ids] bot-place-card card-id)))
+              (update-in [:timeline :ids] bot-place-card card-id)
+              (validate-card-placement card-id)))
     :timeout [300 [:evaluate-round]]}))
 
 (rf/reg-event-db
