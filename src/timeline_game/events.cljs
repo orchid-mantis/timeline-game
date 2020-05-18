@@ -102,13 +102,20 @@
 (rf/reg-event-fx
  :play-bot-turn
  (fn [{:keys [db]}]
-   {:db (let [hand (get-in db [:bot :hand])
-              [card-id new-hand] (select-card hand)]
-          (-> db
-              (assoc-in [:bot :hand] new-hand)
-              (update-in [:timeline :ids] bot-place-card card-id)
-              (validate-card-placement card-id)))
-    :timeout [300 [:evaluate-round]]}))
+   (let [hand (get-in db [:bot :hand])
+         [card-id new-hand] (select-card hand)]
+     {:db
+      (-> db
+          (assoc-in [:bot :hand] new-hand)
+          (update-in [:timeline :ids] bot-place-card card-id)
+          (validate-card-placement card-id))
+      :timeout [500 [:eval-bot-turn card-id]]})))
+
+(rf/reg-event-fx
+ :eval-bot-turn
+ (fn [{:keys [db]} [_ id]]
+   {:db (historize-turn db :bot id true)
+    :dispatch [:evaluate-round]}))
 
 (rf/reg-event-db
  :evaluate-round
