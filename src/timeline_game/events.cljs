@@ -67,6 +67,24 @@
     (empty? hand) [false :player-won]
     :else [true nil]))
 
+(rf/reg-event-fx
+ :finish-place-card
+ (fn [{:keys [db]} [_ id]]
+   {:db (let [status (get-in db [:timeline :status])
+              valid-placement? (:valid? status)]
+          (-> db
+              ((fn [db]
+                 (if valid-placement?
+                   db
+                   (-> db
+                       (update-in [:timeline :ids] #(remove-card % id))
+                       (update-in [:player :error-count] (fnil inc 0))
+                       (draw-card)))))
+              (update-in [:player :history :ids] conj id)
+              (assoc-in [:player :history :validity id] valid-placement?)
+              (assoc-in [:timeline :status :active?] false)))
+    :dispatch [:play-bot-turn]}))
+
 (defn select-card [hand]
   (let [card-id (first (shuffle hand))]
     [card-id (remove-card hand card-id)]))
@@ -77,34 +95,22 @@
     :else (let [[lesser greater] (split-with #(> card-id %) timeline)]
             (vec (concat lesser [card-id] greater)))))
 
-(defn bot-play-turn [db]
-  (let [hand (get-in db [:bot :hand])
-        [card-id new-hand] (select-card hand)]
-    (-> db
-        (assoc-in [:bot :hand] new-hand)
-        (update-in [:timeline :ids] bot-place-card card-id))))
+(rf/reg-event-fx
+ :play-bot-turn
+ (fn [{:keys [db]}]
+   {:db (let [hand (get-in db [:bot :hand])
+              [card-id new-hand] (select-card hand)]
+          (-> db
+              (assoc-in [:bot :hand] new-hand)
+              (update-in [:timeline :ids] bot-place-card card-id)))
+    :timeout [300 [:evaluate-round]]}))
 
 (rf/reg-event-db
- :finish-place-card
- (fn [db [_ id]]
-   (let [status (get-in db [:timeline :status])
-         valid-placement? (:valid? status)]
-     (-> db
-         ((fn [db]
-            (if valid-placement?
-              db
-              (-> db
-                  (update-in [:timeline :ids] #(remove-card % id))
-                  (update-in [:player :error-count] (fnil inc 0))
-                  (draw-card)))))
-         (update-in [:player :history :ids] conj id)
-         (assoc-in [:player :history :validity id] valid-placement?)
-         (assoc-in [:timeline :status :active?] false)
-         (bot-play-turn)
-         ((fn [db]
-            (let [hand (get-in db [:player :hand])
-                  error-count (get-in db [:player :error-count])
-                  [next-round? game-result] (eval-turn hand error-count)]
-              (if next-round?
-                (activate-player db)
-                (assoc-in db [:game :result] game-result)))))))))
+ :evaluate-round
+ (fn [db]
+   (let [hand (get-in db [:player :hand])
+         error-count (get-in db [:player :error-count])
+         [next-round? game-result] (eval-turn hand error-count)]
+     (if next-round?
+       (activate-player db)
+       (assoc-in db [:game :result] game-result)))))
