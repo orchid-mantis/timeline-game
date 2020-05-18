@@ -67,6 +67,23 @@
     (empty? hand) [false :player-won]
     :else [true nil]))
 
+(defn select-card [hand]
+  (let [card-id (first (shuffle hand))]
+    [card-id (remove-card hand card-id)]))
+
+(defn bot-place-card [timeline card-id]
+  (cond
+    (nil? card-id) timeline
+    :else (let [[lesser greater] (split-with #(> card-id %) timeline)]
+            (vec (concat lesser [card-id] greater)))))
+
+(defn bot-play-turn [db]
+  (let [hand (get-in db [:bot :hand])
+        [card-id new-hand] (select-card hand)]
+    (-> db
+        (assoc-in [:bot :hand] new-hand)
+        (update-in [:timeline :ids] bot-place-card card-id))))
+
 (rf/reg-event-db
  :finish-place-card
  (fn [db [_ id]]
@@ -83,6 +100,7 @@
          (update-in [:player :history :ids] conj id)
          (assoc-in [:player :history :validity id] valid-placement?)
          (assoc-in [:timeline :status :active?] false)
+         (bot-play-turn)
          ((fn [db]
             (let [hand (get-in db [:player :hand])
                   error-count (get-in db [:player :error-count])
