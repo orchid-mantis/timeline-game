@@ -67,6 +67,11 @@
     (empty? hand) [false :player-won]
     :else [true nil]))
 
+(defn historize-turn [db player card-id valid-placement?]
+  (-> db
+      (update-in [player :history :ids] conj card-id)
+      (assoc-in [player :history :validity card-id] valid-placement?)))
+
 (rf/reg-event-fx
  :finish-place-card
  (fn [{:keys [db]} [_ id]]
@@ -80,8 +85,7 @@
                        (update-in [:timeline :ids] #(remove-card % id))
                        (update-in [:player :error-count] (fnil inc 0))
                        (draw-card)))))
-              (update-in [:player :history :ids] conj id)
-              (assoc-in [:player :history :validity id] valid-placement?)
+              (historize-turn :player id valid-placement?)
               (assoc-in [:timeline :status :active?] false)))
     :dispatch [:play-bot-turn]}))
 
