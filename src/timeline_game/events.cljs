@@ -47,7 +47,7 @@
               (update-in [:player :hand] remove-card id)
               (validate-card-placement id)
               deactivate-player)
-      :timeout [300 [:finish-place-card id]]})))
+      :timeout [300 [:eval-player-turn id]]})))
 
 (rf/reg-fx
  :timeout
@@ -84,7 +84,7 @@
   (assoc-in db [:timeline :status :active?] false))
 
 (rf/reg-event-fx
- :finish-place-card
+ :eval-player-turn
  (fn [{:keys [db]} [_ id]]
    {:db (-> db
             (handle-card-placement :player id)
