@@ -78,19 +78,23 @@
         valid-placement? (:valid? status)]
     (-> db
         (historize player id valid-placement?)
-        ((fn [db] (if valid-placement?
-            db
-            (-> db
-                (update-in [:timeline :ids] #(remove-card % id))
-                (update-in [player :error-count] (fnil inc 0))
-                (draw-card player))))))))
+        ((fn [db]
+           (if valid-placement?
+             db
+             (-> db
+                 (update-in [:timeline :ids] #(remove-card % id))
+                 (update-in [player :error-count] (fnil inc 0))
+                 (draw-card player))))))))
+
+(defn hide-last-status [db]
+  (assoc-in db [:timeline :status :active?] false))
 
 (rf/reg-event-fx
  :finish-place-card
  (fn [{:keys [db]} [_ id]]
    {:db (-> db
             (handle-card-placement :player id)
-            (assoc-in [:timeline :status :active?] false))
+            hide-last-status)
     :dispatch [:play-bot-turn]}))
 
 (defn select-card [hand]
@@ -99,7 +103,7 @@
 
 (defn place-card-correct [timeline card-id]
   (let [[lesser greater] (split-with #(> card-id %) timeline)]
-     (vec (concat lesser [card-id] greater))))
+    (vec (concat lesser [card-id] greater))))
 
 (defn find-index [needle haystack]
   (first (keep-indexed #(when (= %2 needle) %1) haystack)))
@@ -133,7 +137,9 @@
 (rf/reg-event-fx
  :eval-bot-turn
  (fn [{:keys [db]} [_ id]]
-   {:db (handle-card-placement db :bot id)
+   {:db (-> db
+            (handle-card-placement :bot id)
+            hide-last-status)
     :dispatch [:evaluate-round]}))
 
 (rf/reg-event-db
