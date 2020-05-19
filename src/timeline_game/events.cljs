@@ -1,5 +1,6 @@
 (ns timeline-game.events
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [clojure.set :as set]))
 
 (rf/reg-event-db
  :select-card
@@ -53,11 +54,11 @@
  (fn [[time event]]
    (js/setTimeout #(rf/dispatch event) time)))
 
-(defn draw-card [db]
+(defn draw-card [db player]
   (let [card-id (first (:deck db))]
     (if card-id
       (-> db
-          (update-in [:player :hand] conj card-id)
+          (update-in [player :hand] conj card-id)
           (update :deck #(drop 1 %)))
       db)))
 
@@ -67,54 +68,72 @@
     (empty? hand) [false :player-won]
     :else [true nil]))
 
-(defn historize-turn [db player card-id valid-placement?]
+(defn historize [db player card-id valid-placement?]
   (-> db
       (update-in [player :history :ids] conj card-id)
       (assoc-in [player :history :validity card-id] valid-placement?)))
 
+(defn handle-card-placement [db player id]
+  (let [status (get-in db [:timeline :status])
+        valid-placement? (:valid? status)]
+    (-> db
+        (historize player id valid-placement?)
+        ((fn [db] (if valid-placement?
+            db
+            (-> db
+                (update-in [:timeline :ids] #(remove-card % id))
+                (update-in [player :error-count] (fnil inc 0))
+                (draw-card player))))))))
+
 (rf/reg-event-fx
  :finish-place-card
  (fn [{:keys [db]} [_ id]]
-   {:db (let [status (get-in db [:timeline :status])
-              valid-placement? (:valid? status)]
-          (-> db
-              ((fn [db]
-                 (if valid-placement?
-                   db
-                   (-> db
-                       (update-in [:timeline :ids] #(remove-card % id))
-                       (update-in [:player :error-count] (fnil inc 0))
-                       (draw-card)))))
-              (historize-turn :player id valid-placement?)
-              (assoc-in [:timeline :status :active?] false)))
+   {:db (-> db
+            (handle-card-placement :player id)
+            (assoc-in [:timeline :status :active?] false))
     :dispatch [:play-bot-turn]}))
 
 (defn select-card [hand]
   (let [card-id (first (shuffle hand))]
     [card-id (remove-card hand card-id)]))
 
-(defn bot-place-card [timeline card-id]
+(defn place-card-correct [timeline card-id]
+  (let [[lesser greater] (split-with #(> card-id %) timeline)]
+     (vec (concat lesser [card-id] greater))))
+
+(defn find-index [needle haystack]
+  (first (keep-indexed #(when (= %2 needle) %1) haystack)))
+
+(defn place-card-wrong [timeline card-id]
+  (let [correct-timeline (place-card-correct timeline card-id)
+        correct-pos (find-index card-id correct-timeline)
+        all-pos (range (count correct-timeline))
+        all-wrong-pos (into [] (set/difference (set all-pos) #{correct-pos}))
+        random-pos (rand-nth all-wrong-pos)]
+    (put-before timeline random-pos card-id)))
+
+(defn bot-place-card [timeline card-id bot-success?]
   (cond
     (nil? card-id) timeline
-    :else (let [[lesser greater] (split-with #(> card-id %) timeline)]
-            (vec (concat lesser [card-id] greater)))))
+    bot-success? (place-card-correct timeline card-id)
+    :else (place-card-wrong timeline card-id)))
 
 (rf/reg-event-fx
  :play-bot-turn
  (fn [{:keys [db]}]
-   (let [hand (get-in db [:bot :hand])
-         [card-id new-hand] (select-card hand)]
-     {:db
-      (-> db
-          (assoc-in [:bot :hand] new-hand)
-          (update-in [:timeline :ids] bot-place-card card-id)
-          (validate-card-placement card-id))
+   (let [[card-id new-hand] (select-card (get-in db [:bot :hand]))
+         distribution (get-in db [:bot :success-dist])]
+     {:db (-> db
+              (assoc-in [:bot :hand] new-hand)
+              (update-in [:timeline :ids] bot-place-card card-id (peek distribution))
+              (assoc-in [:bot :success-dist] (pop distribution))
+              (validate-card-placement card-id))
       :timeout [500 [:eval-bot-turn card-id]]})))
 
 (rf/reg-event-fx
  :eval-bot-turn
  (fn [{:keys [db]} [_ id]]
-   {:db (historize-turn db :bot id true)
+   {:db (handle-card-placement db :bot id)
     :dispatch [:evaluate-round]}))
 
 (rf/reg-event-db

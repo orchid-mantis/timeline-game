@@ -3,7 +3,8 @@
             [reagent.dom :as reagent-dom]
             [timeline-game.events]
             [timeline-game.view :as view]
-            [timeline-game.db :as db]))
+            [timeline-game.db :as db]
+            [kixi.stats.distribution :refer [sample bernoulli]]))
 
 (def hand-size 5)
 
@@ -41,12 +42,16 @@
 (defn init-game-state [db]
   (assoc db :game {:result :await}))
 
+(defn init-success-rate-distribution [db]
+  (assoc-in db [:bot :success-dist] (sample (* hand-size 3) (bernoulli {:p 0.9}))))
+
 (defn init-game [db]
   (-> db
       init-game-state
       init-deck
       init-timeline
-      (init-players players)))
+      (init-players players)
+      init-success-rate-distribution))
 
 (rf/reg-event-db
  :new-game
