@@ -62,12 +62,6 @@
           (update :deck #(drop 1 %)))
       db)))
 
-(defn eval-turn [hand error-count]
-  (cond
-    (> error-count 3) [false :player-lost]
-    (empty? hand) [false :player-won]
-    :else [true nil]))
-
 (defn historize [db player card-id valid-placement?]
   (-> db
       (update-in [player :history :ids] conj card-id)
@@ -142,12 +136,18 @@
             hide-last-status)
     :dispatch [:evaluate-round]}))
 
+(defn evaluate-round [[player-hand bot-hand]]
+  (cond
+    (and (empty? player-hand) (empty? bot-hand)) [false :tie]
+    (empty? player-hand) [false :player-won]
+    (empty? bot-hand) [false :player-lost]
+    :else [true nil]))
+
 (rf/reg-event-db
  :evaluate-round
  (fn [db]
-   (let [hand (get-in db [:player :hand])
-         error-count (get-in db [:player :error-count])
-         [next-round? game-result] (eval-turn hand error-count)]
+   (let [players-hands [(get-in db [:player :hand]) (get-in db [:bot :hand])]
+         [next-round? game-result] (evaluate-round players-hands)]
      (if next-round?
        (activate-player db)
        (assoc-in db [:game :result] game-result)))))
