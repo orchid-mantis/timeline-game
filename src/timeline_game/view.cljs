@@ -1,5 +1,7 @@
 (ns timeline-game.view
   (:require [re-frame.core :as rf]
+            [timeline-game.dropdown-panel :as dropdown]
+            [timeline-game.card_history_overview :as hist-overview]
             [timeline-game.hand :as hand]
             [timeline-game.timeline :as timeline]
             [timeline-game.history :as history]
@@ -19,7 +21,10 @@
     "Start a new game"]
 
    [game-result/view]
-   [history/view]
+
+   [dropdown/view "Player's history" [hist-overview/view] [history/view]]
+
+   [:div {:style {:clear :both}}]
 
    [:div.timeline
     [:h2 "Timeline"]
