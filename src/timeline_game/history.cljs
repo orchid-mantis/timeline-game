@@ -26,16 +26,19 @@
 
 (defn view [history-cards-sub]
   (fn []
-    [:ul
-     (doall
-      (for [card @history-cards-sub
-            :let [id (:id card)
-                  valid? (:valid? card)]]
-        [:li
-         {:key id
-          :style {:margin 5
-                  :padding 5
-                  :width 100
-                  :border (if valid? "2px solid green" "2px solid red")
-                  :list-style-type :none}}
-         (:title card)]))]))
+    (let [cards @history-cards-sub]
+      (if (empty? cards)
+        [:p "No card was played yet."]
+        [:ul
+         (doall
+          (for [card cards
+                :let [id (:id card)
+                      valid? (:valid? card)]]
+            [:li
+             {:key id
+              :style {:margin 5
+                      :padding 5
+                      :width 100
+                      :border (if valid? "2px solid green" "2px solid red")
+                      :list-style-type :none}}
+             (:title card)]))]))))
