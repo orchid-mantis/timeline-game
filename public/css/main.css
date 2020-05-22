@@ -6,7 +6,8 @@
   .dropbtn {
     background-color: #4CAF50;
     color: white;
-    padding: 16px;
+    padding: 10px;
+    margin: 5px;
     font-size: 16px;
     border: none;
     cursor: pointer;
@@ -17,8 +18,8 @@
   }
   
   .dropdown-content {
-    /* display: none; */
     position: absolute;
+    left: 0;
     right: 0;
     padding: 10px;
     background-color: #f9f9f9;
@@ -43,6 +44,7 @@
     display: inline-flex;
     border: solid white;
     border-width: 0 3px 3px 0;
+    margin-right: 10px;
     padding: 3px;
   }
 
