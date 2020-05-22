@@ -26,19 +26,27 @@
 
 (defn view [history-cards-sub]
   (fn []
-    (let [cards @history-cards-sub]
+    (let [cards @history-cards-sub
+          cards-count (count cards)]
       (if (empty? cards)
         [:p "No card was played yet."]
-        [:ul
+        [:table
+         [:tr
+          [:th "Round"]
+          [:th "Card"]]
          (doall
-          (for [card cards
-                :let [id (:id card)
+          (for [[card index] (zipmap cards (range))
+                :let [index (- cards-count index)
+                      id (:id card)
                       valid? (:valid? card)]]
-            [:li
-             {:key id
-              :style {:margin 5
-                      :padding 5
-                      :width 100
-                      :border (if valid? "2px solid green" "2px solid red")
-                      :list-style-type :none}}
-             (:title card)]))]))))
+            [:tr {:key id}
+             [:td {:style {:text-align :center
+                           :vertical-align :middle}}
+                   index]
+             [:td {:style {:text-align :center
+                           :margin 5
+                           :padding 5
+                           :width 100
+                           :border (if valid? "2px solid green" "2px solid red")
+                           :list-style-type :none}}
+              (:title card)]]))]))))
