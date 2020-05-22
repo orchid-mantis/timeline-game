@@ -22,7 +22,15 @@
 
    [game-result/view]
 
-   [dropdown/view "Player's history" [hist-overview/view] [history/view]]
+   [dropdown/view
+    "Player's history"
+    [hist-overview/view (rf/subscribe [:history/overview :player])]
+    [history/view (rf/subscribe [:history/played-cards :player])]]
+
+   [dropdown/view
+    "Bot's history"
+    [hist-overview/view (rf/subscribe [:history/overview :bot])]
+    [history/view (rf/subscribe [:history/played-cards :bot])]]
 
    [:div {:style {:clear :both}}]
 
