@@ -31,22 +31,24 @@
       (if (empty? cards)
         [:p "No card was played yet."]
         [:table
-         [:tr
-          [:th "Round"]
-          [:th "Card"]]
-         (doall
-          (for [[card index] (zipmap cards (range))
-                :let [index (- cards-count index)
-                      id (:id card)
-                      valid? (:valid? card)]]
-            [:tr {:key id}
-             [:td {:style {:text-align :center
-                           :vertical-align :middle}}
-                   index]
-             [:td {:style {:text-align :center
-                           :margin 5
-                           :padding 5
-                           :width 100
-                           :border (if valid? "2px solid green" "2px solid red")
-                           :list-style-type :none}}
-              (:title card)]]))]))))
+         [:thead
+          [:tr
+           [:th "Round"]
+           [:th "Card"]]]
+         [:tbody
+          (doall
+           (for [[card index] (zipmap cards (range))
+                 :let [index (- cards-count index)
+                       id (:id card)
+                       valid? (:valid? card)]]
+             [:tr {:key id}
+              [:td {:style {:text-align :center
+                            :vertical-align :middle}}
+               index]
+              [:td {:style {:text-align :center
+                            :margin 5
+                            :padding 5
+                            :width 100
+                            :border (if valid? "2px solid green" "2px solid red")
+                            :list-style-type :none}}
+               (:title card)]]))]]))))
