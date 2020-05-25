@@ -22,11 +22,6 @@
  (fn [db]
    (:cards db)))
 
-(rf/reg-sub
- :player-turn?
- (fn [db]
-   (get-in db [:player :active?])))
-
 (defn ^:dev/after-load render []
   (rf/clear-subscription-cache!)
   (reagent-dom/render [view/root]

@@ -2,6 +2,12 @@
   (:require [re-frame.core :as rf]))
 
 (rf/reg-sub
+ :players-turn?
+ (fn [] (rf/subscribe [:game-state]))
+ (fn [game-state]
+   (= game-state :players-turn)))
+
+(rf/reg-sub
  :hand
  (fn [db]
    (get-in db [:player :hand])))
@@ -15,7 +21,7 @@
    (map cards hand)))
 
 (defn view []
-  (let [player-turn? (rf/subscribe [:player-turn?])
+  (let [player-turn? (rf/subscribe [:players-turn?])
         cards (rf/subscribe [:hand/cards])]
     (fn []
       [:ul

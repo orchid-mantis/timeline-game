@@ -10,6 +10,15 @@
                      :game-end       :game-ended}
    :game-ended      {:new-game       :players-turn}})
 
+;; -- Subscriptions -----------------------------------------------------------
+
+(rf/reg-sub
+ :game-state
+ (fn [db _]
+   (get-in db [:game :state])))
+
+;; -- Events ------------------------------------------------------------------
+
 (defn update-next-state [db event]
   (fsm/update-next-state game-state-machine db [:game :state] event))
 
