@@ -47,6 +47,7 @@
               (update-in [:player :hand] remove-card id)
               (validate-card-placement id)
               deactivate-player)
+      :dispatch [:next-player]
       :timeout [300 [:eval-player-turn id]]})))
 
 (rf/reg-fx
@@ -143,11 +144,15 @@
     (empty? bot-hand) [false :player-lost]
     :else [true nil]))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  :evaluate-round
- (fn [db]
+ (fn [{:keys [db]} _]
    (let [players-hands [(get-in db [:player :hand]) (get-in db [:bot :hand])]
          [next-round? game-result] (evaluate-round players-hands)]
-     (if next-round?
-       (activate-player db)
-       (assoc-in db [:game :result] game-result)))))
+     {:db
+      (if next-round?
+        (activate-player db)
+        db)
+      :dispatch (if next-round?
+                  [:next-round]
+                  [:game-end game-result])})))

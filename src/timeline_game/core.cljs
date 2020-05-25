@@ -2,10 +2,9 @@
   (:require [re-frame.core :as rf]
             [reagent.dom :as reagent-dom]
             [timeline-game.events]
-            [timeline-game.init]
+            [timeline-game.game-loop]
             [timeline-game.view :as view]
-            [timeline-game.db :as db]
-            ))
+            [timeline-game.db :as db]))
 
 (rf/reg-event-fx
  ::load-app

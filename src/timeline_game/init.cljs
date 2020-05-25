@@ -1,6 +1,5 @@
 (ns timeline-game.init
-  (:require [re-frame.core :as rf]
-            [kixi.stats.distribution :refer [sample bernoulli]]))
+  (:require [kixi.stats.distribution :refer [sample bernoulli]]))
 
 (def hand-size 5)
 
@@ -48,5 +47,3 @@
       init-timeline
       (init-players players)
       init-success-rate-distribution))
-
-(rf/reg-event-db :new-game init-game)
