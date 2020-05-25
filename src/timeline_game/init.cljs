@@ -21,7 +21,6 @@
 
 (defn init-player [db player]
   (-> db
-      (assoc player {:active? true})
       (assoc-in [player :history] {:ids '() :validity {}})
       (init-hand player)))
 

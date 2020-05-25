@@ -21,12 +21,6 @@
 (defn remove-card [ids id]
   (remove #(= % id) ids))
 
-(defn deactivate-player [db]
-  (assoc-in db [:player :active?] false))
-
-(defn activate-player [db]
-  (assoc-in db [:player :active?] true))
-
 (defn ordered? [xs]
   (or (empty? xs) (apply <= xs)))
 
@@ -45,8 +39,7 @@
      {:db (-> db
               (update-in [:timeline :ids] put-before pos id)
               (update-in [:player :hand] remove-card id)
-              (validate-card-placement id)
-              deactivate-player)
+              (validate-card-placement id))
       :dispatch [:next-player]
       :timeout [300 [:eval-player-turn id]]})))
 
@@ -149,10 +142,7 @@
  (fn [{:keys [db]} _]
    (let [players-hands [(get-in db [:player :hand]) (get-in db [:bot :hand])]
          [next-round? game-result] (evaluate-round players-hands)]
-     {:db
-      (if next-round?
-        (activate-player db)
-        db)
+     {:db db
       :dispatch (if next-round?
                   [:next-round]
                   [:game-end game-result])})))
