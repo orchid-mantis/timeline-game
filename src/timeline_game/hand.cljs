@@ -41,6 +41,6 @@
                     :width 100
                     :border "2px solid blue"
                     :user-select (when (not @player-turn?) :none)
-                    :cursor :pointer
+                    :cursor (if @player-turn? :pointer :not-allowed)
                     :background-color (when (not @player-turn?) :grey)}}
            (:title card)]))])))
