@@ -47,10 +47,8 @@
  interceptors
  (fn [{:keys [db]} [event _]]
    (let [player (get-in db [:game :player])]
-     (if (= player :bot)
-       {:db (update-next-state db event)
-        :dispatch [:play-bot-move]}
-       {:db (update-next-state db event)}))))
+     (merge {:db (update-next-state db event)}
+            (when (= player :bot) {:dispatch [:play-bot-move]})))))
 
 (rf/reg-fx
  :timeout
