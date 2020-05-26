@@ -1,6 +1,8 @@
 (ns timeline-game.hand
   (:require [re-frame.core :as rf]))
 
+;; -- Subscriptions -----------------------------------------------------------
+
 (rf/reg-sub
  :players-turn?
  (fn []
@@ -22,6 +24,20 @@
     (rf/subscribe [:hand])])
  (fn [[cards hand]]
    (map cards hand)))
+
+;; -- Events ------------------------------------------------------------------
+
+(rf/reg-event-db
+ :select-card
+ (fn [db [_ id]]
+   (assoc-in db [:player :selected-card-id] id)))
+
+(rf/reg-event-db
+ :deselect-card
+ (fn [db]
+   (assoc-in db [:player :selected-card-id] :nothing)))
+
+;; -- UI ------------------------------------------------------------------
 
 (defn view []
   (let [player-turn? (rf/subscribe [:players-turn?])

@@ -56,25 +56,6 @@
  (fn [[time event]]
    (js/setTimeout #(rf/dispatch event) time)))
 
-(rf/reg-event-db
- :select-card
- (fn [db [_ id]]
-   (assoc-in db [:player :selected-card-id] id)))
-
-(rf/reg-event-db
- :deselect-card
- (fn [db]
-   (assoc-in db [:player :selected-card-id] :nothing)))
-
-(rf/reg-event-fx
- :place-card
- (fn [{:keys [db]} [_ pos]]
-   (let [id (get-in db [:player :selected-card-id])]
-     {:db (-> db
-              (update-in [:player :hand] remove-card id)
-              (update-in [:timeline :ids] put-before pos id))
-      :dispatch [:eval-move :player id]})))
-
 (defn historize [db player card-id valid-move?]
   (-> db
       (update-in [player :history :ids] conj card-id)

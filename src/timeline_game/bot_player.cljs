@@ -1,7 +1,6 @@
 (ns timeline-game.bot-player
   (:require [re-frame.core :as rf]
             [clojure.set :as set]
-            [timeline-game.game-loop]
             [timeline-game.common :refer [put-before remove-card]]))
 
 (defn select-card [hand]

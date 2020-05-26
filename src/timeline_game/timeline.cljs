@@ -1,6 +1,9 @@
 (ns timeline-game.timeline
   (:require [re-frame.core :as rf]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [timeline-game.common :refer [put-before remove-card]]))
+
+;; -- Subscriptions -----------------------------------------------------------
 
 (rf/reg-sub
  :timeline-ids
@@ -30,6 +33,17 @@
      :misplaced-card :red
      nil)))
 
+;; -- Events ------------------------------------------------------------------
+
+(rf/reg-event-fx
+ :place-card
+ (fn [{:keys [db]} [_ pos]]
+   (let [id (get-in db [:player :selected-card-id])]
+     {:db (-> db
+              (update-in [:player :hand] remove-card id)
+              (update-in [:timeline :ids] put-before pos id))
+      :dispatch [:eval-move :player id]})))
+
 (defn drop-zone [s pos]
   [:li {:key pos
         :on-drag-over (fn [e]
@@ -49,6 +63,8 @@
                 :background-color (when (get-in @s [:drag-enter pos]) :yellow)
                 :width 20}}
    "*"])
+
+;; -- UI ------------------------------------------------------------------
 
 (defn view []
   (let [cards (rf/subscribe [:timeline/cards])
