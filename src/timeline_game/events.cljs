@@ -78,7 +78,6 @@
 
 (rf/reg-event-fx
  :eval-move
- interceptors
  (fn [{:keys [db]} [_ player id]]
    (let [timeline (get-in db [:timeline :ids])
          valid-move? (ordered? timeline)]
