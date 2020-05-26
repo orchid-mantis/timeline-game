@@ -23,12 +23,22 @@
   (fsm/update-next-state player-fsm db [:game :player] event))
 
 (rf/reg-event-fx
- :next-player
- (fn [{:keys [db]} [event _]]
-   (let [next-player (next-player db event)]
-     {:db (if (= next-player :none)
-            (assoc-in db [:game :player] nil)
-            (update-next-state db event))
+ :end-turn
+ (fn [{:keys [db]} _]
+   (let [next-player (next-player db :next-player)]
+     {:db db
       :dispatch (if (= next-player :none)
                   [:eval-round]
-                  [:init-turn])})))
+                  [:next-player])})))
+
+(rf/reg-event-fx
+ :next-round
+ (fn [{:keys [db]} _]
+   {:db (assoc-in db [:game :player] nil)
+    :dispatch [:next-player]}))
+
+(rf/reg-event-fx
+ :next-player
+ (fn [{:keys [db]} [event _]]
+   {:db (update-next-state db event)
+    :dispatch [:init-turn]}))

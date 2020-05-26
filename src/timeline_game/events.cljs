@@ -116,7 +116,7 @@
  interceptors
  (fn [{:keys [db]} [event _]]
    {:db (update-next-state db event)
-    :dispatch [:next-player]}))
+    :dispatch [:end-turn]}))
 
 (rf/reg-event-fx
  :wrong-move
@@ -141,7 +141,7 @@
             (update-in [:timeline :ids] #(remove-card % id))
             (draw-card player)
             (update-next-state event))
-    :dispatch [:next-player]}))
+    :dispatch [:end-turn]}))
 
 (defn select-card [hand]
   (let [card-id (first (shuffle hand))]
@@ -193,7 +193,7 @@
          [next-round? game-result] (evaluate-round players-hands)]
      {:db db
       :dispatch (if next-round?
-                  [:next-player]
+                  [:next-round]
                   [:game-end game-result])})))
 
 (rf/reg-event-db

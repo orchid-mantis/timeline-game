@@ -51,6 +51,6 @@
 (defn handle-new-game
   [{:keys [db]} _]
   {:db (init-game db)
-   :dispatch [:next-player]})
+   :dispatch [:next-round]})
 
 (rf/reg-event-fx :new-game handle-new-game)
