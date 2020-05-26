@@ -1,8 +1,8 @@
 (ns timeline-game.core
   (:require [re-frame.core :as rf]
             [reagent.dom :as reagent-dom]
+            [timeline-game.init]
             [timeline-game.events]
-            [timeline-game.game-loop]
             [timeline-game.view :as view]
             [timeline-game.db :as db]))
 
@@ -11,16 +11,6 @@
  (fn [{:keys [db]} _]
    {:db (merge db (-> db/default-db))
     :dispatch [:new-game]}))
-
-(rf/reg-sub
- :deck
- (fn [db]
-   (:deck db)))
-
-(rf/reg-sub
- :cards
- (fn [db]
-   (:cards db)))
 
 (defn ^:dev/after-load render []
   (rf/clear-subscription-cache!)

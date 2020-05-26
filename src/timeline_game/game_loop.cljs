@@ -1,44 +1,34 @@
 (ns timeline-game.game-loop
   (:require [re-frame.core :as rf]
-            [timeline-game.init :as init]
             [timeline-game.fsm :as fsm]))
 
-(def game-state-machine
-  {nil              {:new-game       :players-turn}
-   :players-turn    {:next-player    :bots-turn}
-   :bots-turn       {:next-round     :players-turn
-                     :game-end       :game-ended}
-   :game-ended      {:new-game       :players-turn}})
+(def player-fsm
+  {nil              {:next-player     :player}
+   :player          {:next-player     :bot}
+   :bot             {:next-player     :none}})
 
 ;; -- Subscriptions -----------------------------------------------------------
 
 (rf/reg-sub
- :game-state
+ :player
  (fn [db _]
-   (get-in db [:game :state])))
+   (get-in db [:game :player])))
 
 ;; -- Events ------------------------------------------------------------------
 
+(defn next-player [db event]
+  (fsm/next-state player-fsm (get-in db [:game :player]) event))
+
 (defn update-next-state [db event]
-  (fsm/update-next-state game-state-machine db [:game :state] event))
+  (fsm/update-next-state player-fsm db [:game :player] event))
 
-(defn handle-next-state
-  [db [event _]]
-  (update-next-state db event))
-
-(defn handle-new-game
-  [db [event _]]
-  (-> db
-      init/init-game
-      (update-next-state event)))
-
-(defn handle-game-end
-  [db [event game-result]]
-  (-> db
-      (assoc-in [:game :result] game-result)
-      (update-next-state event)))
-
-(rf/reg-event-db :new-game handle-new-game)
-(rf/reg-event-db :next-player handle-next-state)
-(rf/reg-event-db :next-round handle-next-state)
-(rf/reg-event-db :game-end handle-game-end)
+(rf/reg-event-fx
+ :next-player
+ (fn [{:keys [db]} [event _]]
+   (let [next-player (next-player db event)]
+     {:db (if (= next-player :none)
+            (assoc-in db [:game :player] nil)
+            (update-next-state db event))
+      :dispatch (if (= next-player :none)
+                  [:eval-round]
+                  [:init-turn])})))

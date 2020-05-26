@@ -8,6 +8,11 @@
    (get-in db [:timeline :ids])))
 
 (rf/reg-sub
+ :timeline/last-added
+ (fn [db]
+   (get-in db [:timeline :last-added-id])))
+
+(rf/reg-sub
  :timeline/cards
  (fn []
    [(rf/subscribe [:cards])
@@ -16,9 +21,14 @@
    (vec (map cards timeline))))
 
 (rf/reg-sub
- :card-placement-status
- (fn [db]
-   (get-in db [:timeline :status])))
+ :highlight-color
+ (fn []
+   (rf/subscribe [:turn]))
+ (fn [turn]
+   (case turn
+     :well-placed-card :green
+     :misplaced-card :red
+     nil)))
 
 (defn drop-zone [s pos]
   [:li {:key pos
@@ -42,7 +52,8 @@
 
 (defn view []
   (let [cards (rf/subscribe [:timeline/cards])
-        status (rf/subscribe [:card-placement-status])
+        last-added-id (rf/subscribe [:timeline/last-added])
+        color (rf/subscribe [:highlight-color])
         s (reagent/atom {})]
     (fn []
       (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
@@ -59,10 +70,7 @@
                              :padding 5
                              :width 100
                              :border "2px solid blue"
-                             :background-color (when (and (:active? @status) (= id (:id @status)))
-                                                 (if (:valid? @status)
-                                                   :green
-                                                   :red))}}
+                             :background-color (when (= id @last-added-id) @color)}}
                 (:title item)])))]
          ;[:p (pr-str @s)]
          ]))))

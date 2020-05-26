@@ -1,5 +1,6 @@
 (ns timeline-game.init
-  (:require [kixi.stats.distribution :refer [sample bernoulli]]))
+  (:require [re-frame.core :as rf]
+            [kixi.stats.distribution :refer [sample bernoulli]]))
 
 (def hand-size 5)
 
@@ -34,7 +35,7 @@
         (update :deck #(drop 1 %)))))
 
 (defn init-game-state [db]
-  (assoc db :game {:state nil :result :await}))
+  (assoc db :game {:result :await}))
 
 (defn init-success-rate-distribution [db]
   (assoc-in db [:bot :success-dist] (sample (* hand-size 3) (bernoulli {:p 0.9}))))
@@ -46,3 +47,10 @@
       init-timeline
       (init-players players)
       init-success-rate-distribution))
+
+(defn handle-new-game
+  [{:keys [db]} _]
+  {:db (init-game db)
+   :dispatch [:next-player]})
+
+(rf/reg-event-fx :new-game handle-new-game)

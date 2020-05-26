@@ -3,9 +3,12 @@
 
 (rf/reg-sub
  :players-turn?
- (fn [] (rf/subscribe [:game-state]))
- (fn [game-state]
-   (= game-state :players-turn)))
+ (fn []
+   [(rf/subscribe [:player])
+    (rf/subscribe [:turn])])
+ (fn [[player turn]]
+   (and (= player :player)
+        (= turn :ready))))
 
 (rf/reg-sub
  :hand
