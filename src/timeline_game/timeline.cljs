@@ -58,7 +58,8 @@
                    (rf/dispatch [:place-card (/ pos 2)])
                    (swap! s update-in [:drag-enter pos] (fn [] false)))
 
-        :style {:display :table-cell
+        :style {:display :inline-block
+                :padding "5px 0 5px 0"
                 :text-align :center
                 :background-color (when (get-in @s [:drag-enter pos]) :yellow)
                 :width 20}}
@@ -82,8 +83,9 @@
                (drop-zone s pos)
 
                [:li {:key pos
-                     :style {:display :table-cell
+                     :style {:display :inline-block
                              :padding 5
+                             :margin "5px 0 5px 0"
                              :width 100
                              :border "2px solid blue"
                              :background-color (when (= id @last-added-id) @color)}}
