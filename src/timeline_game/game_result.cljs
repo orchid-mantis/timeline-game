@@ -11,7 +11,6 @@
     (fn []
       (let [show? (not= @game-result :await)
             display-data (case @game-result
-                           :tie {:text "Tie!" :color :blue}
                            :player-won {:text "You won!" :color :green}
                            :player-lost {:text "Game over" :color :red}
                            nil)]

@@ -35,7 +35,7 @@
         (update :deck #(drop 1 %)))))
 
 (defn init-game-state [db]
-  (assoc db :game {:result :await}))
+  (assoc db :game {:mode :standard :result :await}))
 
 (defn init-success-rate-distribution [db]
   (let [card-count (count (:cards db))]

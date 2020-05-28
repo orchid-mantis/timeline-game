@@ -121,11 +121,12 @@
  :wrong-end-turn
  interceptors
  (fn [{:keys [db]} [event player id]]
-   {:db (-> db
-            (update-in [:timeline :ids] #(remove-card % id))
-            (draw-card player)
-            (update-next-state event))
-    :dispatch [:end-turn]}))
+   (let [mode (get-in db [:game :mode])]
+     {:db (cond-> db
+            true (update-in [:timeline :ids] #(remove-card % id))
+            true (update-next-state event)
+            (= mode :standard) (draw-card player))
+      :dispatch [:end-turn]})))
 
 (rf/reg-event-fx
  :end-turn
@@ -142,27 +143,59 @@
    {:db (update-next-player db event)
     :dispatch [:init-turn]}))
 
-(defn evaluate-round [[player-hand bot-hand]]
-  (cond
-    (and (empty? player-hand) (empty? bot-hand)) [false :tie]
-    (empty? player-hand) [false :player-won]
-    (empty? bot-hand) [false :player-lost]
-    :else [true nil]))
+(defn eval-standard [db]
+  (let [player-hand (get-in db [:player :hand])
+        bot-hand (get-in db [:bot :hand])]
+    (cond
+      (and (empty? player-hand) (empty? bot-hand)) [true :sudden-death]
+      (empty? player-hand) [false :player-won]
+      (empty? bot-hand)    [false :player-lost]
+      :else                [true :standard])))
+
+(defn well-played? [history]
+  (let [last-played-card (first (:ids history))]
+    (get (:validity history) last-played-card)))
+
+(defn eval-sudden-death [db]
+  (let [player-history (get-in db [:player :history])
+        bot-history (get-in db [:bot :history])]
+    (cond
+      (and (well-played? player-history) (well-played? bot-history)) [true :sudden-death]
+      (well-played? player-history) [false :player-won]
+      (well-played? bot-history)    [false :player-lost]
+      :else                         [true :sudden-death])))
+
+(defn evaluate-round [db]
+  (let [mode (get-in db [:game :mode])]
+    (case mode
+      :standard (eval-standard db)
+      :sudden-death (eval-sudden-death db))))
 
 (rf/reg-event-fx
  :eval-round
  (fn [{:keys [db]} _]
-   (let [players-hands [(get-in db [:player :hand]) (get-in db [:bot :hand])]
-         [next-round? game-result] (evaluate-round players-hands)]
+   (let [[next-round? result] (evaluate-round db)]
      {:db db
       :dispatch (if next-round?
-                  [:next-round]
-                  [:game-end game-result])})))
+                  [:next-round result]
+                  [:game-end result])})))
+
+(defn all-players-draw-card [db]
+  (reduce #(draw-card %1 %2) db [:player :bot]))
+
+(defn handle-mode-change [db mode]
+  (cond (= mode :sudden-death)
+        (-> db
+            (assoc-in [:game :mode] mode)
+            (all-players-draw-card))
+        :else db))
 
 (rf/reg-event-fx
  :next-round
- (fn [{:keys [db]} _]
-   {:db (assoc-in db [:game :player] nil)
+ (fn [{:keys [db]} [_ mode]]
+   {:db (-> db
+            (assoc-in [:game :player] nil)
+            (handle-mode-change mode))
     :dispatch [:next-player]}))
 
 (rf/reg-event-db
