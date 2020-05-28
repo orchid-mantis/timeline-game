@@ -33,6 +33,18 @@
      :misplaced-card :red
      nil)))
 
+(rf/reg-sub
+ :player/selected-card-id
+ (fn [db]
+   (get-in db [:player :selected-card-id])))
+
+(rf/reg-sub
+ :highlight-drop-zones?
+ (fn []
+   (rf/subscribe [:player/selected-card-id]))
+ (fn [selected-card]
+   (not= selected-card :nothing)))
+
 ;; -- Events ------------------------------------------------------------------
 
 (rf/reg-event-fx
@@ -44,7 +56,7 @@
               (update-in [:timeline :ids] put-before pos id))
       :dispatch [:eval-move :player id]})))
 
-(defn drop-zone [s pos]
+(defn drop-zone [s pos highlight-drop-zones?]
   [:li {:key pos
         :on-drag-over (fn [e]
                         (.preventDefault e))
@@ -61,7 +73,8 @@
         :style {:display :inline-block
                 :padding "5px 0 5px 0"
                 :text-align :center
-                :background-color (when (get-in @s [:drag-enter pos]) :yellow)
+                :background-color (when highlight-drop-zones? :orange)
+                :border (when (get-in @s [:drag-enter pos]) "2px solid orange")
                 :width 20}}
    "*"])
 
@@ -71,6 +84,7 @@
   (let [cards (rf/subscribe [:timeline/cards])
         last-added-id (rf/subscribe [:timeline/last-added])
         color (rf/subscribe [:highlight-color])
+        highlight-drop-zones? (rf/subscribe [:highlight-drop-zones?])
         s (reagent/atom {})]
     (fn []
       (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
@@ -80,7 +94,7 @@
            (for [[item pos] (map vector items (range))
                  :let [id (:id item)]]
              (if (= item :drop-zone)
-               (drop-zone s pos)
+               (drop-zone s pos @highlight-drop-zones?)
 
                [:li {:key pos
                      :style {:display :inline-block
