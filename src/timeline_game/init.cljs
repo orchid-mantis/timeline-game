@@ -38,7 +38,8 @@
   (assoc db :game {:result :await}))
 
 (defn init-success-rate-distribution [db]
-  (assoc-in db [:bot :success-dist] (sample (* hand-size 3) (bernoulli {:p 0.9}))))
+  (let [card-count (count (:cards db))]
+    (assoc-in db [:bot :success-dist] (sample card-count (bernoulli {:p 0.9})))))
 
 (defn init-game [db]
   (-> db
