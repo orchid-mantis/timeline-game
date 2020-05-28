@@ -158,12 +158,14 @@
 
 (defn eval-sudden-death [db]
   (let [player-history (get-in db [:player :history])
-        bot-history (get-in db [:bot :history])]
+        bot-history (get-in db [:bot :history])
+        player-well-played? (well-played? player-history)
+        bot-well-played? (well-played? bot-history)]
     (cond
-      (and (well-played? player-history) (well-played? bot-history)) [true :sudden-death]
-      (well-played? player-history) [false :player-won]
-      (well-played? bot-history)    [false :player-lost]
-      :else                         [true :sudden-death])))
+      (and player-well-played? bot-well-played?) [true :sudden-death]
+      player-well-played? [false :player-won]
+      bot-well-played?    [false :player-lost]
+      :else               [true :sudden-death])))
 
 (defn evaluate-round [db]
   (let [mode (get-in db [:game :mode])]
