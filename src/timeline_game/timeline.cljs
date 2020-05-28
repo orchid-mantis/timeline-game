@@ -53,7 +53,8 @@
    (let [id (get-in db [:player :selected-card-id])]
      {:db (-> db
               (update-in [:player :hand] remove-card id)
-              (update-in [:timeline :ids] put-before pos id))
+              (update-in [:timeline :ids] put-before pos id)
+              (assoc-in [:player :selected-card-id] :nothing))
       :dispatch [:eval-move :player id]})))
 
 (defn drop-zone [s pos highlight-drop-zones?]
