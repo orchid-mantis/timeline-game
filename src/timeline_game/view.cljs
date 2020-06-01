@@ -11,13 +11,8 @@
   [:div
    [:h1 "Timeline Game"]
 
-   [:button
-    {:on-click #(rf/dispatch [:new-game])
-     :style {:width 150
-             :padding "10px 20px"
-             :display :block
-             :margin "10px auto 0px auto"
-             :cursor :pointer}}
+   [:button.btn
+    {:on-click #(rf/dispatch [:new-game])}
     "Start a new game"]
 
    [game-result/view]

@@ -1,3 +1,11 @@
+  .btn {
+    width: 150px;
+    padding: 10px 20px;
+    display: block;
+    margin: 10px auto 0px auto;
+    cursor: pointer;
+  }
+
   .dropdown {
     position: relative;
     display: inline-block;

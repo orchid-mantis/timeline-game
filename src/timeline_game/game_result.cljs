@@ -57,20 +57,10 @@
                       :color (:color @view-data)}}
          (:text @view-data)]
 
-        [:button
-         {:on-click #(rf/dispatch [:new-game])
-          :style {:width 150
-                  :padding "10px 20px"
-                  :display :block
-                  :margin "10px auto 0px auto"
-                  :cursor :pointer}}
+        [:button.btn
+         {:on-click #(rf/dispatch [:new-game])}
          "Start a new game"]
 
-        [:button
-         {:on-click #(rf/dispatch [:game-result/close])
-          :style {:width 150
-                  :padding "10px 20px"
-                  :display :block
-                  :margin "10px auto 0px auto"
-                  :cursor :pointer}}
+        [:button.btn
+         {:on-click #(rf/dispatch [:game-result/close])}
          "Close"]]])))
