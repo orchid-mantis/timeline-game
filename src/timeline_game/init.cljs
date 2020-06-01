@@ -23,6 +23,7 @@
 (defn init-player [db player]
   (-> db
       (assoc-in [player :history] {:ids '() :validity {}})
+      (assoc-in [player :selected-card-id] :nothing)
       (init-hand player)))
 
 (defn init-players [db players]
