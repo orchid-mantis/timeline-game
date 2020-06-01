@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "watch": "shadow-cljs watch app;",
-    "release": "shadow-cljs release app;",
+    "release": "shadow-cljs release --verbose app;",
     "server": "shadow-cljs server;"
   },
   "dependencies": {
