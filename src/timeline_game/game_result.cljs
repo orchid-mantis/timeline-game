@@ -1,6 +1,8 @@
 (ns timeline-game.game-result
   (:require [re-frame.core :as rf]))
 
+;; -- Subscriptions -----------------------------------------------------------
+
 (rf/reg-sub
  :game-result
  (fn [db]
@@ -22,6 +24,15 @@
      :player-won {:text "You won!" :color :green}
      :player-lost {:text "Game over" :color :red}
      nil)))
+
+;; -- Events ------------------------------------------------------------------
+
+(rf/reg-event-db
+ :game-result/close
+ (fn [db]
+   (assoc-in db [:game :result] :await)))
+
+;; -- UI ------------------------------------------------------------------
 
 (defn view []
   (let [show? (rf/subscribe [:game-result/show?])
@@ -53,4 +64,13 @@
                   :display :block
                   :margin "10px auto 0px auto"
                   :cursor :pointer}}
-         "Start a new game"]]])))
+         "Start a new game"]
+
+        [:button
+         {:on-click #(rf/dispatch [:game-result/close])
+          :style {:width 150
+                  :padding "10px 20px"
+                  :display :block
+                  :margin "10px auto 0px auto"
+                  :cursor :pointer}}
+         "Close"]]])))
