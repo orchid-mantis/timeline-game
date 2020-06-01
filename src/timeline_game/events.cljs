@@ -114,7 +114,7 @@
     (if card-id
       (-> db
           (update-in [player :hand] conj card-id)
-          (update :deck #(drop 1 %)))
+          (update :deck #(vec (drop 1 %))))
       db)))
 
 (rf/reg-event-fx
@@ -124,6 +124,7 @@
    (let [mode (get-in db [:game :mode])]
      {:db (cond-> db
             true (update-in [:timeline :ids] #(remove-card % id))
+            true (update :deck #(conj % id))
             true (update-next-state event)
             (= mode :standard) (draw-card player))
       :dispatch [:end-turn]})))

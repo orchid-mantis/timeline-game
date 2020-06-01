@@ -9,10 +9,10 @@
 (defn init-deck [db]
   (let [cards (keys (:cards db))
         deck (shuffle cards)]
-    (assoc db :deck deck)))
+    (assoc db :deck (vec deck))))
 
 (defn deal-cards [hand-size deck]
-  [(take hand-size deck) (drop hand-size deck)])
+  [(take hand-size deck) (vec (drop hand-size deck))])
 
 (defn init-hand [db player]
   (let [[hand deck] (deal-cards hand-size (:deck db))]
