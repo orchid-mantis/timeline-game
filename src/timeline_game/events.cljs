@@ -79,8 +79,9 @@
 (rf/reg-event-fx
  :eval-move
  (fn [{:keys [db]} [_ player id]]
-   (let [timeline (get-in db [:timeline :ids])
-         valid-move? (ordered? timeline)]
+   (let [ids (get-in db [:timeline :ids])
+         cards (:cards db)
+         valid-move? (ordered? ids cards)]
      {:db (-> db
               (assoc-in [:timeline :last-added-id] id)
               (historize player id valid-move?))

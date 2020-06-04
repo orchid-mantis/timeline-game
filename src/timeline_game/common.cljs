@@ -9,5 +9,6 @@
 (defn remove-card [ids id]
   (remove #(= % id) ids))
 
-(defn ordered? [xs]
-  (or (empty? xs) (apply <= xs)))
+(defn ordered? [ids cards]
+  (let [years (map #(:year (cards %)) ids)]
+    (or (empty? ids) (apply <= years))))
