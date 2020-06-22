@@ -1,0 +1,66 @@
+  @import url("https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300,700");
+  .main-parent {
+    border-radius: 6px;
+    margin: 10px;
+    background: black;
+    height: 210px;
+    width: 130px;
+    background-color: #3e8e41;
+    /* padding: 10px; */
+  }
+
+  .parent {
+    float: left;
+    margin: 5px;
+    position: relative;
+    width: 120px;
+    top: 0;
+    left: 0;
+    transition: all .2s ease-in-out;
+  }
+
+  /* .parent:hover { 
+    z-index: 5;
+    box-shadow: 0px 13px 30px -15px #000000;
+    transform:translateY(-10px);
+  } */
+
+  .border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* border: 1px green solid; */
+    width: 120px;
+    z-index: 2;
+    margin-bottom: 1px;
+    /* box-shadow: 0px 5px 20px -10px #3A1C71; */
+  }
+
+  .image {
+    position: relative;
+    width: 118px;
+    height: 152px;
+    padding: 1px;
+    display: block;
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: rgb(240, 235, 211); */
+    /* background-image: url("/images/cards/papyrus.png"); */
+    /* background-image: url("/images/cards/papyrus-small.png");  */
+    background: linear-gradient(110deg, rgb(240, 235, 211) 0%, rgb(240, 229, 175) 100%);
+    margin: 0;
+    height: 42px;
+  }
+
+  .card-title {
+    font-family: "Open Sans", Helvetica, sans-serif;
+    margin: 0;
+    padding: 0 5px 0 5px;
+    font-weight: bold;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+  }
