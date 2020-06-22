@@ -1,6 +1,7 @@
 (ns timeline-game.core
   (:require [re-frame.core :as rf]
             [reagent.dom :as reagent-dom]
+            [timeline-game.routes :as routes]
             [timeline-game.init]
             [timeline-game.events]
             [timeline-game.view :as view]
@@ -18,5 +19,6 @@
                       (js/document.getElementById "app")))
 
 (defn ^:export init []
+  (routes/app-routes)
   (rf/dispatch-sync [::load-app])
   (render))

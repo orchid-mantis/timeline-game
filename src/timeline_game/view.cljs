@@ -5,11 +5,14 @@
             [timeline-game.hand :as hand]
             [timeline-game.timeline :as timeline]
             [timeline-game.history :as history]
+            [timeline-game.card-set :as card-set]
             [timeline-game.game-result :as game-result]))
 
-(defn root []
+(defn main-panel []
   [:div
    [:h1 "Timeline Game"]
+
+   [:a.button {:href "#/card-set"} "View all cards"]
 
    [:button.btn
     {:on-click #(rf/dispatch [:new-game])}
@@ -36,3 +39,22 @@
    [:div.hand
     [:h2 "Hand"]
     [hand/view]]])
+
+(defn card-set-panel []
+  [:div
+   [:a.button {:href "#/"} "Return to game"]
+   [card-set/view]])
+
+(defn- panels [panel-name]
+  (case panel-name
+    :main-panel [main-panel]
+    :card-set-panel [card-set-panel]
+    [:div]))
+
+(defn show-panel [panel-name]
+  [panels panel-name])
+
+(defn root []
+  (let [active-panel (rf/subscribe [:active-panel])]
+    [:div
+     [show-panel @active-panel]]))
