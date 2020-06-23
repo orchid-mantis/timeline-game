@@ -43,14 +43,6 @@
 
 ;; -- Events ------------------------------------------------------------------
 
-(def debug (rf/after (fn [db event]
-                       (.log js/console "=======")
-                       (.log js/console "player: " (str (get-in db [:game :player])))
-                       (.log js/console "state: " (str (get-in db [:game :turn])))
-                       (.log js/console "event: " (str event)))))
-
-(def interceptors [debug])
-
 (defn update-next-state [db event]
   (fsm/update-next-state turn-state-fsm db [:game :turn] event))
 
@@ -62,7 +54,6 @@
 
 (rf/reg-event-fx
  :init-turn
- interceptors
  (fn [{:keys [db]} [event _]]
    (let [player (get-in db [:game :player])]
      (merge {:db (update-next-state db event)}
@@ -93,21 +84,18 @@
 
 (rf/reg-event-fx
  :correct-move
- interceptors
  (fn [{:keys [db]} [event _]]
    {:db (update-next-state db event)
     :timeout [keep-state-in-ms [:correct-end-turn]]}))
 
 (rf/reg-event-fx
  :correct-end-turn
- interceptors
  (fn [{:keys [db]} [event _]]
    {:db (update-next-state db event)
     :dispatch [:end-turn]}))
 
 (rf/reg-event-fx
  :wrong-move
- interceptors
  (fn [{:keys [db]} [event player id]]
    {:db (update-next-state db event)
     :timeout [keep-state-in-ms [:wrong-end-turn player id]]}))
@@ -122,7 +110,6 @@
 
 (rf/reg-event-fx
  :wrong-end-turn
- interceptors
  (fn [{:keys [db]} [event player id]]
    (let [mode (get-in db [:game :mode])]
      {:db (cond-> db
