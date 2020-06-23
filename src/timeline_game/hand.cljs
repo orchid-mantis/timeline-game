@@ -1,5 +1,6 @@
 (ns timeline-game.hand
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [timeline-game.basic-card :as basic-card]))
 
 ;; -- Subscriptions -----------------------------------------------------------
 
@@ -53,13 +54,8 @@
             :on-drag-start #(rf/dispatch [:select-card id])
             :on-drag-end (fn []
                            (rf/dispatch [:deselect-card]))
-
             :style {:display :inline-block
-                    :margin 5
-                    :padding 5
-                    :width 100
-                    :border "2px solid blue"
                     :user-select (when (not @player-turn?) :none)
                     :cursor (if @player-turn? :pointer :not-allowed)
                     :background-color (when (not @player-turn?) :grey)}}
-           (:title card)]))])))
+           [basic-card/view card false]]))])))

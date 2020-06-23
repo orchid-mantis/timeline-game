@@ -1,7 +1,8 @@
 (ns timeline-game.timeline
   (:require [re-frame.core :as rf]
             [reagent.core :as reagent]
-            [timeline-game.common :refer [put-before remove-card]]))
+            [timeline-game.common :refer [put-before remove-card]]
+            [timeline-game.basic-card :as basic-card]))
 
 ;; -- Subscriptions -----------------------------------------------------------
 
@@ -99,11 +100,7 @@
 
                [:li {:key pos
                      :style {:display :inline-block
-                             :padding 5
-                             :margin "5px 0 5px 0"
-                             :width 100
-                             :border "2px solid blue"
                              :background-color (when (= id @last-added-id) @color)}}
-                (:title item)])))]
+                [basic-card/view item true]])))]
          ;[:p (pr-str @s)]
          ]))))

@@ -1,6 +1,7 @@
 (ns timeline-game.card-set
   (:require [reagent.core :as reagent]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [timeline-game.basic-card :as basic-card]))
 
 (rf/reg-sub
  :card-set/ordered
@@ -20,12 +21,4 @@
            [:li {:id id
                  :key pos
                  :style {:display :inline-block}}
-            [:div.parent
-             [:img.border {:src "images/cards/card-border-back.svg"}]
-             [:img.image {:src "images/cards/adam-eva.png"}]
-             [:div.content
-              [:h3.card-title (:title item)]]]
-
-            ;; [:p (:year item)]
-            ;; [:p (:time-desc item)]
-            ]))]])))
+            [basic-card/view item true]]))]])))

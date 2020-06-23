@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300,700");
+.card {
+  font-family: "Open Sans", Helvetica, sans-serif;
+  text-align: center;
+  display: inline-block;
+  width: 150px;
+  padding: 0.5em;
+  border-radius: 6px;
+  margin: 10px;
+  background: #ddd;
+  text-align: left;
+  box-shadow: 0px 5px 20px -10px #111111;
+  position: relative;
+  transition: 0.4s;
+}
+
+.card__verse {
+  margin: 0;
+  padding: 1em;
+}
+
+.card__caption {
+  background-color: rgba(255, 255, 255, 0.65);
+  padding: 0.75em;
+  position: relative;
+  border-radius: 0 0 3px 3px;
+}
+
+.card__time-desc {
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  margin: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 1em;
+  font-weight: 400;
+  font-family: "Open Sans Condensed", "Open Sans", helvetica, sans-serif;
+  letter-spacing: 0.1em;
+  padding: 0.4em;
+  line-height: 0.7em;
+  border-radius: 1px;
+  background: #bbbbbb;
+}
+
+.card__title {
+  font-family: "Open Sans Condensed", "Open Sans", helvetica, sans-serif;
+  text-align: center;
+  font-size: 1em;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.card--normal {
+  background: linear-gradient(110deg, #FDBB2D 0%, #3A1C71 100%);
+  box-shadow: 0px 5px 20px -10px #3A1C71;
+}
+
+.card--normal .card__time-desc {
+  background-color: #C08A53;
+}
+
+.card:hover {
+  z-index: 5;
+  box-shadow: 0px 13px 30px -15px #000000;
+  transform: translateY(-10px);
+}
