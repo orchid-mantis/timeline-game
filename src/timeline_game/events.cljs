@@ -104,7 +104,7 @@
   (let [card-id (first (:deck db))]
     (if card-id
       (-> db
-          (update-in [player :hand] conj card-id)
+          (update-in [player :hand :ids] conj card-id)
           (update :deck #(vec (drop 1 %))))
       db)))
 
@@ -135,8 +135,8 @@
     :dispatch [:init-turn]}))
 
 (defn eval-standard [db]
-  (let [player-hand (get-in db [:player :hand])
-        bot-hand (get-in db [:bot :hand])]
+  (let [player-hand (get-in db [:player :hand :ids])
+        bot-hand (get-in db [:bot :hand :ids])]
     (cond
       (and (empty? player-hand) (empty? bot-hand)) [true :sudden-death]
       (empty? player-hand) [false :player-won]

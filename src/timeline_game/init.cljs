@@ -17,7 +17,7 @@
 (defn init-hand [db player]
   (let [[hand deck] (deal-cards hand-size (:deck db))]
     (-> db
-        (assoc-in [player :hand] hand)
+        (assoc-in [player :hand :ids] hand)
         (assoc :deck deck))))
 
 (defn init-player [db player]

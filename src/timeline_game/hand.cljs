@@ -15,15 +15,15 @@
         (= turn :ready))))
 
 (rf/reg-sub
- :hand
+ :hand/ids
  (fn [db]
-   (get-in db [:player :hand])))
+   (get-in db [:player :hand :ids])))
 
 (rf/reg-sub
  :hand/cards
  (fn []
    [(rf/subscribe [:cards])
-    (rf/subscribe [:hand])])
+    (rf/subscribe [:hand/ids])])
  (fn [[cards hand]]
    (map cards hand)))
 
@@ -61,5 +61,5 @@
             false
             (ui/cs (when @player-turn? :selectable))
             {:user-select (when (not @player-turn?) :none)
-                                        :cursor (if @player-turn? :pointer :not-allowed)
-                                        :opacity (when (not @player-turn?) 0.3)}]]))])))
+             :cursor (if @player-turn? :pointer :not-allowed)
+             :opacity (when (not @player-turn?) 0.3)}]]))])))

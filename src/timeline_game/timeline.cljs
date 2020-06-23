@@ -54,7 +54,7 @@
  (fn [{:keys [db]} [_ pos]]
    (let [id (get-in db [:player :selected-card-id])]
      {:db (-> db
-              (update-in [:player :hand] remove-card id)
+              (update-in [:player :hand :ids] remove-card id)
               (update-in [:timeline :ids] put-before pos id)
               (assoc-in [:player :selected-card-id] :nothing))
       :dispatch [:eval-move :player id]})))

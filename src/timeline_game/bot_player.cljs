@@ -31,10 +31,10 @@
 (rf/reg-event-fx
  :play-bot-move
  (fn [{:keys [db]} _]
-   (let [[id new-hand] (select-card (get-in db [:bot :hand]))
+   (let [[id new-hand] (select-card (get-in db [:bot :hand :ids]))
          distribution (get-in db [:bot :success-dist])]
      {:db (-> db
-              (assoc-in [:bot :hand] new-hand)
+              (assoc-in [:bot :hand :ids] new-hand)
               (update-in [:timeline :ids] bot-place-card id (peek distribution))
               (assoc-in [:bot :success-dist] (pop distribution)))
       :dispatch [:eval-move :bot id]})))
