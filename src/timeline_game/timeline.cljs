@@ -2,7 +2,8 @@
   (:require [re-frame.core :as rf]
             [reagent.core :as reagent]
             [timeline-game.common :refer [put-before remove-card]]
-            [timeline-game.basic-card :as basic-card]))
+            [timeline-game.basic-card :as basic-card]
+            [timeline-game.ui-helpers :as ui]))
 
 ;; -- Subscriptions -----------------------------------------------------------
 
@@ -25,13 +26,13 @@
    (vec (map cards timeline))))
 
 (rf/reg-sub
- :highlight-color
+ :move-animation
  (fn []
    (rf/subscribe [:turn]))
  (fn [turn]
    (case turn
-     :well-placed-card :green
-     :misplaced-card :red
+     :well-placed-card :flip-in-hor-top
+     :misplaced-card :rotate-out-2-cw
      nil)))
 
 (rf/reg-sub
@@ -85,7 +86,7 @@
 (defn view []
   (let [cards (rf/subscribe [:timeline/cards])
         last-added-id (rf/subscribe [:timeline/last-added])
-        color (rf/subscribe [:highlight-color])
+        animation (rf/subscribe [:move-animation])
         highlight-drop-zones? (rf/subscribe [:highlight-drop-zones?])
         s (reagent/atom {})]
     (fn []
@@ -99,8 +100,8 @@
                (drop-zone s pos @highlight-drop-zones?)
 
                [:li {:key pos
-                     :style {:display :inline-block
-                             :background-color (when (= id @last-added-id) @color)}}
+                     :class (ui/cs (when (= id @last-added-id) @animation))
+                     :style {:display :inline-block}}
                 [basic-card/view item true]])))]
          ;[:p (pr-str @s)]
          ]))))

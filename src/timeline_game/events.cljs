@@ -17,6 +17,8 @@
    :player    {:next-player    :bot}
    :bot       {:next-player    :none}})
 
+(def keep-state-in-ms 700)
+
 ;; -- Subscriptions -----------------------------------------------------------
 
 (rf/reg-sub
@@ -94,7 +96,7 @@
  interceptors
  (fn [{:keys [db]} [event _]]
    {:db (update-next-state db event)
-    :timeout [300 [:correct-end-turn]]}))
+    :timeout [keep-state-in-ms [:correct-end-turn]]}))
 
 (rf/reg-event-fx
  :correct-end-turn
@@ -108,7 +110,7 @@
  interceptors
  (fn [{:keys [db]} [event player id]]
    {:db (update-next-state db event)
-    :timeout [300 [:wrong-end-turn player id]]}))
+    :timeout [keep-state-in-ms [:wrong-end-turn player id]]}))
 
 (defn draw-card [db player]
   (let [card-id (first (:deck db))]
