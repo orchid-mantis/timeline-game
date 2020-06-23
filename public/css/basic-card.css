@@ -61,7 +61,7 @@
   background-color: #C08A53;
 }
 
-.card:hover {
+.hand .card:hover {
   z-index: 5;
   box-shadow: 0px 13px 30px -15px #000000;
   transform: translateY(-10px);
