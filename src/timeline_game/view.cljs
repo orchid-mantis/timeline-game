@@ -12,7 +12,7 @@
   [:div
    [:h1 "Timeline Game"]
 
-   [:a.button {:href "#/card-set"} "View all cards"]
+  ;;  [:a.button {:href "#/card-set"} "View all cards"]
 
    [:button.btn
     {:on-click #(rf/dispatch [:new-game])}
