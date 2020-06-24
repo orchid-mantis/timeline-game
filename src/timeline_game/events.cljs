@@ -45,11 +45,6 @@
  (fn [db _]
    (get-in db [:game :player])))
 
-(rf/reg-sub
- :hand/state
- (fn [db _]
-   (get-in db [:game :hand-state])))
-
 ;; -- Events ------------------------------------------------------------------
 
 (defn update-next-state [db event]
@@ -61,8 +56,8 @@
 (defn update-next-player [db event]
   (fsm/update-next-state player-fsm db [:game :player] event))
 
-(defn update-next-hand-state [db event]
-  (fsm/update-next-state hand-fsm db [:game :hand-state] event))
+(defn update-next-hand-state [db event player]
+  (fsm/update-next-state hand-fsm db [player :hand :state] event))
 
 (rf/reg-event-fx
  :init-turn
@@ -112,18 +107,6 @@
    {:db (update-next-state db event)
     :timeout [keep-state-in-ms [:wrong-end-turn player id]]}))
 
-(defn draw-card [db player]
-  (let [card-id (first (:deck db))]
-    (if card-id
-      (-> db
-          (update-in [player :hand :ids] conj card-id)
-          (update :deck #(vec (drop 1 %)))
-          (assoc-in [player :hand :last-added-id] card-id))
-      db)))
-
-(defn players-draw-card [db players]
-  (reduce #(draw-card %1 %2) db players))
-
 (rf/reg-event-fx
  :wrong-end-turn
  (fn [{:keys [db]} [event player id]]
@@ -136,21 +119,33 @@
                   [:draw-card [player] :end-turn]
                   [:end-turn])})))
 
+(defn draw-card [db player]
+  (let [card-id (first (:deck db))]
+    (if card-id
+      (-> db
+          (update-in [player :hand :ids] conj card-id)
+          (update :deck #(vec (drop 1 %)))
+          (assoc-in [player :hand :last-added-id] card-id))
+      db)))
+
+(defn players-draw-card [db players]
+  (reduce #(draw-card %1 %2) db players))
+
+(defn update-next-hand-states [db players event]
+  (reduce #(update-next-hand-state %1 event %2) db players))
+
 (rf/reg-event-fx
  :draw-card
  (fn [{:keys [db]} [event players next-event]]
-   (let [players-draw? (contains? (set players) :player)]
-     {:db (cond-> db
-            players-draw? (update-next-hand-state event)
-            true (players-draw-card players))
-      :timeout [keep-state-in-ms [:end-draw-card players-draw? next-event]]})))
+   {:db (-> db
+            (update-next-hand-states players event)
+            (players-draw-card players))
+    :timeout [keep-state-in-ms [:end-draw-card players next-event]]}))
 
 (rf/reg-event-fx
  :end-draw-card
- (fn [{:keys [db]} [event players-draw? next-event]]
-   {:db (if players-draw?
-          (update-next-hand-state db event)
-          db)
+ (fn [{:keys [db]} [event players next-event]]
+   {:db (update-next-hand-states db players event)
     :dispatch [next-event]}))
 
 (rf/reg-event-fx

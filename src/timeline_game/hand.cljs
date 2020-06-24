@@ -15,6 +15,11 @@
         (= turn :ready))))
 
 (rf/reg-sub
+ :hand/state
+ (fn [db _]
+   (get-in db [:player :hand :state])))
+
+(rf/reg-sub
  :hand/last-added
  (fn [db]
    (get-in db [:player :hand :last-added-id])))

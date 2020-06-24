@@ -18,6 +18,7 @@
   (let [[hand deck] (deal-cards hand-size (:deck db))]
     (-> db
         (assoc-in [player :hand :ids] hand)
+        (assoc-in [player :hand :state] :ready)
         (assoc :deck deck))))
 
 (defn init-player [db player]
@@ -36,7 +37,7 @@
         (update :deck #(drop 1 %)))))
 
 (defn init-game-state [db]
-  (assoc db :game {:mode :standard :result :await :hand-state :ready}))
+  (assoc db :game {:mode :standard :result :await}))
 
 (defn init-success-rate-distribution [db]
   (let [card-count (count (:cards db))]
