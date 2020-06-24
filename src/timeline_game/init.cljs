@@ -36,7 +36,7 @@
         (update :deck #(drop 1 %)))))
 
 (defn init-game-state [db]
-  (assoc db :game {:mode :standard :result :await}))
+  (assoc db :game {:mode :standard :result :await :hand-state :ready}))
 
 (defn init-success-rate-distribution [db]
   (let [card-count (count (:cards db))]
@@ -54,4 +54,4 @@
  :new-game
  (fn [{:keys [db]} _]
    {:db (init-game db)
-    :dispatch [:next-round]}))
+    :dispatch [:next-round :standard]}))

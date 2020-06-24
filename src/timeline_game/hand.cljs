@@ -15,6 +15,21 @@
         (= turn :ready))))
 
 (rf/reg-sub
+ :hand/last-added
+ (fn [db]
+   (get-in db [:player :hand :last-added-id])))
+
+(rf/reg-sub
+ :drawn-card-id
+ (fn []
+   [(rf/subscribe [:hand/state])
+    (rf/subscribe [:hand/last-added])])
+ (fn [[hand-state last-added-id]]
+   (if (= hand-state :draw-card-animation)
+     last-added-id
+     nil)))
+
+(rf/reg-sub
  :hand/ids
  (fn [db]
    (get-in db [:player :hand :ids])))
@@ -43,7 +58,8 @@
 
 (defn view []
   (let [player-turn? (rf/subscribe [:players-turn?])
-        cards (rf/subscribe [:hand/cards])]
+        cards (rf/subscribe [:hand/cards])
+        drawn-card-id (rf/subscribe [:drawn-card-id])]
     (fn []
       [:ul
        (doall
@@ -59,7 +75,8 @@
            [basic-card/view
             card
             false
-            (ui/cs (when @player-turn? :selectable))
+            (ui/cs (when @player-turn? :selectable)
+                   (when (= id @drawn-card-id) :slide-in-top))
             {:user-select (when (not @player-turn?) :none)
              :cursor (if @player-turn? :pointer :not-allowed)
              :opacity (when (not @player-turn?) 0.3)}]]))])))

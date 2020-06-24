@@ -17,6 +17,10 @@
    :player    {:next-player    :bot}
    :bot       {:next-player    :none}})
 
+(def hand-fsm
+  {:ready                  {:draw-card        :draw-card-animation}
+   :draw-card-animation    {:end-draw-card    :ready}})
+
 (def keep-state-in-ms 700)
 
 ;; -- Subscriptions -----------------------------------------------------------
@@ -41,6 +45,11 @@
  (fn [db _]
    (get-in db [:game :player])))
 
+(rf/reg-sub
+ :hand/state
+ (fn [db _]
+   (get-in db [:game :hand-state])))
+
 ;; -- Events ------------------------------------------------------------------
 
 (defn update-next-state [db event]
@@ -51,6 +60,9 @@
 
 (defn update-next-player [db event]
   (fsm/update-next-state player-fsm db [:game :player] event))
+
+(defn update-next-hand-state [db event]
+  (fsm/update-next-state hand-fsm db [:game :hand-state] event))
 
 (rf/reg-event-fx
  :init-turn
@@ -105,19 +117,41 @@
     (if card-id
       (-> db
           (update-in [player :hand :ids] conj card-id)
-          (update :deck #(vec (drop 1 %))))
+          (update :deck #(vec (drop 1 %)))
+          (assoc-in [player :hand :last-added-id] card-id))
       db)))
+
+(defn players-draw-card [db players]
+  (reduce #(draw-card %1 %2) db players))
 
 (rf/reg-event-fx
  :wrong-end-turn
  (fn [{:keys [db]} [event player id]]
    (let [mode (get-in db [:game :mode])]
+     {:db (-> db
+              (update-in [:timeline :ids] #(remove-card % id))
+              (update :deck #(conj % id))
+              (update-next-state event))
+      :dispatch (if (= mode :standard)
+                  [:draw-card [player] :end-turn]
+                  [:end-turn])})))
+
+(rf/reg-event-fx
+ :draw-card
+ (fn [{:keys [db]} [event players next-event]]
+   (let [players-draw? (contains? (set players) :player)]
      {:db (cond-> db
-            true (update-in [:timeline :ids] #(remove-card % id))
-            true (update :deck #(conj % id))
-            true (update-next-state event)
-            (= mode :standard) (draw-card player))
-      :dispatch [:end-turn]})))
+            players-draw? (update-next-hand-state event)
+            true (players-draw-card players))
+      :timeout [keep-state-in-ms [:end-draw-card players-draw? next-event]]})))
+
+(rf/reg-event-fx
+ :end-draw-card
+ (fn [{:keys [db]} [event players-draw? next-event]]
+   {:db (if players-draw?
+          (update-next-hand-state db event)
+          db)
+    :dispatch [next-event]}))
 
 (rf/reg-event-fx
  :end-turn
@@ -173,23 +207,15 @@
                   [:next-round result]
                   [:game-end result])})))
 
-(defn all-players-draw-card [db]
-  (reduce #(draw-card %1 %2) db [:player :bot]))
-
-(defn handle-mode-change [db mode]
-  (cond (= mode :sudden-death)
-        (-> db
-            (assoc-in [:game :mode] mode)
-            (all-players-draw-card))
-        :else db))
-
 (rf/reg-event-fx
  :next-round
  (fn [{:keys [db]} [_ mode]]
    {:db (-> db
             (assoc-in [:game :player] nil)
-            (handle-mode-change mode))
-    :dispatch [:next-player]}))
+            (assoc-in [:game :mode] mode))
+    :dispatch (if (= mode :sudden-death)
+                [:draw-card [:player :bot] :next-player]
+                [:next-player])}))
 
 (rf/reg-event-db
  :game-end
