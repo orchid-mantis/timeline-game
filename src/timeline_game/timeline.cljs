@@ -71,15 +71,12 @@
         :on-drop (fn [e]
                    (.preventDefault e)
                    (rf/dispatch [:place-card (/ pos 2)])
-                   (swap! s update-in [:drag-enter pos] (fn [] false)))
-
-        :style {:display :inline-block
-                :padding "5px 0 5px 0"
-                :text-align :center
-                :background-color (when highlight-drop-zones? :orange)
-                :border (when (get-in @s [:drag-enter pos]) "2px solid orange")
-                :width 20}}
-   "*"])
+                   (swap! s update-in [:drag-enter pos] (fn [] false)))}
+   [:div.drop-zone
+    {:class (ui/cs (when highlight-drop-zones? :highlight-all)
+                   (when (get-in @s [:drag-enter pos]) :highlight))}
+    [:div.ribbon
+     {:class (when highlight-drop-zones? :hide)}]]])
 
 ;; -- UI ------------------------------------------------------------------
 
@@ -91,17 +88,16 @@
         s (reagent/atom {})]
     (fn []
       (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
-        [:div
-         [:ul
-          (doall
-           (for [[item pos] (map vector items (range))
-                 :let [id (:id item)]]
-             (if (= item :drop-zone)
-               (drop-zone s pos @highlight-drop-zones?)
+        [:ul
+         (doall
+          (for [[item pos] (map vector items (range))
+                :let [id (:id item)]]
+            (if (= item :drop-zone)
+              (drop-zone s pos @highlight-drop-zones?)
 
-               [:li {:key pos
-                     :class (ui/cs (when (= id @last-added-id) @animation))
-                     :style {:display :inline-block}}
-                [basic-card/view item true]])))]
+              [:li {:key pos
+                    :class (ui/cs (when (= id @last-added-id) @animation))
+                    :style {:display :inline-block}}
+               [basic-card/view item true nil {:margin "10px 0 10px 0"}]])))]
          ;[:p (pr-str @s)]
-         ]))))
+        ))))
