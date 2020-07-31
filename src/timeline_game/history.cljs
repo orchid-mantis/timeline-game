@@ -48,7 +48,7 @@
               [:td {:style {:text-align :center
                             :margin 5
                             :padding 5
-                            :width 100
+                            :width 150
                             :border (if valid? "2px solid green" "2px solid red")
                             :list-style-type :none}}
                (:title card)]]))]]))))
