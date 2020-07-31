@@ -1,7 +1,8 @@
 (ns timeline-game.bot-player
   (:require [re-frame.core :as rf]
             [clojure.set :as set]
-            [timeline-game.common :refer [put-before remove-card]]))
+            [timeline-game.common :refer [put-before remove-card]]
+            [kixi.stats.distribution :refer [draw bernoulli]]))
 
 (defn select-card [hand]
   (let [card-id (first (shuffle hand))]
@@ -28,13 +29,17 @@
     bot-success? (place-card-correct timeline card-id)
     :else (place-card-wrong timeline card-id)))
 
+(rf/reg-cofx
+ :bot-success?
+ (fn [cofx]
+   (assoc cofx :bot-success? (draw (bernoulli {:p 0.9})))))
+
 (rf/reg-event-fx
  :play-bot-move
- (fn [{:keys [db]} _]
-   (let [[id new-hand] (select-card (get-in db [:bot :hand :ids]))
-         distribution (get-in db [:bot :success-dist])]
+ [(rf/inject-cofx :bot-success?)]
+ (fn [{:keys [db bot-success?]} _]
+   (let [[id new-hand] (select-card (get-in db [:bot :hand :ids]))]
      {:db (-> db
               (assoc-in [:bot :hand :ids] new-hand)
-              (update-in [:timeline :ids] bot-place-card id (peek distribution))
-              (assoc-in [:bot :success-dist] (pop distribution)))
+              (update-in [:timeline :ids] bot-place-card id bot-success?))
       :dispatch [:eval-move :bot id]})))
