@@ -37,7 +37,7 @@
            [:th "Card"]]]
          [:tbody
           (doall
-           (for [[card index] (zipmap cards (range))
+           (for [[index card] (map-indexed (fn [idx card] [idx card]) cards)
                  :let [index (- cards-count index)
                        id (:id card)
                        valid? (:valid? card)]]
