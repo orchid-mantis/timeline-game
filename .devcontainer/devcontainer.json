@@ -4,7 +4,8 @@
 	"service": "web",
 	"workspaceFolder": "/workspaces/timeline-game",
 	"extensions": [
-		"betterthantomorrow.calva"
+		"betterthantomorrow.calva",
+		"michelemelluso.code-beautifier"
 	],
 	"settings":{
 		"calva.jokerPath": "/usr/bin"
