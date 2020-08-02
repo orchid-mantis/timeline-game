@@ -9,36 +9,35 @@
             [timeline-game.game-result :as game-result]))
 
 (defn main-panel []
-  [:div
-   [:h1 "Timeline Game"]
+  [:div.site
+   [:header
+    [:span.title "Timeline Game"]
 
-  ;;  [:a.button {:href "#/card-set"} "View all cards"]
+    [:a.button
+     {:on-click #(rf/dispatch [:new-game])}
+     "Start a new game"]]
 
-   [:button.btn
-    {:on-click #(rf/dispatch [:new-game])}
-    "Start a new game"]
+   [:div.players
+    [dropdown/view
+     "Player's history"
+     [hist-overview/view (rf/subscribe [:history/overview :player])]
+     [history/view (rf/subscribe [:history/played-cards :player])]]
 
-   [game-result/view]
-
-   [dropdown/view
-    "Player's history"
-    [hist-overview/view (rf/subscribe [:history/overview :player])]
-    [history/view (rf/subscribe [:history/played-cards :player])]]
-
-   [dropdown/view
-    "Bot's history"
-    [hist-overview/view (rf/subscribe [:history/overview :bot])]
-    [history/view (rf/subscribe [:history/played-cards :bot])]]
-
-   [:div {:style {:clear :both}}]
+    [dropdown/view
+     "Bot's history"
+     [hist-overview/view (rf/subscribe [:history/overview :bot])]
+     [history/view (rf/subscribe [:history/played-cards :bot])]]]
 
    [:div.timeline
-    [:h2 "Timeline"]
     [timeline/view]]
 
    [:div.hand
-    [:h2 "Hand"]
-    [hand/view]]])
+    [hand/view]]
+
+   [:footer
+    [:div.status-bar "Status bar"]]
+
+   [game-result/view]])
 
 (defn card-set-panel []
   [:div
