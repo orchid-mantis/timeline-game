@@ -8,3 +8,4 @@ pom.xml
 .cpcache
 public/js/
 public/images/
+.calva/
