@@ -24,11 +24,12 @@
   (-> db
       (assoc-in [player :history] {})
       (assoc-in [player :selected-card-id] :nothing)
-      (update :players #(vec (conj %1 %2)) player)
       (init-hand player)))
 
 (defn init-players [db players]
-  (reduce #(init-player %1 %2) db players))
+  (assoc
+   (reduce #(init-player %1 %2) db players)
+   :players players))
 
 (defn init-timeline [db]
   (let [cards-ids (take 1 (:deck db))]
