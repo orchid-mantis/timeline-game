@@ -6,6 +6,7 @@
             [timeline-game.timeline :as timeline]
             [timeline-game.history :as history]
             [timeline-game.card-set :as card-set]
+            [timeline-game.players-stats :as players-stats]
             [timeline-game.game-result :as game-result]))
 
 (defn main-panel []
@@ -19,15 +20,11 @@
        "Start a new game"]]]]
 
    [:div.players
-    [dropdown/view
-     "Player's history"
-     [hist-overview/view (rf/subscribe [:history/overview :player])]
-     [history/view (rf/subscribe [:history/played-cards :player])]]
-
-    [dropdown/view
-     "Bot's history"
-     [hist-overview/view (rf/subscribe [:history/overview :bot])]
-     [history/view (rf/subscribe [:history/played-cards :bot])]]]
+    [:div.players-stats
+     [:div.column "Player"]
+     [players-stats/view  :player]
+     [:div.column "Bot"]
+     [players-stats/view :bot]]]
 
    [:div.timeline
     [timeline/view]]
