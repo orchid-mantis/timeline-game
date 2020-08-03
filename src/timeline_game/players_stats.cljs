@@ -32,20 +32,20 @@
             invalid-count (:invalid-count @stats)
             hand-size (:hand-size @stats)
             last-played-card (:last-played-card @stats)]
-        [:div.hist-overview.column
-         [:span.item
+        [:div.column.row-data
+         [:span.item {:title "Well-played count"}
           [:i.fas.fa-check {:style {:color :green}}]
           [:span valid-count]]
 
-         [:span.item
+         [:span.item {:title "Wrong-played count"}
           [:i.fas.fa-times {:style {:color :red}}]
           [:span invalid-count]]
 
-         [:span.item
+         [:span.item {:title "Number of cards in hand"}
           [:i.fas.fa-clone {:style {:color :black}}]
           [:span hand-size]]
 
-         [:span.item
+         [:span.item {:title "Card title"}
           [:i.fas.fa-caret-right {:style {:color :black}}]
           [:span
            (get last-played-card :title "n/a")]]]))))
