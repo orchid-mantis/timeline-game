@@ -36,14 +36,14 @@
 
 (rf/reg-sub
  :hand/ids
- (fn [db]
-   (get-in db [:player :hand :ids])))
+ (fn [db [_ player]]
+   (get-in db [player :hand :ids])))
 
 (rf/reg-sub
  :hand/cards
  (fn []
    [(rf/subscribe [:cards])
-    (rf/subscribe [:hand/ids])])
+    (rf/subscribe [:hand/ids :player])])
  (fn [[cards hand]]
    (map cards hand)))
 

@@ -1,7 +1,7 @@
 (ns timeline-game.players-stats
   (:require [re-frame.core :as rf]))
 
-(defn history-overview [cards history]
+(defn players-stats [cards history]
   (let [ids (:ids history)
         validity (vals (:validity history))]
     {:valid-count (count (filter true? validity))
@@ -9,18 +9,28 @@
      :last-played-card (cards (first ids))}))
 
 (rf/reg-sub
+ :hand/size
+ (fn [[_ player]]
+   (rf/subscribe [:hand/ids player]))
+ (fn [hand-ids]
+   (count hand-ids)))
+
+(rf/reg-sub
  :player/stats
  (fn [[_ player]]
    [(rf/subscribe [:cards])
+    (rf/subscribe [:hand/size player])
     (rf/subscribe [:history player])])
- (fn [[cards history]]
-   (history-overview cards history)))
+ (fn [[cards hand-size history]]
+   (merge {:hand-size hand-size}
+          (players-stats cards history))))
 
 (defn view [player]
   (let [stats (rf/subscribe [:player/stats player])]
     (fn []
       (let [valid-count (:valid-count @stats)
             invalid-count (:invalid-count @stats)
+            hand-size (:hand-size @stats)
             last-played-card (:last-played-card @stats)]
         [:div.hist-overview.column
          [:span.item
@@ -33,4 +43,9 @@
 
          [:span.item
           [:i.fas.fa-clone {:style {:color :black}}]
-          [:span (get last-played-card :title "---")]]]))))
+          [:span hand-size]]
+
+         [:span.item
+          [:i.fas.fa-caret-right {:style {:color :black}}]
+          [:span
+           (get last-played-card :title "n/a")]]]))))
