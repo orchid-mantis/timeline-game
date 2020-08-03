@@ -32,9 +32,10 @@ ul {
 }
 
 .title {
-  font-family: "Open Sans", helvetica, sans-serif;
-  font-weight: 800;
-  font-size: 1em;
+  font-family: 'riffic-bold', sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1.75em;
   letter-spacing: 0.1em;
 }
 

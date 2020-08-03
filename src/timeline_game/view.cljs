@@ -13,7 +13,7 @@
    [:header
     [:div.menu-wrapper
      [:div.menu
-      [:span.title "Timeline Game"]
+      [:span.title "Bible Timeline Game"]
       [:a.button
        {:on-click #(rf/dispatch [:new-game])}
        "Start a new game"]]]]
