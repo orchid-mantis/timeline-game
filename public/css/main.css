@@ -9,21 +9,21 @@
   a.button {
     display: inline-block;
     padding: 0.46em 1em;
-    border: 1px solid #7996D2;
+    border: 2px solid #EACB89;
     margin: 0.3em;
     color: #000000;
     border-radius: 3px;
     box-sizing: border-box;
     text-decoration: none;
     font-weight: 300;
-    background-color: #E1F0FF;
+    background-color: #FFF3D9;
     text-align: center;
     transition: all 0.15s;
     cursor: pointer;
   }
 
   a.button:hover {
-    background-color: #7996D2;
+    background-color: #EACB89;
   }
 
   @media all and (max-width:30em) {
