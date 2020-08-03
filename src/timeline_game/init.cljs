@@ -37,7 +37,7 @@
         (update :deck #(drop 1 %)))))
 
 (defn init-game-state [db]
-  (assoc db :game {:mode :standard :result :await}))
+  (assoc db :game {:mode :standard :result :await :round 0}))
 
 (defn init-game [db]
   (-> db

@@ -206,6 +206,7 @@
  :next-round
  (fn [{:keys [db]} [_ mode]]
    {:db (-> db
+            (update-in [:game :round] inc)
             (assoc-in [:game :player] nil)
             (assoc-in [:game :mode] mode))
     :dispatch (if (= mode :sudden-death)
@@ -215,4 +216,6 @@
 (rf/reg-event-db
  :game-end
  (fn [db [_ game-result]]
-   (assoc-in db [:game :result] game-result)))
+   (-> db
+       (assoc-in [:game :round] 0)
+       (assoc-in [:game :result] game-result))))
