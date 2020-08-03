@@ -105,12 +105,12 @@
     -webkit-transform: rotate(45deg);
   }
 
-  .hist-overview i,
+  .row-data i,
   span {
     padding: 3px;
   }
 
-  .hist-overview {
+  .row-data {
     width: 300px;
   }
 
