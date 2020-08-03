@@ -72,9 +72,8 @@
    (js/setTimeout #(rf/dispatch event) time)))
 
 (defn historize [db player card-id valid-move?]
-  (-> db
-      (update-in [player :history :ids] conj card-id)
-      (assoc-in [player :history :validity card-id] valid-move?)))
+  (let [round-num (get-in db [:game :round])]
+    (assoc-in db [player :history round-num] {:id card-id :valid? valid-move?})))
 
 (rf/reg-event-fx
  :eval-move
@@ -172,15 +171,15 @@
       (empty? bot-hand)    [false :player-lost]
       :else                [true :standard])))
 
-(defn well-played? [history]
-  (let [last-played-card (first (:ids history))]
-    (get (:validity history) last-played-card)))
+(defn well-played? [round-num history]
+  (:valid? (get history round-num)))
 
 (defn eval-sudden-death [db]
-  (let [player-history (get-in db [:player :history])
+  (let [round-num (get-in db [:game :round])
+        player-history (get-in db [:player :history])
         bot-history (get-in db [:bot :history])
-        player-well-played? (well-played? player-history)
-        bot-well-played? (well-played? bot-history)]
+        player-well-played? (well-played? round-num player-history)
+        bot-well-played? (well-played? round-num bot-history)]
     (cond
       (and player-well-played? bot-well-played?) [true :sudden-death]
       player-well-played? [false :player-won]

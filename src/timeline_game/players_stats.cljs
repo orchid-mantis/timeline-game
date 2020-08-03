@@ -2,11 +2,12 @@
   (:require [re-frame.core :as rf]))
 
 (defn players-stats [cards history]
-  (let [ids (:ids history)
-        validity (vals (:validity history))]
-    {:valid-count (count (filter true? validity))
-     :invalid-count (count (filter false? validity))
-     :last-played-card (cards (first ids))}))
+  (let [played-cards (vals history)
+        players-cards-count (count played-cards)
+        well-played-count (count (filter #(true? (:valid? %)) played-cards))]
+    {:well-played-count well-played-count
+     :wrong-played-count (- players-cards-count well-played-count)
+     :last-played-card (cards (:id (last played-cards)))}))
 
 (rf/reg-sub
  :hand/size
@@ -28,22 +29,19 @@
 (defn view [player]
   (let [stats (rf/subscribe [:player/stats player])]
     (fn []
-      (let [valid-count (:valid-count @stats)
-            invalid-count (:invalid-count @stats)
-            hand-size (:hand-size @stats)
-            last-played-card (:last-played-card @stats)]
+      (let [last-played-card (:last-played-card @stats)]
         [:div.column.row-data
          [:span.item {:title "Well-played count"}
           [:i.fas.fa-check {:style {:color :green}}]
-          [:span valid-count]]
+          [:span (:well-played-count @stats)]]
 
          [:span.item {:title "Wrong-played count"}
           [:i.fas.fa-times {:style {:color :red}}]
-          [:span invalid-count]]
+          [:span (:wrong-played-count @stats)]]
 
          [:span.item {:title "Number of cards in hand"}
           [:i.fas.fa-clone {:style {:color :black}}]
-          [:span hand-size]]
+          [:span (:hand-size @stats)]]
 
          [:span.item {:title "Card title"}
           [:i.fas.fa-caret-right {:style {:color :black}}]
