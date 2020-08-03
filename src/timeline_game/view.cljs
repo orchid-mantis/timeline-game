@@ -11,11 +11,12 @@
 (defn main-panel []
   [:div.site
    [:header
-    [:span.title "Timeline Game"]
-
-    [:a.button
-     {:on-click #(rf/dispatch [:new-game])}
-     "Start a new game"]]
+    [:div.menu-wrapper
+     [:div.menu
+      [:span.title "Timeline Game"]
+      [:a.button
+       {:on-click #(rf/dispatch [:new-game])}
+       "Start a new game"]]]]
 
    [:div.players
     [dropdown/view
@@ -33,9 +34,6 @@
 
    [:div.hand
     [hand/view]]
-
-   [:footer
-    [:div.status-bar "Status bar"]]
 
    [game-result/view]])
 

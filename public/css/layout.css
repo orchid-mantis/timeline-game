@@ -4,27 +4,49 @@ html {
   margin: 0;
 }
 
+ul {
+  padding-inline-start: 0;
+}
+
 .site {
+  font-family: "Open Sans", helvetica, sans-serif;
   display: grid;
-  grid-template-rows: auto repeat(3, 1fr) auto;
+  grid-template-rows: auto repeat(3, 1fr);
   grid-gap: 10px;
 }
 
+.menu-wrapper {
+  vertical-align: middle;
+  padding: 0 0.5em 0.5em 0.5em;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  margin: 10px;
+  background-color: #4A659E;
+}
+
+.menu {
+  background-color: rgba(255, 255, 255, 0.65);
+  padding: 0.25em;
+  position: relative;
+  border-radius: 0 0 3px 3px;
+}
+
 .title {
-  font-family: "Open Sans Condensed", "Open Sans", helvetica, sans-serif;
+  font-family: "Open Sans", helvetica, sans-serif;
   font-weight: 800;
   font-size: 1em;
   letter-spacing: 0.1em;
 }
 
 header {
-  background-color: #f0ebd3;
-  border-bottom: 2px solid #a08f6b;
   display: flex;
   justify-content: flex-start;
 }
 
-.players {}
+.players {
+  display: flex;
+  justify-content: center;
+}
 
 .timeline {
   display: flex;
@@ -39,10 +61,4 @@ header {
 footer {
   display: flex;
   justify-content: center;
-}
-
-.status-bar {
-  border: 2px solid black;
-  border-radius: 10px;
-  padding: 10px;
 }

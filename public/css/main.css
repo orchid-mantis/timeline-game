@@ -9,17 +9,17 @@
   a.button {
     display: inline-block;
     padding: 0.46em 1.6em;
-    border: 0.1em solid #000000;
-    margin: 0 0.2em 0.2em 0;
-    border-radius: 0.2em;
+    /* border: 0.1em solid #000000; */
+    margin: 0.3em;
+    /* border-radius: 1em; */
     box-sizing: border-box;
     text-decoration: none;
-    font-family: 'Roboto', sans-serif;
     font-weight: 300;
     color: #000000;
     background-color: #f0ebd3;
     text-align: center;
     transition: all 0.15s;
+    cursor: pointer;
   }
 
   a.button:hover {
@@ -106,7 +106,8 @@
     -webkit-transform: rotate(45deg);
   }
 
-  .hist-overview i, span {
+  .hist-overview i,
+  span {
     padding: 3px;
   }
 
