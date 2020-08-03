@@ -24,6 +24,7 @@
   (-> db
       (assoc-in [player :history] {:ids '() :validity {}})
       (assoc-in [player :selected-card-id] :nothing)
+      (update :players #(vec (conj %1 %2)) player)
       (init-hand player)))
 
 (defn init-players [db players]
