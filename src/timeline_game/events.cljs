@@ -71,9 +71,17 @@
  (fn [[time event]]
    (js/setTimeout #(rf/dispatch event) time)))
 
+(defn update-stats [stats card-id valid-move?]
+  (let [count-key (if valid-move? :well-played-count :wrong-played-count)]
+    (-> stats
+        (update count-key inc)
+        (assoc :last-played-card-id card-id))))
+
 (defn historize [db player card-id valid-move?]
   (let [round-num (get-in db [:game :round])]
-    (assoc-in db [:history round-num player] {:id card-id :valid? valid-move?})))
+    (-> db
+        (assoc-in [:history round-num player] {:id card-id :valid? valid-move?})
+        (update-in [player :stats] update-stats card-id valid-move?))))
 
 (rf/reg-event-fx
  :eval-move
