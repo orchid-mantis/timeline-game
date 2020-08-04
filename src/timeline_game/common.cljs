@@ -12,3 +12,13 @@
 (defn ordered? [ids cards]
   (let [years (map #(:year (cards %)) ids)]
     (or (empty? ids) (apply <= years))))
+
+(defn fmap [f map]
+  (into {} (for [[k v] map]
+             [k (f v)])))
+
+(defn copy-fields [obj-map obj-key field-keys mod-map]
+  (fmap (fn [m]
+          (let [obj (obj-map (obj-key m))]
+            (reduce (fn [m k] (assoc m k (k obj))) m field-keys)))
+        mod-map))
