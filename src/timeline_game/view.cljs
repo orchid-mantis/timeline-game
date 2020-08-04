@@ -1,7 +1,6 @@
 (ns timeline-game.view
   (:require [re-frame.core :as rf]
             [timeline-game.dropdown-panel :as dropdown]
-            [timeline-game.card_history_overview :as hist-overview]
             [timeline-game.hand :as hand]
             [timeline-game.timeline :as timeline]
             [timeline-game.history :as history]
