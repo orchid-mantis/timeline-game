@@ -22,7 +22,6 @@
 
 (defn init-player [db player]
   (-> db
-      (assoc-in [player :history] {})
       (assoc-in [player :selected-card-id] :nothing)
       (init-hand player)))
 
@@ -45,6 +44,7 @@
       init-game-state
       init-deck
       init-timeline
+      (assoc :history {})
       (init-players players)))
 
 (rf/reg-event-fx

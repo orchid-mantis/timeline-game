@@ -16,12 +16,22 @@
  (fn [hand-ids]
    (count hand-ids)))
 
+(defn map-values [f map]
+  (into {} (for [[k v] map]
+             [k (f v)])))
+
+(rf/reg-sub
+ :history/player
+ (fn [db [_ player]]
+   (let [history (get-in db [:history])]
+     (map-values #(player %) history))))
+
 (rf/reg-sub
  :player/stats
  (fn [[_ player]]
    [(rf/subscribe [:cards])
     (rf/subscribe [:hand/size player])
-    (rf/subscribe [:history player])])
+    (rf/subscribe [:history/player player])])
  (fn [[cards hand-size history]]
    (merge {:hand-size hand-size}
           (players-stats cards history))))
