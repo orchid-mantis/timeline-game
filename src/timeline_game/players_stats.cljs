@@ -29,19 +29,19 @@
     (fn []
       (let [last-played-card (:last-played-card @stats)]
         [:div.column.row-data
-         [:span.item {:title "Well-played count"}
+         [:div {:title "Well-played count"}
           [:i.fas.fa-check {:style {:color :green}}]
           [:span (:well-played-count @stats)]]
 
-         [:span.item {:title "Wrong-played count"}
+         [:div {:title "Wrong-played count"}
           [:i.fas.fa-times {:style {:color :red}}]
           [:span (:wrong-played-count @stats)]]
 
-         [:span.item {:title "Number of cards in hand"}
+         [:div {:title "Number of cards in hand"}
           [:i.fas.fa-clone {:style {:color :black}}]
           [:span @hand-size]]
 
-         [:span.item {:title "Card title"}
+         [:div {:title "Card title"}
           [:i.fas.fa-caret-right {:style {:color :black}}]
           [:span
            (get last-played-card :title "n/a")]]]))))

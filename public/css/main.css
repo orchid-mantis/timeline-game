@@ -111,7 +111,8 @@
   }
 
   .row-data {
-    width: 300px;
+    display: grid;
+    grid-template-columns: repeat(3, 50px) 200px;
   }
 
   .players-stats {
