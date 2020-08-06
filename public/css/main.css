@@ -130,3 +130,11 @@
     padding: 0.4em;
     border-radius: 2px;
   }
+
+  .well-played {
+    border: 2px solid green;
+  }
+
+  .wrong-played {
+    border: 2px solid red;
+  }

@@ -31,6 +31,12 @@
    [:div.hand
     [hand/view]]
 
+   (let [sub (rf/subscribe [:history/played-cards])]
+     [:div ":history/played-cards"
+      [:div (pr-str @sub)]])
+
+   [history/history-grid [:player :bot]]
+
    [game-result/view]])
 
 (defn card-set-panel []
