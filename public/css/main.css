@@ -160,3 +160,22 @@
   .page-selector {
     margin: 5px;
   }
+
+  .ui.table>thead th.sorted-by:after {
+    display: inline-block;
+    content: '\f0dc';
+  }
+
+  .ui.table>thead th.sorted-by.desc:after {
+    content: '\f0d7';
+  }
+
+  .ui.table>thead th.asc:after {
+    content: '\f0d8';
+  }
+
+  .ui.table>thead th:after {
+    display: none;
+    font-family: FontAwesome;
+    margin-left: .5em;
+  }

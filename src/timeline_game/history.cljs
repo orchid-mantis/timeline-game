@@ -45,7 +45,8 @@
         [:history/played-cards]
         (into [] (concat
                   (list {::dt/column-key [:round]
-                         ::dt/column-label "Round"})
+                         ::dt/column-label "Round"
+                         ::dt/sorting {::dt/enabled? true}})
 
                   (for [[k v] @players]
                     {::dt/column-key [k]
