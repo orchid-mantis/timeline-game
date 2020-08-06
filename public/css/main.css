@@ -138,3 +138,25 @@
   .wrong-played {
     border: 2px solid red;
   }
+
+  .ui.table {
+    width: 600px;
+    border-radius: 4px;
+    background-color: #F1BF53;
+  }
+
+  .ui.table th {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .ui.table td,
+  .ui.table th {
+    background-color: rgba(255, 255, 255, 0.65);
+    padding: 0.4em;
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .page-selector {
+    margin: 5px;
+  }

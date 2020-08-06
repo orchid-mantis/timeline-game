@@ -1,7 +1,8 @@
 (ns timeline-game.history
   (:require [re-frame.core :as rf]
             [timeline-game.common :refer [fmap copy-fields]]
-            [re-frame-datatable.core :as dt]))
+            [re-frame-datatable.core :as dt]
+            [re-frame-datatable.views :as dt-views]))
 
 (rf/reg-sub
  :players
@@ -30,18 +31,26 @@
       [:span {:class (if well-played? :well-played :wrong-played)}
        (:title player)])))
 
+(defn empty-tbody-formatter []
+  [:em
+   "No cards were played yet"])
+
 (defn history-grid []
   (let [players (rf/subscribe [:players])]
     (fn []
-      [dt/datatable
-       :history-datatable
-       [:history/played-cards]
-       (into [] (concat
-                 (list {::dt/column-key [:round]
-                        ::dt/column-label "Round"})
+      [:div
+       [dt-views/default-pagination-controls :history-datatable [:history/played-cards]]
+       [dt/datatable
+        :history-datatable
+        [:history/played-cards]
+        (into [] (concat
+                  (list {::dt/column-key [:round]
+                         ::dt/column-label "Round"})
 
-                 (for [[k v] @players]
-                   {::dt/column-key [k]
-                    ::dt/column-label (:name v)
-                    ::dt/render-fn card-title-formatter})))
-       {::dt/table-classes ["ui" "celled" "stripped" "table"]}])))
+                  (for [[k v] @players]
+                    {::dt/column-key [k]
+                     ::dt/column-label (:name v)
+                     ::dt/render-fn card-title-formatter})))
+        {::dt/table-classes ["ui" "table"]
+         ::dt/empty-tbody-component empty-tbody-formatter
+         ::dt/pagination {::dt/enabled? true, ::dt/per-page 10}}]])))
