@@ -32,14 +32,6 @@ ul {
   border-radius: 0 0 3px 3px;
 }
 
-.title {
-  font-family: 'riffic-bold', sans-serif;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 1.75em;
-  letter-spacing: 0.1em;
-}
-
 header {
   display: flex;
   justify-content: center;
