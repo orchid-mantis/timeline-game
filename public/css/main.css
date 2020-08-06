@@ -6,7 +6,7 @@
     cursor: pointer;
   }
 
-  a.button {
+  .button {
     display: inline-block;
     padding: 0.46em 1em;
     border: 2px solid #EACB89;
@@ -22,12 +22,12 @@
     cursor: pointer;
   }
 
-  a.button:hover {
+  .button:hover {
     background-color: #EACB89;
   }
 
   @media all and (max-width:30em) {
-    a.button {
+    .button {
       display: block;
       margin: 0.4em auto;
     }
@@ -54,13 +54,9 @@
 
   .dropdown-content {
     position: absolute;
-    left: 0;
-    right: 0;
-    padding: 10px;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    width: max-content;
+    display: none;
+    z-index: 2;
   }
 
   .dropdown-content a {
@@ -74,12 +70,13 @@
     background-color: #f1f1f1;
   }
 
+  /* arrow */
   .arrow {
     width: 6px;
     height: 6px;
     white-space: nowrap;
     display: inline-flex;
-    border: solid white;
+    border: solid rgb(155, 127, 91);
     border-width: 0 3px 3px 0;
     margin-right: 10px;
     padding: 3px;
@@ -129,6 +126,44 @@
     background-color: rgba(255, 255, 255, 0.65);
     padding: 0.4em;
     border-radius: 2px;
+  }
+
+  .overlay-container {
+    display: inline-block;
+  }
+
+  .overlay-container {
+    position: fixed;
+    width: "100%";
+    height: "100%";
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: "rgba(255,255,255,0.9)";
+    z-index: 2;
+  }
+
+  .overlay-content {
+    position: absolute;
+    top: "40%";
+    left: "50%";
+    transform: "translate(-50%,-50%)";
+    -ms-transform: "translate(-50%,-50%)";
+  }
+
+  .icon-button {
+    text-align: right;
+    width: 100%;
+    color: rgb(155, 127, 91);
+  }
+
+  .history-grid {
+    padding: 20px;
+    background-color: white;
+    border: 8px solid #F1BF53;
+    border-radius: 6px;
+    box-shadow: 0px 5px 20px -10px #F1BF53;
   }
 
   .history-grid-row {

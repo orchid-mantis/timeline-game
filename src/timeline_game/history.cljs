@@ -63,3 +63,8 @@
                                {::dt/table-classes ["ui" "table"]
                                 ::dt/empty-tbody-component empty-tbody-formatter
                                 ::dt/pagination {::dt/enabled? true, ::dt/per-page 10}}]])})))
+
+(defn overlay-view []
+  [:div.history-grid
+   [:i.icon-button.fas.fa-times-circle.fa-2x {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])}]
+   [history-grid]])

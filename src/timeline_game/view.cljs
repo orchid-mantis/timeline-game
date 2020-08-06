@@ -6,6 +6,7 @@
             [timeline-game.history :as history]
             [timeline-game.card-set :as card-set]
             [timeline-game.players-stats :as players-stats]
+            [timeline-game.overlay :as overlay]
             [timeline-game.game-result :as game-result]))
 
 (defn main-panel []
@@ -14,9 +15,14 @@
     [:div.menu-wrapper
      [:div.menu
       [:span.title "Bible Timeline Game"]
+
       [:a.button
        {:on-click #(rf/dispatch [:new-game])}
-       "Start a new game"]]]]
+       "Start a new game"]
+
+      [:a.button
+       {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])}
+       "Played cards"]]]]
 
    [:div.players
     [:div.players-stats
@@ -31,11 +37,9 @@
    [:div.hand
     [hand/view]]
 
-   (let [sub (rf/subscribe [:history/played-cards])]
-     [:div ":history/played-cards"
-      [:div (pr-str @sub)]])
-
-   [history/history-grid]
+   [overlay/view
+    :history-overlay
+    [history/overlay-view]]
 
    [game-result/view]])
 
