@@ -4,6 +4,11 @@
             [re-frame-datatable.core :as dt]))
 
 (rf/reg-sub
+ :players
+ (fn [db]
+   (get-in db [:players])))
+
+(rf/reg-sub
  :history
  (fn [db]
    (get-in db [:history])))
@@ -25,18 +30,18 @@
       [:span {:class (if well-played? :well-played :wrong-played)}
        (:title player)])))
 
-;; TODO check if player change affect grid
-(defn history-grid [players]
-  (fn []
-    [dt/datatable
-     :history-datatable
-     [:history/played-cards]
-     (into [] (concat
-               (list {::dt/column-key [:round]
-                      ::dt/column-label "Round"})
+(defn history-grid []
+  (let [players (rf/subscribe [:players])]
+    (fn []
+      [dt/datatable
+       :history-datatable
+       [:history/played-cards]
+       (into [] (concat
+                 (list {::dt/column-key [:round]
+                        ::dt/column-label "Round"})
 
-               (for [p players]
-                 {::dt/column-key [p]
-                  ::dt/column-label (pr-str p)
-                  ::dt/render-fn card-title-formatter})))
-     {::dt/table-classes ["ui" "celled" "stripped" "table"]}]))
+                 (for [[k v] @players]
+                   {::dt/column-key [k]
+                    ::dt/column-label (:name v)
+                    ::dt/render-fn card-title-formatter})))
+       {::dt/table-classes ["ui" "celled" "stripped" "table"]}])))

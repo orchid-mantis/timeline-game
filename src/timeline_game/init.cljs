@@ -3,7 +3,7 @@
 
 (def hand-size 5)
 
-(def players [:player :bot])
+(def players {:player {:name "Player"} :bot {:name "Bot"}})
 
 (defn init-deck [db]
   (let [cards (keys (:cards db))
@@ -30,7 +30,7 @@
 
 (defn init-players [db players]
   (assoc
-   (reduce #(init-player %1 %2) db players)
+   (reduce #(init-player %1 %2) db (keys players))
    :players players))
 
 (defn init-timeline [db]

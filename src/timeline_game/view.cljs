@@ -35,7 +35,7 @@
      [:div ":history/played-cards"
       [:div (pr-str @sub)]])
 
-   [history/history-grid [:player :bot]]
+   [history/history-grid]
 
    [game-result/view]])
 
