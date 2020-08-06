@@ -1,5 +1,6 @@
 (ns timeline-game.history
   (:require [re-frame.core :as rf]
+            [reagent.core :as reagent]
             [timeline-game.common :refer [fmap copy-fields]]
             [re-frame-datatable.core :as dt]
             [re-frame-datatable.views :as dt-views]))
@@ -38,21 +39,27 @@
 
 (defn history-grid []
   (let [players (rf/subscribe [:players])]
-    (fn []
-      [:div
-       [dt-views/default-pagination-controls :history-datatable [:history/played-cards]]
-       [dt/datatable
-        :history-datatable
-        [:history/played-cards]
-        (into [] (concat
-                  (list {::dt/column-key [:round]
-                         ::dt/column-label "Round"
-                         ::dt/sorting {::dt/enabled? true}})
+    (reagent/create-class
+     {:display-name "history-grid"
+      :component-did-mount (fn [comp] ;; seems that re-frame datatables cant set default sort order
+                             (let [coll (.getElementsByClassName js/document "sorted-by")
+                                   item (.item coll 0)]
+                               (.click item)
+                               (.click item)))
+      :reagent-render (fn [] [:div
+                              [dt-views/default-pagination-controls :history-datatable [:history/played-cards]]
+                              [dt/datatable
+                               :history-datatable
+                               [:history/played-cards]
+                               (into [] (concat
+                                         (list {::dt/column-key [:round]
+                                                ::dt/column-label "Round"
+                                                ::dt/sorting {::dt/enabled? true}})
 
-                  (for [[k v] @players]
-                    {::dt/column-key [k]
-                     ::dt/column-label (:name v)
-                     ::dt/render-fn card-title-formatter})))
-        {::dt/table-classes ["ui" "table"]
-         ::dt/empty-tbody-component empty-tbody-formatter
-         ::dt/pagination {::dt/enabled? true, ::dt/per-page 10}}]])))
+                                         (for [[k v] @players]
+                                           {::dt/column-key [k]
+                                            ::dt/column-label (:name v)
+                                            ::dt/render-fn card-title-formatter})))
+                               {::dt/table-classes ["ui" "table"]
+                                ::dt/empty-tbody-component empty-tbody-formatter
+                                ::dt/pagination {::dt/enabled? true, ::dt/per-page 10}}]])})))
