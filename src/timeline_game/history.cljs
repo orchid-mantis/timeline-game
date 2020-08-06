@@ -66,5 +66,6 @@
 
 (defn overlay-view []
   [:div.history-grid
-   [:i.icon-button.fas.fa-times-circle.fa-2x {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])}]
+   [:i.icon-button.fas.fa-times-circle.fa-2x {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])
+                                              :title "Close"}]
    [history-grid]])
