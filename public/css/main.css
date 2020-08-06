@@ -106,7 +106,7 @@
   }
 
   .row-data i,
-  span {
+  .row-data span {
     padding: 3px;
   }
 
@@ -131,22 +131,38 @@
     border-radius: 2px;
   }
 
-  .well-played {
-    border: 2px solid green;
+  .history-grid-row {
+    display: grid;
+    grid-template-columns: 22px 200px;
+    align-items: center;
   }
 
-  .wrong-played {
-    border: 2px solid red;
+  .well-played:before {
+    color: green;
+    content: '\f00c';
+  }
+
+  .wrong-played:before {
+    color: red;
+    content: '\f00d';
   }
 
   .ui.table {
-    width: 600px;
     border-radius: 4px;
     background-color: #F1BF53;
   }
 
-  .ui.table th {
+  .ui.table>thead th {
     background-color: rgba(255, 255, 255, 0.4);
+    width: 222px;
+  }
+
+  .ui.table th:nth-child(1) {
+    width: 80px;
+  }
+
+  .ui.table tr td:nth-child(1) {
+    text-align: center;
   }
 
   .ui.table td,
@@ -154,13 +170,13 @@
     background-color: rgba(255, 255, 255, 0.65);
     padding: 0.4em;
     border-radius: 2px;
-    text-align: center;
   }
 
   .page-selector {
     margin: 5px;
   }
 
+  /* datatable-sorting */
   .ui.table>thead th.sorted-by:after {
     display: inline-block;
     content: '\f0dc';

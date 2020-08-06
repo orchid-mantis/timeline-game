@@ -28,8 +28,9 @@
   (let [well-played? (:valid? player)]
     (if (nil? well-played?)
       [:span "n/a"]
-      [:span {:class (if well-played? :well-played :wrong-played)}
-       (:title player)])))
+      [:div.history-grid-row
+       [:i.fas {:class (if well-played? :well-played :wrong-played)}]
+       [:span (:title player)]])))
 
 (defn empty-tbody-formatter []
   [:em
