@@ -29,7 +29,7 @@
 .card__time-desc {
   width: fit-content;
   position: absolute;
-  top: 0;
+  top: -3px;
   margin: 0;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -40,7 +40,7 @@
   letter-spacing: 0.1em;
   padding: 0.4em;
   line-height: 0.7em;
-  border-radius: 1px;
+  border-radius: 4px;
   background: #bbbbbb;
 }
 
@@ -53,12 +53,12 @@
 }
 
 .card--normal {
-  background: linear-gradient(110deg, #FDBB2D 0%, #3A1C71 100%);
-  box-shadow: 0px 5px 20px -10px #3A1C71;
+  background: linear-gradient(110deg, #FDBB2D 0%, rgb(214, 122, 64) 100%);
+  box-shadow: 0px 5px 20px -10px rgb(214, 122, 64);
 }
 
 .card--normal .card__time-desc {
-  background-color: #C08A53;
+  background-color: rgb(187, 112, 69);
 }
 
 .card.selectable:hover {
