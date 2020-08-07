@@ -6,6 +6,6 @@ manifest.json
 .nrepl-port
 pom.xml
 .cpcache
-public/js/
+public/js/compiled/
 public/images/
 .calva/
