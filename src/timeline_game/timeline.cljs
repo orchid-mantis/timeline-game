@@ -60,18 +60,18 @@
       :dispatch [:eval-move :player id]})))
 
 (defn drop-zone [s pos highlight-drop-zones?]
-  [:li {:key pos
-        :on-drag-over (fn [e]
-                        (.preventDefault e))
-        :on-drag-enter (fn [e]
-                         (.preventDefault e)
-                         (swap! s assoc-in [:drag-enter pos] true))
-        :on-drag-leave (fn []
-                         (swap! s update-in [:drag-enter pos] (fn [] false)))
-        :on-drop (fn [e]
-                   (.preventDefault e)
-                   (rf/dispatch [:place-card (/ pos 2)])
-                   (swap! s update-in [:drag-enter pos] (fn [] false)))}
+  [:div.scroll-item {:key pos
+                     :on-drag-over (fn [e]
+                                     (.preventDefault e))
+                     :on-drag-enter (fn [e]
+                                      (.preventDefault e)
+                                      (swap! s assoc-in [:drag-enter pos] true))
+                     :on-drag-leave (fn []
+                                      (swap! s update-in [:drag-enter pos] (fn [] false)))
+                     :on-drop (fn [e]
+                                (.preventDefault e)
+                                (rf/dispatch [:place-card (/ pos 2)])
+                                (swap! s update-in [:drag-enter pos] (fn [] false)))}
    [:div.drop-zone
     {:class (ui/cs (when highlight-drop-zones? :highlight-all)
                    (when (get-in @s [:drag-enter pos]) :highlight))}
@@ -88,16 +88,15 @@
         s (reagent/atom {})]
     (fn []
       (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
-        [:ul
+        [:div.scrolling-wrapper
          (doall
           (for [[item pos] (map vector items (range))
                 :let [id (:id item)]]
             (if (= item :drop-zone)
               (drop-zone s pos @highlight-drop-zones?)
 
-              [:li {:key pos
-                    :class (ui/cs (when (= id @last-added-id) @animation))
-                    :style {:display :inline-block}}
+              [:div.scroll-item {:key pos
+                     :class (ui/cs (when (= id @last-added-id) @animation))}
                [basic-card/view item true nil {:margin "10px 0 10px 0"}]])))]
          ;[:p (pr-str @s)]
         ))))

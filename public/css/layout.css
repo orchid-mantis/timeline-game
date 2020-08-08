@@ -10,9 +10,6 @@ ul {
 
 .site {
   font-family: "Open Sans", helvetica, sans-serif;
-  display: grid;
-  grid-template-rows: auto repeat(3, 1fr);
-  grid-gap: 10px;
 }
 
 .menu-wrapper {
@@ -35,6 +32,7 @@ ul {
 header {
   display: flex;
   justify-content: center;
+  margin-bottom: 10px;
 }
 
 .players {
@@ -43,8 +41,7 @@ header {
 }
 
 .timeline {
-  display: flex;
-  justify-content: center;
+  margin: 100px 0;
 }
 
 .hand {

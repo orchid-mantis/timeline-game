@@ -1,18 +1,38 @@
-.timeline ul {
-    margin: 20px;
+/* Horizontal scroll */
+.scrolling-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    height: 150px;
+    padding-top: 50px;
+    -webkit-overflow-scrolling: touch;
 }
 
-.timeline li {
+.scrolling-wrapper .scroll-item {
     display: inline-block;
+    -webkit-box-flex: 0;
+    flex: 0 0 auto;
 }
 
+.scrolling-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.timeline .scroll-item:first-child {
+    margin-left: 30px;
+}
+
+.timeline .scroll-item:last-child {
+    margin-right: 30px;
+}
+
+/* Drop zone */
 .drop-zone {
-    display: inline-block;
     position: relative;
-    vertical-align: middle;
     width: 20px;
     height: 80px;
-    z-index: -1;
+    top: 10px;
     border-radius: 10px;
 }
 
@@ -28,19 +48,17 @@
     border: 2px solid crimson;
 }
 
-.ribbon.hide {
-    visibility: hidden;
-}
-
 @keyframes highlight-drop-zones {
     0% {
         opacity: 0.3;
     }
+
     100% {
         opacity: 1;
     }
 }
 
+/* Ribbon */
 .ribbon {
     position: absolute;
     top: 25px;
@@ -48,10 +66,7 @@
     width: 200px;
     height: 30px;
     background: crimson;
-}
-
-.timeline li:first-child .ribbon {
-    visibility: hidden;
+    z-index: -1;
 }
 
 .ribbon:before {
@@ -72,4 +87,12 @@
     right: -30px;
     border: 15px solid transparent;
     border-left: 15px solid crimson;
+}
+
+.ribbon.hide {
+    visibility: hidden;
+}
+
+.timeline>div>.scroll-item:first-child .ribbon {
+    visibility: hidden;
 }
