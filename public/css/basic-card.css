@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300,700");
+
 .card {
   font-family: "Open Sans", Helvetica, sans-serif;
   text-align: center;
@@ -9,14 +10,8 @@
   margin: 10px;
   background: #ddd;
   text-align: left;
-  box-shadow: 0px 5px 20px -10px #111111;
   position: relative;
   transition: 0.4s;
-}
-
-.card__verse {
-  margin: 0;
-  padding: 1em;
 }
 
 .card__caption {
@@ -54,7 +49,6 @@
 
 .card--normal {
   background: linear-gradient(110deg, #FDBB2D 0%, rgb(214, 122, 64) 100%);
-  box-shadow: 0px 5px 20px -10px rgb(214, 122, 64);
 }
 
 .card--normal .card__time-desc {
@@ -63,6 +57,6 @@
 
 .card.selectable:hover {
   z-index: 5;
-  box-shadow: 0px 13px 30px -15px #000000;
+  box-shadow: 0px 13px 30px -10px rgb(214, 122, 64);
   transform: translateY(-10px);
 }
