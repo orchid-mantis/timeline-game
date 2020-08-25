@@ -89,6 +89,12 @@
     (fn []
       (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
         [:div.scrolling-wrapper
+         {:ref #(swap! s assoc :timeline-node %)
+
+          :on-wheel (fn [e]
+                      (let [node (get @s :timeline-node)]
+                        (when node
+                          (set! (.-scrollLeft node) (+ (.-scrollLeft node) (.-deltaY e))))))}
          (doall
           (for [[item pos] (map vector items (range))
                 :let [id (:id item)]]
