@@ -59,6 +59,25 @@
               (assoc-in [:player :selected-card-id] :nothing))
       :dispatch [:eval-move :player id]})))
 
+(rf/reg-event-fx
+ :scroll-timeline
+ (fn [{:keys [db]} [_ direction]]
+   (let [node (get-in db [:dom-nodes :timeline])]
+     {:db db
+      :apply-scroll-timeline [node direction]})))
+
+(defn horizontal-scroll [node delta]
+  (when node
+    (set! (.-scrollLeft node) (+ (.-scrollLeft node) delta))))
+
+(rf/reg-fx
+ :apply-scroll-timeline
+ (fn [[node direction]]
+   (let [delta (case direction
+                 :left -100
+                 :right 100)]
+     (horizontal-scroll node delta))))
+
 (defn drop-zone [s pos highlight-drop-zones?]
   [:div.scroll-item {:key pos
                      :on-drag-over (fn [e]
@@ -81,7 +100,8 @@
 ;; -- UI ------------------------------------------------------------------
 
 (defn view []
-  (let [cards (rf/subscribe [:timeline/cards])
+  (let [node (rf/subscribe [:DOM/get-node :timeline])
+        cards (rf/subscribe [:timeline/cards])
         last-added-id (rf/subscribe [:timeline/last-added])
         animation (rf/subscribe [:move-animation])
         highlight-drop-zones? (rf/subscribe [:highlight-drop-zones?])
@@ -89,12 +109,10 @@
     (fn []
       (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
         [:div.scrolling-wrapper
-         {:ref #(swap! s assoc :timeline-node %)
+         {:ref #(rf/dispatch [:DOM/store-node :timeline %])
 
           :on-wheel (fn [e]
-                      (let [node (get @s :timeline-node)]
-                        (when node
-                          (set! (.-scrollLeft node) (+ (.-scrollLeft node) (.-deltaY e))))))}
+                      (horizontal-scroll @node (.-deltaY e)))}
          (doall
           (for [[item pos] (map vector items (range))
                 :let [id (:id item)]]

@@ -1,4 +1,21 @@
-(ns timeline-game.common)
+(ns timeline-game.common
+  (:require [re-frame.core :as rf]))
+
+;; -- Subscriptions -----------------------------------------------------------
+
+(rf/reg-sub
+ :DOM/get-node
+ (fn [db [_ key]]
+   (get-in db [:dom-nodes key])))
+
+;; -- Events ------------------------------------------------------------------
+
+(rf/reg-event-db
+ :DOM/store-node
+ (fn [db [_ key node]]
+   (assoc-in db [:dom-nodes key] node)))
+
+;; -- Functions ------------------------------------------------------------------
 
 (defn put-before [items pos item]
   (let [items (remove #{item} items)

@@ -1,6 +1,7 @@
 (ns timeline-game.core
   (:require [re-frame.core :as rf]
             [reagent.dom :as reagent-dom]
+            ["mousetrap" :as mousetrap]
             [timeline-game.routes :as routes]
             [timeline-game.init]
             [timeline-game.events]
@@ -18,7 +19,12 @@
   (reagent-dom/render [view/root]
                       (js/document.getElementById "app")))
 
+(defn init-key-bindings []
+  (mousetrap/bind "left" #(rf/dispatch [:scroll-timeline :left]))
+  (mousetrap/bind "right" #(rf/dispatch [:scroll-timeline :right])))
+
 (defn ^:export init []
   (routes/app-routes)
   (rf/dispatch-sync [::load-app])
+  (init-key-bindings)
   (render))
