@@ -102,7 +102,7 @@
               (drop-zone s pos @highlight-drop-zones?)
 
               [:div.scroll-item {:key pos
-                     :class (ui/cs (when (= id @last-added-id) @animation))}
+                                 :class (ui/cs (when (= id @last-added-id) @animation))}
                [basic-card/view item true nil {:margin "10px 0 10px 0"}]])))]
          ;[:p (pr-str @s)]
         ))))
