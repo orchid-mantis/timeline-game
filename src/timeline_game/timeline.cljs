@@ -79,21 +79,21 @@
      (horizontal-scroll node delta))))
 
 (defn drop-zone [s pos highlight-drop-zones?]
-  [:div.scroll-item {:key pos
-                     :on-drag-over (fn [e]
-                                     (.preventDefault e))
-                     :on-drag-enter (fn [e]
-                                      (.preventDefault e)
-                                      (swap! s assoc-in [:drag-enter pos] true))
-                     :on-drag-leave (fn []
-                                      (swap! s update-in [:drag-enter pos] (fn [] false)))
-                     :on-drop (fn [e]
-                                (.preventDefault e)
-                                (rf/dispatch [:place-card (/ pos 2)])
-                                (swap! s update-in [:drag-enter pos] (fn [] false)))}
-   [:div.drop-zone
-    {:class (ui/cs (when highlight-drop-zones? :highlight-all)
-                   (when (get-in @s [:drag-enter pos]) :highlight))}
+  [:div.scroll-item {:key pos}
+   [:div.drop-zone {:class (ui/cs (when highlight-drop-zones? :highlight-all)
+                                  (when (get-in @s [:drag-enter pos]) :highlight))
+
+                    :on-drag-over (fn [e]
+                                    (.preventDefault e))
+                    :on-drag-enter (fn [e]
+                                     (.preventDefault e)
+                                     (swap! s assoc-in [:drag-enter pos] true))
+                    :on-drag-leave (fn []
+                                     (swap! s update-in [:drag-enter pos] (fn [] false)))
+                    :on-drop (fn [e]
+                               (.preventDefault e)
+                               (rf/dispatch [:place-card (/ pos 2)])
+                               (swap! s update-in [:drag-enter pos] (fn [] false)))}
     [:div.ribbon
      {:class (when highlight-drop-zones? :hide)}]]])
 
