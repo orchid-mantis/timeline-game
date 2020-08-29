@@ -25,6 +25,7 @@
 
 .timeline .scroll-item:last-child {
     margin-right: 30px;
+    width: 250px;
 }
 
 /* Drop zone */
