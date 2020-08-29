@@ -20,8 +20,8 @@
                       (js/document.getElementById "app")))
 
 (defn init-key-bindings []
-  (mousetrap/bind "left" #(rf/dispatch [:scroll-timeline :left]))
-  (mousetrap/bind "right" #(rf/dispatch [:scroll-timeline :right])))
+  (mousetrap/bind "left"  #(rf/dispatch [:scroll-timeline -100]))
+  (mousetrap/bind "right" #(rf/dispatch [:scroll-timeline  100])))
 
 (defn ^:export init []
   (routes/app-routes)

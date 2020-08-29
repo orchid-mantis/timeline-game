@@ -61,10 +61,17 @@
 
 (rf/reg-event-fx
  :scroll-timeline
- (fn [{:keys [db]} [_ direction]]
-   (let [node (get-in db [:dom-nodes :timeline])]
-     {:db db
-      :apply-scroll-timeline [node direction]})))
+ (fn [{:keys [db]} [_ delta]]
+   (let [node (get-in db [:dom-nodes :timeline])
+         turn (get-in db [:game :turn])
+         player (get-in db [:game :player])
+         game-result (get-in db [:game :result])
+         players-turn? (and (= player :player) (= turn :ready))
+         game-ended? (not= game-result :await)
+         allow-scroll? (or game-ended? players-turn? )]
+     (merge {:db db}
+            (when allow-scroll?
+              {:apply-scroll-timeline [node delta]})))))
 
 (defn horizontal-scroll [node delta]
   (when node
@@ -72,11 +79,8 @@
 
 (rf/reg-fx
  :apply-scroll-timeline
- (fn [[node direction]]
-   (let [delta (case direction
-                 :left -100
-                 :right 100)]
-     (horizontal-scroll node delta))))
+ (fn [[node delta]]
+   (horizontal-scroll node delta)))
 
 (defn drop-zone [s pos highlight-drop-zones?]
   [:div.scroll-item {:key pos}
@@ -100,8 +104,7 @@
 ;; -- UI ------------------------------------------------------------------
 
 (defn view []
-  (let [node (rf/subscribe [:DOM/get-node :timeline])
-        cards (rf/subscribe [:timeline/cards])
+  (let [cards (rf/subscribe [:timeline/cards])
         last-added-id (rf/subscribe [:timeline/last-added])
         animation (rf/subscribe [:move-animation])
         highlight-drop-zones? (rf/subscribe [:highlight-drop-zones?])
@@ -112,7 +115,7 @@
          {:ref #(rf/dispatch [:DOM/store-node :timeline %])
 
           :on-wheel (fn [e]
-                      (horizontal-scroll @node (.-deltaY e)))}
+                      (rf/dispatch [:scroll-timeline (.-deltaY e)]))}
          (doall
           (for [[item pos] (map vector items (range))
                 :let [id (:id item)]]
