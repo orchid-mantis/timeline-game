@@ -10,10 +10,8 @@
 
 (rf/reg-sub
  :game-result/show?
- (fn []
-   (rf/subscribe [:game-result]))
- (fn [result]
-   (not= result :await)))
+ (fn [db]
+   (get-in db [:game :show-result?])))
 
 (rf/reg-sub
  :game-result/view-data
@@ -30,7 +28,7 @@
 (rf/reg-event-db
  :game-result/close
  (fn [db]
-   (assoc-in db [:game :result] :await)))
+   (assoc-in db [:game :show-result?] false)))
 
 ;; -- UI ------------------------------------------------------------------
 
