@@ -224,6 +224,5 @@
  :game-end
  (fn [db [_ game-result]]
    (-> db
-       (assoc-in [:game :round] 0)
        (assoc-in [:game :show-result?] true)
        (assoc-in [:game :result] game-result))))
