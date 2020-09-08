@@ -2,7 +2,7 @@
   (:require [re-frame.core :as rf]
             [timeline-game.dropdown-panel :as dropdown]
             [timeline-game.hand :as hand]
-            [timeline-game.timeline :as timeline]
+            [timeline-game.ui.views :as ui]
             [timeline-game.history :as history]
             [timeline-game.card-set :as card-set]
             [timeline-game.players-stats :as players-stats]
@@ -32,7 +32,7 @@
      [players-stats/view :bot]]]
 
    [:div.timeline
-    [timeline/view]]
+    [ui/timeline-view]]
 
    [:div.hand
     [hand/view]]
