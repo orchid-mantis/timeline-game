@@ -5,6 +5,7 @@
             [timeline-game.routes :as routes]
             [timeline-game.init]
             [timeline-game.events]
+            [timeline-game.subs]
             [timeline-game.views :as views]
             [timeline-game.db :as db]))
 
