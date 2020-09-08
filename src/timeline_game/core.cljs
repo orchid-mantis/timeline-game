@@ -5,7 +5,7 @@
             [timeline-game.routes :as routes]
             [timeline-game.init]
             [timeline-game.events]
-            [timeline-game.view :as view]
+            [timeline-game.views :as views]
             [timeline-game.db :as db]))
 
 (rf/reg-event-fx
@@ -16,7 +16,7 @@
 
 (defn ^:dev/after-load render []
   (rf/clear-subscription-cache!)
-  (reagent-dom/render [view/root]
+  (reagent-dom/render [views/root]
                       (js/document.getElementById "app")))
 
 (defn init-key-bindings []

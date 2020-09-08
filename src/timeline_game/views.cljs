@@ -1,4 +1,4 @@
-(ns timeline-game.view
+(ns timeline-game.views
   (:require [re-frame.core :as rf]
             [timeline-game.ui.views :as ui]
             [timeline-game.ui.components :as uic]))
