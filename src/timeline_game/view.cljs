@@ -2,7 +2,6 @@
   (:require [re-frame.core :as rf]
             [timeline-game.ui.views :as ui]
             [timeline-game.ui.components :as uic]
-            [timeline-game.history :as history]
             [timeline-game.game-result :as game-result]))
 
 (defn main-panel []
@@ -35,7 +34,7 @@
 
    [uic/overlay-view
     :history-overlay
-    [history/overlay-view]]
+    [ui/card-history-view]]
 
    [game-result/view]])
 

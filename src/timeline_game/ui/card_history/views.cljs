@@ -1,29 +1,10 @@
-(ns timeline-game.history
-  (:require [re-frame.core :as rf]
-            [reagent.core :as reagent]
-            [timeline-game.common :refer [fmap copy-fields]]
-            [re-frame-datatable.core :as dt]
-            [re-frame-datatable.views :as dt-views]))
-
-(rf/reg-sub
- :players
- (fn [db]
-   (get-in db [:players])))
-
-(rf/reg-sub
- :history
- (fn [db]
-   (get-in db [:history])))
-
-(rf/reg-sub
- :history/played-cards
- (fn []
-   [(rf/subscribe [:cards])
-    (rf/subscribe [:history])])
- (fn [[cards history]]
-   (let [played-cards (fmap (partial copy-fields cards :id [:title]) history)]
-     (for [[k v] played-cards]
-       (assoc v :round k)))))
+(ns timeline-game.ui.card-history.views
+  (:require
+   [re-frame.core :as rf]
+   [reagent.core :as reagent]
+   [timeline-game.ui.card-history.subs]
+   [re-frame-datatable.core :as dt]
+   [re-frame-datatable.views :as dt-views]))
 
 (defn- card-title-formatter [player]
   (let [well-played? (:valid? player)]
@@ -33,7 +14,7 @@
        [:i.fas {:class (if well-played? :well-played :wrong-played)}]
        [:span (:title player)]])))
 
-(defn empty-tbody-formatter []
+(defn- empty-tbody-formatter []
   [:em
    "No cards were played yet"])
 
@@ -64,9 +45,9 @@
                                 ::dt/empty-tbody-component empty-tbody-formatter
                                 ::dt/pagination {::dt/enabled? true, ::dt/per-page 10}}]])})))
 
-(defn overlay-view []
+(defn view []
   [:div.history-grid
    [:div.icon-button-wrapper
     [:i.fas.fa-times-circle.fa-2x {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])
-                                               :title "Close"}]]
+                                   :title "Close"}]]
    [history-grid]])
