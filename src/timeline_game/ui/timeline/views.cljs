@@ -34,19 +34,20 @@
         s (reagent/atom {})]
     (fn []
       (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
-        [:div.scrolling-wrapper
-         {:ref #(rf/dispatch [:DOM/store-node :timeline %])
+        [:div.timeline
+         [:div.scrolling-wrapper
+          {:ref #(rf/dispatch [:DOM/store-node :timeline %])
 
-          :on-wheel (fn [e]
-                      (rf/dispatch [:scroll-timeline (.-deltaY e)]))}
-         (doall
-          (for [[item pos] (map vector items (range))
-                :let [id (:id item)]]
-            (if (= item :drop-zone)
-              (drop-zone s pos @highlight-drop-zones?)
+           :on-wheel (fn [e]
+                       (rf/dispatch [:scroll-timeline (.-deltaY e)]))}
+          (doall
+           (for [[item pos] (map vector items (range))
+                 :let [id (:id item)]]
+             (if (= item :drop-zone)
+               (drop-zone s pos @highlight-drop-zones?)
 
-              [:div.scroll-item {:key pos
-                                 :class (utils/cs (when (= id @last-added-id) @animation))}
-               [uic/basic-card-view item true nil {:margin "10px 0 10px 0"}]])))]
+               [:div.scroll-item {:key pos
+                                  :class (utils/cs (when (= id @last-added-id) @animation))}
+                [uic/basic-card-view item true nil {:margin "10px 0 10px 0"}]])))]]
          ;[:p (pr-str @s)]
         ))))
