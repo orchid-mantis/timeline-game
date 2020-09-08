@@ -5,11 +5,11 @@
    [timeline-game.ui.timeline.events]
    [timeline-game.ui.timeline.subs]
    [timeline-game.ui.components :as uic]
-   [timeline-game.ui-helpers :as ui]))
+   [timeline-game.ui.utils :as utils]))
 
 (defn drop-zone [s pos highlight-drop-zones?]
   [:div.scroll-item {:key pos}
-   [:div.drop-zone {:class (ui/cs (when highlight-drop-zones? :highlight-all)
+   [:div.drop-zone {:class (utils/cs (when highlight-drop-zones? :highlight-all)
                                   (when (get-in @s [:drag-enter pos]) :highlight))
 
                     :on-drag-over (fn [e]
@@ -46,7 +46,7 @@
               (drop-zone s pos @highlight-drop-zones?)
 
               [:div.scroll-item {:key pos
-                                 :class (ui/cs (when (= id @last-added-id) @animation))}
+                                 :class (utils/cs (when (= id @last-added-id) @animation))}
                [uic/basic-card-view item true nil {:margin "10px 0 10px 0"}]])))]
          ;[:p (pr-str @s)]
         ))))

@@ -4,7 +4,7 @@
    [timeline-game.ui.hand.events]
    [timeline-game.ui.hand.subs]
    [timeline-game.ui.components :as uic]
-   [timeline-game.ui-helpers :as ui]))
+   [timeline-game.ui.utils :as utils]))
 
 (defn view []
   (let [player-turn? (rf/subscribe [:players-turn?])
@@ -25,7 +25,7 @@
            [uic/basic-card-view
             card
             false
-            (ui/cs (when @player-turn? :selectable)
+            (utils/cs (when @player-turn? :selectable)
                    (when (= id @drawn-card-id) :slide-in-top))
             {:user-select (when (not @player-turn?) :none)
              :cursor (if @player-turn? :pointer :not-allowed)
