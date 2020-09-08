@@ -1,7 +1,6 @@
 (ns timeline-game.view
   (:require [re-frame.core :as rf]
             [timeline-game.dropdown-panel :as dropdown]
-            [timeline-game.hand :as hand]
             [timeline-game.ui.views :as ui]
             [timeline-game.ui.components :as uic]
             [timeline-game.history :as history]
@@ -35,7 +34,7 @@
     [ui/timeline-view]]
 
    [:div.hand
-    [hand/view]]
+    [ui/hand-view]]
 
    [uic/overlay-view
     :history-overlay
