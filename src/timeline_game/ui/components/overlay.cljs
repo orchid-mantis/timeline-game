@@ -1,5 +1,6 @@
-(ns timeline-game.overlay
-  (:require [re-frame.core :as rf]))
+(ns timeline-game.ui.components.overlay
+  (:require
+   [re-frame.core :as rf]))
 
 (rf/reg-event-db
  :overlay/toggle
