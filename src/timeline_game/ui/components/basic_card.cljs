@@ -1,6 +1,4 @@
-(ns timeline-game.basic-card
-  (:require [reagent.core :as reagent]
-            [re-frame.core :as rf]))
+(ns timeline-game.ui.components.basic-card)
 
 (defn view [card show-face? class style]
   (fn [card show-face? class style]
