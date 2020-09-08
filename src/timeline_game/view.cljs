@@ -4,7 +4,6 @@
             [timeline-game.ui.views :as ui]
             [timeline-game.ui.components :as uic]
             [timeline-game.history :as history]
-            [timeline-game.card-set :as card-set]
             [timeline-game.players-stats :as players-stats]
             [timeline-game.game-result :as game-result]))
 
@@ -45,7 +44,7 @@
 (defn card-set-panel []
   [:div
    [:a.button {:href "#/"} "Return to game"]
-   [card-set/view]])
+   [ui/card-set-view]])
 
 (defn- panels [panel-name]
   (case panel-name

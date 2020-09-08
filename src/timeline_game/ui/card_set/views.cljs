@@ -1,7 +1,7 @@
-(ns timeline-game.card-set
-  (:require [reagent.core :as reagent]
-            [re-frame.core :as rf]
-            [timeline-game.ui.components :as uic]))
+(ns timeline-game.ui.card-set.views
+  (:require
+   [re-frame.core :as rf]
+   [timeline-game.ui.components :as uic]))
 
 (rf/reg-sub
  :card-set/ordered
