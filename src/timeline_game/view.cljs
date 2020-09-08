@@ -3,7 +3,6 @@
             [timeline-game.ui.views :as ui]
             [timeline-game.ui.components :as uic]
             [timeline-game.history :as history]
-            [timeline-game.players-stats :as players-stats]
             [timeline-game.game-result :as game-result]))
 
 (defn main-panel []
@@ -24,9 +23,9 @@
    [:div.players
     [:div.players-stats
      [:div.column "Player"]
-     [players-stats/view  :player]
+     [ui/players-stats-view :player]
      [:div.column "Bot"]
-     [players-stats/view :bot]]]
+     [ui/players-stats-view :bot]]]
 
    [:div.timeline
     [ui/timeline-view]]
