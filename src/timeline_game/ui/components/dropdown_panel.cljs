@@ -1,6 +1,6 @@
-(ns timeline-game.dropdown-panel
-  (:require [reagent.core :as reagent]
-            [re-frame.core :as rf]))
+(ns timeline-game.ui.components.dropdown-panel
+  (:require
+   [reagent.core :as reagent]))
 
 (defn view [title content]
   (let [s (reagent/atom {:open false})]

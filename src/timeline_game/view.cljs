@@ -1,6 +1,5 @@
 (ns timeline-game.view
   (:require [re-frame.core :as rf]
-            [timeline-game.dropdown-panel :as dropdown]
             [timeline-game.ui.views :as ui]
             [timeline-game.ui.components :as uic]
             [timeline-game.history :as history]
