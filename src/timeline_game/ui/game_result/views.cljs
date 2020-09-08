@@ -1,5 +1,6 @@
-(ns timeline-game.game-result
-  (:require [re-frame.core :as rf]))
+(ns timeline-game.ui.game-result.views
+  (:require
+   [re-frame.core :as rf]))
 
 ;; -- Subscriptions -----------------------------------------------------------
 
