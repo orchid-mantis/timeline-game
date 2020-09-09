@@ -4,44 +4,13 @@
             [timeline-game.common :refer [remove-card ordered?]]
             [timeline-game.fsm :as fsm]))
 
-(def turn-state-fsm
-  {nil                  {:init-turn           :ready}
-   :ready               {:correct-move        :well-placed-card
-                         :wrong-move          :misplaced-card}
-   :well-placed-card    {:correct-end-turn    :turn-ended}
-   :misplaced-card      {:wrong-end-turn      :turn-ended}
-   :turn-ended          {:init-turn           :ready}})
-
-(def player-fsm
-  {nil        {:next-player    :player}
-   :player    {:next-player    :bot}
-   :bot       {:next-player    :none}})
-
-(def hand-fsm
-  {:ready                  {:draw-card        :draw-card-animation}
-   :draw-card-animation    {:end-draw-card    :ready}})
-
 (def keep-state-in-ms 700)
-
-;; -- Events ------------------------------------------------------------------
-
-(defn update-next-state [db event]
-  (fsm/update-next-state turn-state-fsm db [:game :turn] event))
-
-(defn next-player [db event]
-  (fsm/next-state player-fsm (get-in db [:game :player]) event))
-
-(defn update-next-player [db event]
-  (fsm/update-next-state player-fsm db [:game :player] event))
-
-(defn update-next-hand-state [db event player]
-  (fsm/update-next-state hand-fsm db [player :hand :state] event))
 
 (rf/reg-event-fx
  :init-turn
  (fn [{:keys [db]} [event _]]
    (let [player (get-in db [:game :player])]
-     (merge {:db (update-next-state db event)}
+     (merge {:db (fsm/update-turn db event)}
             (when (= player :bot) {:dispatch [:play-bot-move]})))))
 
 (rf/reg-fx
@@ -77,19 +46,19 @@
 (rf/reg-event-fx
  :correct-move
  (fn [{:keys [db]} [event _]]
-   {:db (update-next-state db event)
+   {:db (fsm/update-turn db event)
     :timeout [keep-state-in-ms [:correct-end-turn]]}))
 
 (rf/reg-event-fx
  :correct-end-turn
  (fn [{:keys [db]} [event _]]
-   {:db (update-next-state db event)
+   {:db (fsm/update-turn db event)
     :dispatch [:end-turn]}))
 
 (rf/reg-event-fx
  :wrong-move
  (fn [{:keys [db]} [event player id]]
-   {:db (update-next-state db event)
+   {:db (fsm/update-turn db event)
     :timeout [keep-state-in-ms [:wrong-end-turn player id]]}))
 
 (rf/reg-event-fx
@@ -99,7 +68,7 @@
      {:db (-> db
               (update-in [:timeline :ids] #(remove-card % id))
               (update :deck #(conj % id))
-              (update-next-state event))
+              (fsm/update-turn event))
       :dispatch (if (= mode :standard)
                   [:draw-card [player] :end-turn]
                   [:end-turn])})))
@@ -116,27 +85,27 @@
 (defn players-draw-card [db players]
   (reduce #(draw-card %1 %2) db players))
 
-(defn update-next-hand-states [db players event]
-  (reduce #(update-next-hand-state %1 event %2) db players))
+(defn fsm-update-hands [db players event]
+  (reduce #(fsm/update-hand %1 event %2) db players))
 
 (rf/reg-event-fx
  :draw-card
  (fn [{:keys [db]} [event players next-event]]
    {:db (-> db
-            (update-next-hand-states players event)
+            (fsm-update-hands players event)
             (players-draw-card players))
     :timeout [keep-state-in-ms [:end-draw-card players next-event]]}))
 
 (rf/reg-event-fx
  :end-draw-card
  (fn [{:keys [db]} [event players next-event]]
-   {:db (update-next-hand-states db players event)
+   {:db (fsm-update-hands db players event)
     :dispatch [next-event]}))
 
 (rf/reg-event-fx
  :end-turn
  (fn [{:keys [db]} _]
-   (let [next-player (next-player db :next-player)]
+   (let [next-player (fsm/next-player db :next-player)]
      {:db db
       :dispatch (if (= next-player :none)
                   [:eval-round]
@@ -145,7 +114,7 @@
 (rf/reg-event-fx
  :next-player
  (fn [{:keys [db]} [event _]]
-   {:db (update-next-player db event)
+   {:db (fsm/update-player db event)
     :dispatch [:init-turn]}))
 
 (defn eval-standard [db]
