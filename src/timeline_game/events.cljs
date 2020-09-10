@@ -22,7 +22,8 @@
   (let [count-key (if valid-move? :well-played-count :wrong-played-count)]
     (-> stats
         (update count-key inc)
-        (assoc :last-played-card-id card-id))))
+        (assoc :last-played-card-id card-id)
+        (assoc :last-valid-move? valid-move?))))
 
 (defn historize [db player card-id valid-move?]
   (let [round-num (get-in db [:game :round])]

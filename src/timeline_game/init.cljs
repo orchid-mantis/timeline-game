@@ -26,7 +26,8 @@
       (init-hand player)
       (assoc-in [player :stats] {:well-played-count 0
                                  :wrong-played-count 0
-                                 :last-played-card-id nil})))
+                                 :last-played-card-id nil
+                                 :last-valid-move? nil})))
 
 (defn init-players [db players]
   (assoc

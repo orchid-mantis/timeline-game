@@ -1,27 +1,37 @@
 (ns timeline-game.ui.players-stats.views
   (:require
    [re-frame.core :as rf]
-   [timeline-game.ui.players-stats.subs]))
+   [timeline-game.ui.players-stats.subs]
+   [timeline-game.ui.components.icons :as icon]))
 
 (defn view [player]
   (let [stats (rf/subscribe [:player/stats-view player])
         hand-size (rf/subscribe [:hand/size player])]
     (fn []
-      (let [last-played-card (:last-played-card @stats)]
+      (let [last-played-card (:last-played-card @stats)
+            last-valid-move? (:last-valid-move? @stats)]
         [:div.column.row-data
          [:div {:title "Well-played count"}
-          [:i.fas.fa-check {:style {:color :green}}]
+          [icon/well-played]
           [:span (:well-played-count @stats)]]
 
          [:div {:title "Wrong-played count"}
-          [:i.fas.fa-times {:style {:color :red}}]
+          [icon/wrong-played]
           [:span (:wrong-played-count @stats)]]
 
          [:div {:title "Number of cards in hand"}
-          [:i.fas.fa-clone {:style {:color :black}}]
+          [icon/card-deck]
           [:span @hand-size]]
 
-         [:div {:title "Card title"}
-          [:i.fas.fa-caret-right {:style {:color :black}}]
+         [:div.section {:title (case last-valid-move?
+                                 true "Well-played"
+                                 false "Wrong-played"
+                                 "Last played card")}
+          (case last-valid-move?
+            true  [icon/well-played]
+            false [icon/wrong-played]
+            [icon/caret-right])]
+
+         [:div {:title "Last played card"}
           [:span
-           (get last-played-card :title "n/a")]]]))))
+           (get last-played-card :title "-----")]]]))))

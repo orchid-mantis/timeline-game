@@ -119,7 +119,13 @@
 
   .row-data {
     display: grid;
-    grid-template-columns: repeat(3, 50px) 200px;
+    grid-template-columns: repeat(3, 50px) 22px 200px;
+  }
+
+  .row-data .section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .players-stats {
