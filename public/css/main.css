@@ -250,3 +250,7 @@
     font-family: FontAwesome;
     margin-left: .5em;
   }
+
+  .draggable.can-drop .card--normal {
+    background: linear-gradient(110deg, yellowgreen 0%, green 100%);
+  }

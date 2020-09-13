@@ -25,9 +25,9 @@
      [:div.column "Bot"]
      [ui/players-stats-view :bot]]]
 
-   [ui/timeline-view]
-
-   [ui/hand-view]
+   [:div.table
+    [ui/timeline-view]
+    [ui/hand-view]]
 
    [uic/overlay-view
     :history-overlay

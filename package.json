@@ -9,6 +9,7 @@
   "dependencies": {
     "create-react-class": "^15.6.3",
     "highlight.js": "9.18.1",
+    "interactjs": "^1.9.22",
     "mousetrap": "^1.6.5",
     "react": "^16.13.1",
     "react-dom": "^16.12.0",
