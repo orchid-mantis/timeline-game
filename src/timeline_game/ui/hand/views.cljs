@@ -38,7 +38,7 @@
                          #js
                           [(.restrictRect
                             (.-modifiers interact)
-                            #js {:restriction ".table", :endOnly true})]
+                            #js {:restriction ".table", :endOnly false})]
                          :onmove (fn [e]
                                    (let [[x y] @pos
                                          new-x (+ (.-dx e) x)
