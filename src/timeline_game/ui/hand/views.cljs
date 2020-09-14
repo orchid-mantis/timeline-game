@@ -17,7 +17,8 @@
       (fn [card player-turn? drawn-card-id]
         (let [node (:node @s)
               z-index (:z-index @s)
-              [x y] (:pos @s)]
+              [x y] (:pos @s)
+              dragged? (:dragged? @s)]
           (when node
             (.draggable (interact node) @player-turn?))
           [:div.draggable
@@ -25,7 +26,8 @@
                     :user-select :none
                     :position :relative
                     :z-index z-index
-                    :transform (str "translate(" x "px, " y "px)")}}
+                    :transform (str "translate(" x "px, " y "px)")
+                    :transition (when (not dragged?) "0.5s")}}
            [uic/basic-card-view
             card
             false
@@ -52,11 +54,14 @@
                                        (swap! s assoc :pos [new-x new-y])))
 
                            :onstart (fn []
-                                      (swap! s assoc :z-index 1)
+                                      (swap! s merge {:dragged? true
+                                                      :z-index 1})
                                       (rf/dispatch [:select-card id]))
 
                            :onend   (fn []
-                                      (swap! s merge {:pos [0 0] :z-index 0})
+                                      (swap! s merge {:dragged? false
+                                                      :z-index 0
+                                                      :pos [0 0]})
                                       (rf/dispatch [:deselect-card]))})))})))
 
 (defn view []
