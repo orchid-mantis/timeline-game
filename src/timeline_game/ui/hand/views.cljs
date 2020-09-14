@@ -65,9 +65,7 @@
         drawn-card-id (rf/subscribe [:drawn-card-id])]
     (fn []
       [:div.hand
-       [:ul
-        (doall
-         (for [card @cards]
-           [:div {:key (:id card)
-                  :style {:display :inline-block}}
-            [draggable  card player-turn? drawn-card-id]]))]])))
+       (doall
+        (for [card @cards]
+          [:div {:key (:id card)}
+           [draggable card player-turn? drawn-card-id]]))])))

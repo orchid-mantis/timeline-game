@@ -42,7 +42,6 @@
          timeline (get-in db [:timeline :ids])
          [pos new-timeline] (bot-place-card timeline id bot-success?)
          timeline-node (get-in db [:dom-nodes :timeline])]
-     (js/console.log (str "Bots card pos = " pos))
      {:db (assoc-in db [:bot :last-move] {:id id
                                           :hand new-hand
                                           :timeline new-timeline})
@@ -61,7 +60,6 @@
                                                       0)]
                                            (swap! scroll-amount #(+ % step))
                                            (set! (.-scrollLeft el) (op scroll-left (- step diff)))
-                                          ;;  (js/console.log scroll-left)
                                            (when (>= @scroll-amount distance)
                                              (js/clearInterval @timer)
                                              (callback))))
@@ -71,21 +69,15 @@
  (fn [[node pos callback]]
    (let [max-dist (- (.-scrollWidth node) (.-clientWidth node))
          current-pos (.-scrollLeft node)
-         target-pos (->
-                        ;; (quot dist-to-pos client-width)
-                        ;; (* client-width)
-                     (* pos (+ 166 20))
-                     (#(if (> pos 0)
-                         (+ % 40)
-                         %))
-                     (min max-dist))
+         target-pos (-> (* pos (+ 166 20))
+                        (#(if (> pos 0)
+                            (+ % 40)
+                            %))
+                        (min max-dist))
          diff (- current-pos target-pos)
          distance (if (< diff 0)
                     (- diff)
                     diff)]
-     (js/console.log (str "max-dist = " max-dist))
-     (js/console.log (str "clientWidth = " (.-clientWidth node)))
-     (js/console.log (str "target-pos = " target-pos " current-pos = " current-pos " distance = " distance))
      (if (< target-pos current-pos)
        (side-scroll node :left  25 distance 10 callback)
        (side-scroll node :right 25 distance 10 callback)))))
