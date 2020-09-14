@@ -3,7 +3,6 @@
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [reagent.dom :as reagent-dom]
-   ["interactjs" :as interact]
    [timeline-game.ui.timeline.events]
    [timeline-game.ui.timeline.subs]
    [timeline-game.ui.components :as uic]
@@ -19,21 +18,22 @@
 
     :component-did-mount
     (fn [this]
-      (.dropzone (interact (reagent-dom/dom-node this))
-                 #js
-                  {:accept ".draggable"
-                   :overlap 0.04
-                   :ondragenter (fn [e]
-                                  (let [draggableElement (.-relatedTarget e)
-                                        dropzoneElement (.-target e)]
-                                    (.add (.-classList dropzoneElement) "highlight")
-                                    (.add (.-classList draggableElement) "can-drop")))
+      (let [node (reagent-dom/dom-node this)]
+        (rf/dispatch [:dnd/dropzone
+                      node
+                      {:accept ".draggable"
+                       :overlap 0.04
+                       :ondragenter (fn [e]
+                                      (let [draggableElement (.-relatedTarget e)
+                                            dropzoneElement (.-target e)]
+                                        (.add (.-classList dropzoneElement) "highlight")
+                                        (.add (.-classList draggableElement) "can-drop")))
 
-                   :ondragleave (fn [e]
-                                  (.remove (.. e -target -classList) "highlight")
-                                  (.remove (.. e -relatedTarget -classList) "can-drop"))
+                       :ondragleave (fn [e]
+                                      (.remove (.. e -target -classList) "highlight")
+                                      (.remove (.. e -relatedTarget -classList) "can-drop"))
 
-                   :ondrop #(rf/dispatch [:place-card (/ pos 2)])}))}))
+                       :ondrop #(rf/dispatch [:place-card (/ pos 2)])}])))}))
 
 (defn view []
   (let [cards (rf/subscribe [:timeline/cards])

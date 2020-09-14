@@ -3,7 +3,6 @@
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [reagent.dom :as reagent-dom]
-   ["interactjs" :as interact]
    [timeline-game.ui.hand.events]
    [timeline-game.ui.hand.subs]
    [timeline-game.ui.components :as uic]
@@ -20,7 +19,7 @@
               [x y] (:pos @s)
               dragged? (:dragged? @s)]
           (when node
-            (.draggable (interact node) @player-turn?))
+            (rf/dispatch [:dnd/enable node @player-turn?]))
           [:div.draggable
            {:style {:touch-action :none
                     :user-select :none
@@ -40,29 +39,26 @@
       (fn [this]
         (let [node (reagent-dom/dom-node this)]
           (swap! s assoc :node node)
-          (.draggable (interact node)
-                      #js {:inertia true
-                           :modifiers
-                           #js
-                            [(.restrictRect
-                              (.-modifiers interact)
-                              #js {:restriction ".table", :endOnly false})]
-                           :onmove (fn [e]
-                                     (let [[x y] (:pos @s)
-                                           new-x (+ (.-dx e) x)
-                                           new-y (+ (.-dy e) y)]
-                                       (swap! s assoc :pos [new-x new-y])))
+          (rf/dispatch [:dnd/draggable
+                        node
+                        {:inertia true
+                         :modifiers {:restriction ".table", :endOnly false}
+                         :onmove (fn [e]
+                                   (let [[x y] (:pos @s)
+                                         new-x (+ (.-dx e) x)
+                                         new-y (+ (.-dy e) y)]
+                                     (swap! s assoc :pos [new-x new-y])))
 
-                           :onstart (fn []
-                                      (swap! s merge {:dragged? true
-                                                      :z-index 1})
-                                      (rf/dispatch [:select-card id]))
+                         :onstart (fn []
+                                    (swap! s merge {:dragged? true
+                                                    :z-index 1})
+                                    (rf/dispatch [:select-card id]))
 
-                           :onend   (fn []
-                                      (swap! s merge {:dragged? false
-                                                      :z-index 0
-                                                      :pos [0 0]})
-                                      (rf/dispatch [:deselect-card]))})))})))
+                         :onend   (fn []
+                                    (swap! s merge {:dragged? false
+                                                    :z-index 0
+                                                    :pos [0 0]})
+                                    (rf/dispatch [:deselect-card]))}])))})))
 
 (defn view []
   (let [player-turn? (rf/subscribe [:players-turn?])

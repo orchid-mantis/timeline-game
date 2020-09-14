@@ -2,6 +2,7 @@
   (:require [re-frame.core :as rf]
             [reagent.dom :as reagent-dom]
             ["mousetrap" :as mousetrap]
+            [timeline-game.ui.dnd]
             [timeline-game.routes :as routes]
             [timeline-game.init]
             [timeline-game.events]
