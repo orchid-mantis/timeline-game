@@ -10,18 +10,21 @@
    [timeline-game.ui.utils :as utils]))
 
 (defn draggable [card player-turn? drawn-card-id]
-  (let [s (reagent/atom {:pos [0 0]})
+  (let [s (reagent/atom {:pos [0 0] :z-index 0})
         id (:id card)]
     (reagent/create-class
      {:reagent-render
       (fn [card player-turn? drawn-card-id]
         (let [node (:node @s)
+              z-index (:z-index @s)
               [x y] (:pos @s)]
           (when node
             (.draggable (interact node) @player-turn?))
           [:div.draggable
            {:style {:touch-action :none
                     :user-select :none
+                    :position :relative
+                    :z-index z-index
                     :transform (str "translate(" x "px, " y "px)")}}
            [uic/basic-card-view
             card
@@ -48,10 +51,12 @@
                                            new-y (+ (.-dy e) y)]
                                        (swap! s assoc :pos [new-x new-y])))
 
-                           :onstart #(rf/dispatch [:select-card id])
+                           :onstart (fn []
+                                      (swap! s assoc :z-index 1)
+                                      (rf/dispatch [:select-card id]))
 
                            :onend   (fn []
-                                      (swap! s assoc :pos [0 0])
+                                      (swap! s merge {:pos [0 0] :z-index 0})
                                       (rf/dispatch [:deselect-card]))})))})))
 
 (defn view []
