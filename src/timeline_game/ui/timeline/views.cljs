@@ -8,10 +8,10 @@
    [timeline-game.ui.components :as uic]
    [timeline-game.ui.utils :as utils]))
 
-(defn drop-zone [s pos highlight-drop-zones?]
+(defn drop-zone [pos highlight-drop-zones?]
   (reagent/create-class
    {:reagent-render
-    (fn [s pos highlight-drop-zones?]
+    (fn [_ highlight-drop-zones?]
       [:div.drop-zone {:class (when highlight-drop-zones? :highlight-all)}
        [:div.ribbon
         {:class (when highlight-drop-zones? :hide)}]])
@@ -39,8 +39,7 @@
   (let [cards (rf/subscribe [:timeline/cards])
         last-added-id (rf/subscribe [:timeline/last-added])
         animation (rf/subscribe [:move-animation])
-        highlight-drop-zones? (rf/subscribe [:highlight-drop-zones?])
-        s (reagent/atom {})]
+        highlight-drop-zones? (rf/subscribe [:highlight-drop-zones?])]
     (fn []
       (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
         [:div.timeline
@@ -54,11 +53,9 @@
                  :let [id (:id item)]]
              [:div.scroll-item {:key pos}
               (if (= item :drop-zone)
-                [drop-zone s pos @highlight-drop-zones?]
+                [drop-zone pos @highlight-drop-zones?]
                 [uic/basic-card-view
                  item
                  true
                  (utils/cs (when (= id @last-added-id) @animation))
-                 {:margin "10px 0 10px 0"}])]))]]
-         ;[:p (pr-str @s)]
-        ))))
+                 {:margin "10px 0 10px 0"}])]))]]))))
