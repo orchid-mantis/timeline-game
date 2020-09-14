@@ -50,7 +50,9 @@
 
                            :onstart #(rf/dispatch [:select-card id])
 
-                           :onend   #(rf/dispatch [:deselect-card])})))})))
+                           :onend   (fn []
+                                      (swap! s assoc :pos [0 0])
+                                      (rf/dispatch [:deselect-card]))})))})))
 
 (defn view []
   (let [player-turn? (rf/subscribe [:players-turn?])
