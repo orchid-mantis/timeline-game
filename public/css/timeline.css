@@ -47,6 +47,7 @@
 
 .drop-zone.highlight {
     width: 25px;
+    border-radius: 25px;
     background-color: rgb(107, 12, 31);
 }
 
