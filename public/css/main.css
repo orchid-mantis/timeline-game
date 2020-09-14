@@ -251,7 +251,10 @@
     margin-left: .5em;
   }
 
-  .draggable.can-drop .card--normal:hover {
+  .draggable.can-drop .card--normal {
     background: linear-gradient(110deg, yellowgreen 0%, green 100%);
+  }
+
+  .draggable.can-drop .card--normal:hover {
     box-shadow: none;
   }
