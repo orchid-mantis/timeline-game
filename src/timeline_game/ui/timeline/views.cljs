@@ -33,7 +33,11 @@
                                       (.remove (.. e -target -classList) "highlight")
                                       (.remove (.. e -relatedTarget -classList) "can-drop"))
 
-                       :ondrop #(rf/dispatch [:place-card (/ pos 2)])}])))}))
+                       :ondrop (fn [e]
+                                 (let [draggableElement (.-relatedTarget e)
+                                       str-id (.. draggableElement -dataset -id)
+                                       id (js/parseInt str-id)]
+                                   (rf/dispatch [:place-card id (/ pos 2)])))}])))}))
 
 (defn view []
   (let [cards (rf/subscribe [:timeline/cards])

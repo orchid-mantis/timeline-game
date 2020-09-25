@@ -5,13 +5,12 @@
 
 (rf/reg-event-fx
  :place-card
- (fn [{:keys [db]} [_ pos]]
-   (let [id (get-in db [:player :selected-card-id])]
-     {:db (-> db
-              (update-in [:player :hand :ids] remove-card id)
-              (update-in [:timeline :ids] put-before pos id)
-              (assoc-in [:player :selected-card-id] :nothing))
-      :dispatch [:eval-move :player id]})))
+ (fn [{:keys [db]} [_ id pos]]
+   {:db (-> db
+            (update-in [:player :hand :ids] remove-card id)
+            (update-in [:timeline :ids] put-before pos id)
+            (assoc-in [:player :selected-card-id] :nothing))
+    :dispatch [:eval-move :player id]}))
 
 (rf/reg-event-fx
  :scroll-timeline

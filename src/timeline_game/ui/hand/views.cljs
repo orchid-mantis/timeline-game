@@ -21,7 +21,8 @@
           (when node
             (rf/dispatch [:dnd/enable node @player-turn?]))
           [:div.draggable
-           {:style {:touch-action :none
+           {:data-id id
+            :style {:touch-action :none
                     :user-select :none
                     :position :relative
                     :z-index z-index
