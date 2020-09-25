@@ -36,12 +36,13 @@ header {
 }
 
 .players {
+  margin: 10px 0 10px 0;
   display: flex;
   justify-content: center;
 }
 
 .timeline {
-  margin-top: 100px;
+  padding-top: 100px;
 }
 
 .hand {
