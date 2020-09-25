@@ -14,12 +14,9 @@
     (reagent/create-class
      {:reagent-render
       (fn [card player-turn? drawn-card-id]
-        (let [node (:node @s)
-              z-index (:z-index @s)
+        (let [z-index (:z-index @s)
               [x y] (:pos @s)
               dragged? (:dragged? @s)]
-          (when node
-            (rf/dispatch [:dnd/enable node @player-turn?]))
           [:div.draggable
            {:data-id id
             :style {:touch-action :none
@@ -36,10 +33,14 @@
             {:cursor (when (not @player-turn?) :not-allowed)
              :opacity (when (not @player-turn?) 0.3)}]]))
 
+      :component-did-update
+      (fn [this]
+        (let [node (reagent-dom/dom-node this)]
+          (rf/dispatch [:dnd/enable node @player-turn?])))
+
       :component-did-mount
       (fn [this]
         (let [node (reagent-dom/dom-node this)]
-          (swap! s assoc :node node)
           (rf/dispatch [:dnd/draggable
                         node
                         {:inertia true
