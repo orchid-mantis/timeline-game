@@ -62,7 +62,8 @@
                                     (swap! s merge {:dragged? false
                                                     :z-index 0
                                                     :pos [0 0]})
-                                    (rf/dispatch [:deselect-card id]))}])))})))
+                                    (rf/dispatch [:deselect-card id]))}])
+          (rf/dispatch [:dnd/enable-drag node @players-turn?])))})))
 
 (defn view []
   (let [players-turn? (rf/subscribe [:players-turn?])
