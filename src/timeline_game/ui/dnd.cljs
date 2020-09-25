@@ -10,16 +10,22 @@
     :init-draggable [target options]}))
 
 (rf/reg-event-fx
+ :dnd/enable-drag
+ (fn [{:keys [db]} [_ target enabled?]]
+   {:db db
+    :enable-drag [target enabled?]}))
+
+(rf/reg-event-fx
  :dnd/dropzone
  (fn [{:keys [db]} [_ target options]]
    {:db db
     :init-dropzone [target options]}))
 
 (rf/reg-event-fx
- :dnd/enable
+ :dnd/enable-drop
  (fn [{:keys [db]} [_ target enabled?]]
    {:db db
-    :enable-drag [target enabled?]}))
+    :enable-drop [target enabled?]}))
 
 (rf/reg-fx
  :init-draggable
@@ -29,11 +35,16 @@
      (.draggable (interact target) (clj->js options)))))
 
 (rf/reg-fx
+ :enable-drag
+ (fn [[target enabled?]]
+   (.draggable (interact target) enabled?)))
+
+(rf/reg-fx
  :init-dropzone
  (fn [[target options]]
    (.dropzone (interact target) (clj->js options))))
 
 (rf/reg-fx
- :enable-drag
+ :enable-drop
  (fn [[target enabled?]]
-   (.draggable (interact target) enabled?)))
+   (.dropzone (interact target) enabled?)))

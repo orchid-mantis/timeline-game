@@ -8,12 +8,12 @@
    [timeline-game.ui.components :as uic]
    [timeline-game.ui.utils :as utils]))
 
-(defn draggable [card player-turn? drawn-card-id]
-  (let [s (reagent/atom {:pos [0 0] :z-index 0})
+(defn draggable [card players-turn? drawn-card-id]
+  (let [s (reagent/atom {:pos [0 0] :z-index 0 :players-turn? @players-turn?})
         id (:id card)]
     (reagent/create-class
      {:reagent-render
-      (fn [card player-turn? drawn-card-id]
+      (fn [card players-turn? drawn-card-id]
         (let [z-index (:z-index @s)
               [x y] (:pos @s)
               dragged? (:dragged? @s)]
@@ -28,15 +28,17 @@
            [uic/basic-card-view
             card
             false
-            (utils/cs (when @player-turn? :selectable)
+            (utils/cs (when @players-turn? :selectable)
                       (when (= id @drawn-card-id) :slide-in-top))
-            {:cursor (when (not @player-turn?) :not-allowed)
-             :opacity (when (not @player-turn?) 0.3)}]]))
+            {:cursor (when (not @players-turn?) :not-allowed)
+             :opacity (when (not @players-turn?) 0.3)}]]))
 
       :component-did-update
       (fn [this]
         (let [node (reagent-dom/dom-node this)]
-          (rf/dispatch [:dnd/enable node @player-turn?])))
+          (when (not= @players-turn? (:players-turn? @s))
+            (swap! s update :players-turn? not)
+            (rf/dispatch [:dnd/enable-drag node @players-turn?]))))
 
       :component-did-mount
       (fn [this]
@@ -63,7 +65,7 @@
                                     (rf/dispatch [:deselect-card id]))}])))})))
 
 (defn view []
-  (let [player-turn? (rf/subscribe [:players-turn?])
+  (let [players-turn? (rf/subscribe [:players-turn?])
         cards (rf/subscribe [:hand/cards])
         drawn-card-id (rf/subscribe [:drawn-card-id])]
     (fn []
@@ -71,4 +73,4 @@
        (doall
         (for [card @cards]
           [:div {:key (:id card)}
-           [draggable card player-turn? drawn-card-id]]))])))
+           [draggable card players-turn? drawn-card-id]]))])))

@@ -41,3 +41,10 @@
    (rf/subscribe [:player/selected-cards]))
  (fn [selected-cards]
    (= 1 (count selected-cards))))
+
+(rf/reg-sub
+ :allow-drop?
+ (fn []
+   (rf/subscribe [:player/selected-cards]))
+ (fn [selected-cards]
+   (<= (count selected-cards) 1)))

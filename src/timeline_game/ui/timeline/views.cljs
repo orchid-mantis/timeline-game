@@ -9,35 +9,44 @@
    [timeline-game.ui.utils :as utils]))
 
 (defn drop-zone [pos highlight-drop-zones?]
-  (reagent/create-class
-   {:reagent-render
-    (fn [_ highlight-drop-zones?]
-      [:div.drop-zone {:class (when highlight-drop-zones? :highlight-all)}
-       [:div.ribbon
-        {:class (when highlight-drop-zones? :hide)}]])
+  (let [allow-drop? (rf/subscribe [:allow-drop?])
+        s (reagent/atom @allow-drop?)]
+    (reagent/create-class
+     {:reagent-render
+      (fn [_ highlight-drop-zones?]
+        [:div.drop-zone {:class (when highlight-drop-zones? :highlight-all)}
+         [:div.ribbon
+          {:class (when highlight-drop-zones? :hide)}]])
 
-    :component-did-mount
-    (fn [this]
-      (let [node (reagent-dom/dom-node this)]
-        (rf/dispatch [:dnd/dropzone
-                      node
-                      {:accept ".draggable"
-                       :overlap 0.04
-                       :ondragenter (fn [e]
-                                      (let [draggableElement (.-relatedTarget e)
-                                            dropzoneElement (.-target e)]
-                                        (.add (.-classList dropzoneElement) "highlight")
-                                        (.add (.-classList draggableElement) "can-drop")))
+      :component-did-update
+      (fn [this]
+        (let [node (reagent-dom/dom-node this)]
+          (when (not= @allow-drop? @s)
+            (swap! s not)
+            (rf/dispatch [:dnd/enable-drop node @allow-drop?]))))
 
-                       :ondragleave (fn [e]
-                                      (.remove (.. e -target -classList) "highlight")
-                                      (.remove (.. e -relatedTarget -classList) "can-drop"))
+      :component-did-mount
+      (fn [this]
+        (let [node (reagent-dom/dom-node this)]
+          (rf/dispatch [:dnd/dropzone
+                        node
+                        {:accept ".draggable"
+                         :overlap 0.04
+                         :ondragenter (fn [e]
+                                        (let [draggableElement (.-relatedTarget e)
+                                              dropzoneElement (.-target e)]
+                                          (.add (.-classList dropzoneElement) "highlight")
+                                          (.add (.-classList draggableElement) "can-drop")))
 
-                       :ondrop (fn [e]
-                                 (let [draggableElement (.-relatedTarget e)
-                                       str-id (.. draggableElement -dataset -id)
-                                       id (js/parseInt str-id)]
-                                   (rf/dispatch [:place-card id (/ pos 2)])))}])))}))
+                         :ondragleave (fn [e]
+                                        (.remove (.. e -target -classList) "highlight")
+                                        (.remove (.. e -relatedTarget -classList) "can-drop"))
+
+                         :ondrop (fn [e]
+                                   (let [draggableElement (.-relatedTarget e)
+                                         str-id (.. draggableElement -dataset -id)
+                                         id (js/parseInt str-id)]
+                                     (rf/dispatch [:place-card id (/ pos 2)])))}])))})))
 
 (defn view []
   (let [cards (rf/subscribe [:timeline/cards])
