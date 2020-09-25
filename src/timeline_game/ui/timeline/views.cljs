@@ -9,8 +9,7 @@
    [timeline-game.ui.utils :as utils]))
 
 (defn drop-zone [pos highlight-drop-zones?]
-  (let [allow-drop? (rf/subscribe [:allow-drop?])
-        s (reagent/atom @allow-drop?)]
+  (let [allow-drop? (rf/subscribe [:allow-drop?])]
     (reagent/create-class
      {:reagent-render
       (fn [_ highlight-drop-zones?]
@@ -21,9 +20,9 @@
       :component-did-update
       (fn [this]
         (let [node (reagent-dom/dom-node this)]
-          (when (not= @allow-drop? @s)
-            (swap! s not)
-            (rf/dispatch [:dnd/enable-drop node @allow-drop?]))))
+          (rf/dispatch [:dnd/dropzone
+                        node
+                        {:checker (fn [_ _ dropped?] (and dropped? @allow-drop?))}])))
 
       :component-did-mount
       (fn [this]
