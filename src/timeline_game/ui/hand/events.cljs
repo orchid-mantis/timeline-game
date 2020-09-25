@@ -5,9 +5,9 @@
 (rf/reg-event-db
  :select-card
  (fn [db [_ id]]
-   (assoc-in db [:player :selected-card-id] id)))
+   (update-in db [:player :selected-cards] conj id)))
 
 (rf/reg-event-db
  :deselect-card
- (fn [db]
-   (assoc-in db [:player :selected-card-id] :nothing)))
+ (fn [db [_ id]]
+   (update-in db [:player :selected-cards] disj id)))

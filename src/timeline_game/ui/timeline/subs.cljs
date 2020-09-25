@@ -31,13 +31,13 @@
      nil)))
 
 (rf/reg-sub
- :player/selected-card-id
+ :player/selected-cards
  (fn [db]
-   (get-in db [:player :selected-card-id])))
+   (get-in db [:player :selected-cards])))
 
 (rf/reg-sub
  :highlight-drop-zones?
  (fn []
-   (rf/subscribe [:player/selected-card-id]))
- (fn [selected-card]
-   (not= selected-card :nothing)))
+   (rf/subscribe [:player/selected-cards]))
+ (fn [selected-cards]
+   (= 1 (count selected-cards))))

@@ -22,7 +22,7 @@
 
 (defn init-player [db player]
   (-> db
-      (assoc-in [player :selected-card-id] :nothing)
+      (assoc-in [player :selected-cards] #{})
       (init-hand player)
       (assoc-in [player :stats] {:well-played-count 0
                                  :wrong-played-count 0

@@ -9,7 +9,7 @@
    {:db (-> db
             (update-in [:player :hand :ids] remove-card id)
             (update-in [:timeline :ids] put-before pos id)
-            (assoc-in [:player :selected-card-id] :nothing))
+            (assoc-in [:player :selected-cards] #{}))
     :dispatch [:eval-move :player id]}))
 
 (rf/reg-event-fx
