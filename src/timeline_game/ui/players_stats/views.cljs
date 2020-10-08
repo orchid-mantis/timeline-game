@@ -10,7 +10,7 @@
     (fn []
       (let [last-played-card (:last-played-card @stats)
             last-valid-move? (:last-valid-move? @stats)]
-        [:div.row-data
+        [:div.grid {:style {:grid-template-columns "repeat(3, 50px) 22px 200px"}}
          [:div {:title "Well-played count"}
           [icon/well-played]
           [:span (:well-played-count @stats)]]
@@ -23,10 +23,10 @@
           [icon/card-deck]
           [:span @hand-size]]
 
-         [:div.section {:title (case last-valid-move?
-                                 true "Well-played"
-                                 false "Wrong-played"
-                                 "Last played card")}
+         [:div.centered {:title (case last-valid-move?
+                                  true "Well-played"
+                                  false "Wrong-played"
+                                  "Last played card")}
           (case last-valid-move?
             true  [icon/well-played]
             false [icon/wrong-played]
@@ -40,7 +40,7 @@
   (let [highlight? (= (:id player) curr-player)]
     [:div.grid {:style {:grid-template-columns "15px auto"}
                 :title (when highlight? "Current player")}
-     [:div.center
+     [:div.centered
       (when highlight?
         [icon/caret-right])]
 

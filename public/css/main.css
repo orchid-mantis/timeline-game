@@ -112,27 +112,15 @@
     -webkit-transform: rotate(45deg);
   }
 
-  .row-data i,
-  .row-data span {
-    padding: 3px;
-  }
-
-  .row-data {
-    display: grid;
-    grid-template-columns: repeat(3, 50px) 22px 200px;
-  }
-
-  .row-data .section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .grid .fas {
+    padding-right: 6px;
   }
 
   .grid {
     display: grid;
   }
 
-  .grid .center {
+  .grid .centered {
     display: flex;
     justify-content: center;
     align-items: center;
