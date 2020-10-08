@@ -5,8 +5,8 @@
 (rf/reg-sub
  :players-turn?
  (fn []
-   [(rf/subscribe [:player])
-    (rf/subscribe [:turn])])
+   [(rf/subscribe [:game/current-player])
+    (rf/subscribe [:game/turn])])
  (fn [[player turn]]
    (and (= player :player)
         (= turn :ready))))

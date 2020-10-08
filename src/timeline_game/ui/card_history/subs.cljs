@@ -4,11 +4,6 @@
    [timeline-game.common :refer [fmap copy-fields]]))
 
 (rf/reg-sub
- :players
- (fn [db]
-   (get-in db [:players])))
-
-(rf/reg-sub
  :history
  (fn [db]
    (get-in db [:history])))

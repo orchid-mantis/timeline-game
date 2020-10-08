@@ -23,7 +23,7 @@
 (rf/reg-sub
  :move-animation
  (fn []
-   (rf/subscribe [:turn]))
+   (rf/subscribe [:game/turn]))
  (fn [turn]
    (case turn
      :well-placed-card :flip-in-hor-top

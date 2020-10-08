@@ -19,11 +19,7 @@
        "Played cards"]]]]
 
    [:div.players
-    [:div.players-stats
-     [:div.column "Player"]
-     [ui/players-stats-view :player]
-     [:div.column "Bot"]
-     [ui/players-stats-view :bot]]]
+    [ui/players-stats-view]]
 
    [:div.table
     [ui/timeline-view]
