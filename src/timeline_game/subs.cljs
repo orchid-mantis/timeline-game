@@ -25,7 +25,14 @@
 (rf/reg-sub
  :game/current-player
  (fn [db _]
-   (get-in db [:game :player])))
+   (get-in db [:game :curr-player])))
+
+(rf/reg-sub
+ :game/players-turn?
+ (fn []
+   (rf/subscribe [:game/current-player]))
+ (fn [curr-player]
+   (= curr-player :player)))
 
 (rf/reg-sub
  :game/round
@@ -36,3 +43,8 @@
  :game/mode
  (fn [db _]
    (get-in db [:game :mode])))
+
+(rf/reg-sub
+ :game/result
+ (fn [db]
+   (get-in db [:game :result])))

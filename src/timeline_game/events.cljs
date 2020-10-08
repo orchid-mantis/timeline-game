@@ -9,8 +9,10 @@
 (rf/reg-event-fx
  :init-turn
  (fn [{:keys [db]} [event _]]
-   (let [player (get-in db [:game :player])]
-     (merge {:db (fsm/update-turn db event)}
+   (let [player (get-in db [:game :player-fsm])]
+     (merge {:db (-> db
+                     (assoc-in [:game :curr-player] player)
+                     (fsm/update-turn event))}
             (when (= player :bot) {:dispatch [:play-bot-move]})))))
 
 (rf/reg-fx
@@ -162,7 +164,7 @@
  (fn [{:keys [db]} [_ mode]]
    {:db (-> db
             (update-in [:game :round] inc)
-            (assoc-in [:game :player] nil)
+            (assoc-in [:game :player-fsm] nil)
             (assoc-in [:game :mode] mode))
     :dispatch (if (= mode :sudden-death)
                 [:draw-card [:player :bot] :next-player]

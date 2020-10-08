@@ -5,11 +5,6 @@
 ;; -- Subscriptions -----------------------------------------------------------
 
 (rf/reg-sub
- :game-result
- (fn [db]
-   (get-in db [:game :result])))
-
-(rf/reg-sub
  :game-result/show?
  (fn [db]
    (get-in db [:game :show-result?])))
@@ -17,7 +12,7 @@
 (rf/reg-sub
  :game-result/view-data
  (fn []
-   (rf/subscribe [:game-result]))
+   (rf/subscribe [:game/result]))
  (fn [result]
    (case result
      :player-won {:text "You won!" :color :green}

@@ -17,7 +17,7 @@
  (fn [{:keys [db]} [_ delta]]
    (let [node (get-in db [:dom-nodes :timeline])
          turn (get-in db [:game :turn])
-         player (get-in db [:game :player])
+         player (get-in db [:game :curr-player])
          game-result (get-in db [:game :result])
          game-ended? (not= game-result :await)
          allow-scroll? (or (and (= player :player) (= turn :ready))

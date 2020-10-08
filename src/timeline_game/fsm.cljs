@@ -31,10 +31,10 @@
   (update-next-state turn-state-fsm db [:game :turn] event))
 
 (defn update-player [db event]
-  (update-next-state player-fsm db [:game :player] event))
+  (update-next-state player-fsm db [:game :player-fsm] event))
 
 (defn next-player [db event]
-  (next-state player-fsm (get-in db [:game :player]) event))
+  (next-state player-fsm (get-in db [:game :player-fsm]) event))
 
 (defn update-hand [db event player]
   (update-next-state hand-fsm db [player :hand :state] event))
