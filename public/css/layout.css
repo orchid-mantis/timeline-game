@@ -41,6 +41,11 @@ header {
   justify-content: center;
 }
 
+.status-bar {
+  display: flex;
+  justify-content: center;
+}
+
 .timeline {
   padding-top: 100px;
 }

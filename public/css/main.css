@@ -8,6 +8,13 @@
     color: rgb(155, 127, 91);
   }
 
+  .title-2 {
+    font-family: 'riffic-bold', sans-serif;
+    font-size: 1.5em;
+    letter-spacing: 0.1em;
+    color: rgb(155, 127, 91);
+  }
+
   .btn {
     width: 150px;
     padding: 10px 20px;

@@ -18,6 +18,8 @@
        {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])}
        "Played cards"]]]]
 
+   [ui/status-bar-view]
+
    [:div.players
     [ui/players-stats-view]]
 
