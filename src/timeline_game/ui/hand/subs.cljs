@@ -3,7 +3,7 @@
    [re-frame.core :as rf]))
 
 (rf/reg-sub
- :players-turn?
+ :user-action/allowed?
  (fn []
    [(rf/subscribe [:game/current-player])
     (rf/subscribe [:game/turn])])

@@ -19,9 +19,9 @@
          turn (get-in db [:game :turn])
          player (get-in db [:game :player])
          game-result (get-in db [:game :result])
-         players-turn? (and (= player :player) (= turn :ready))
          game-ended? (not= game-result :await)
-         allow-scroll? (or game-ended? players-turn?)]
+         allow-scroll? (or (and (= player :player) (= turn :ready))
+                           game-ended?)]
      (merge {:db db}
             (when allow-scroll?
               {:apply-scroll-timeline [node delta]})))))
