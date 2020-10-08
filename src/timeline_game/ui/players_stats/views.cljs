@@ -30,7 +30,7 @@
           (case last-valid-move?
             true  [icon/well-played]
             false [icon/wrong-played]
-            [icon/caret-right])]
+            [:span])]
 
          [:div {:title "Last played card"}
           [:span
