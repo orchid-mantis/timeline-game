@@ -3,7 +3,8 @@
 
 (def hand-size 5)
 
-(def players {:player {:name "Player"} :bot {:name "Bot"}})
+(def players {:player {:id :player :name "Player"}
+              :bot    {:id :bot :name "Bot"}})
 
 (defn init-deck [db]
   (let [cards (keys (:cards db))

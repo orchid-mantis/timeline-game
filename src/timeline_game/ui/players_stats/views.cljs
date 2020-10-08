@@ -36,14 +36,26 @@
           [:span
            (get last-played-card :title "-----")]]]))))
 
+(defn player-name [player curr-player]
+  (let [highlight? (= (:id player) curr-player)]
+    [:div.grid {:style {:grid-template-columns "15px auto"}
+                :title (when highlight? "Current player")}
+     [:div.center
+      (when highlight?
+        [icon/caret-right])]
+
+     [:span {:style {:font-weight (when highlight? :bold)}}
+      (:name player)]]))
+
 (defn view []
-  (let [players (rf/subscribe [:players])]
+  (let [players (rf/subscribe [:players])
+        curr-player (rf/subscribe [:game/current-player])]
     (fn []
       (let [items (interleave (vals @players) (keys @players))]
         [:div.players-stats
          (doall
-          (for [[item index] (map vector items (range))]
+          (for [[p index] (map vector items (range))]
             [:div.column {:key index}
-             (if (keyword? item)
-               [players-stats item]
-               (:name item))]))]))))
+             (if (keyword? p)
+               [players-stats p]
+               [player-name p @curr-player])]))]))))

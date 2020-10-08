@@ -128,6 +128,16 @@
     align-items: center;
   }
 
+  .grid {
+    display: grid;
+  }
+
+  .grid .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .players-stats {
     display: grid;
     grid-template-columns: max-content 1fr;
