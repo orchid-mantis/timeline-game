@@ -1,7 +1,7 @@
 (ns timeline-game.ui.card-history.subs
   (:require
    [re-frame.core :as rf]
-   [timeline-game.common :refer [fmap copy-fields]]))
+   [timeline-game.common :refer [map-v copy-fields]]))
 
 (rf/reg-sub
  :history
@@ -14,6 +14,6 @@
    [(rf/subscribe [:cards])
     (rf/subscribe [:history])])
  (fn [[cards history]]
-   (let [played-cards (fmap (partial copy-fields cards :id [:title]) history)]
+   (let [played-cards (map-v (partial copy-fields cards :id [:title]) history)]
      (for [[k v] played-cards]
        (assoc v :round k)))))
