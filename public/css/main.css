@@ -39,6 +39,16 @@
     cursor: pointer;
   }
 
+  .button.disabled {
+    user-select: none;
+    cursor: not-allowed;
+    background-color: #FFF3D9;
+  }
+
+  .button.disabled:hover {
+    background-color: #FFF3D9;
+  }
+
   .button:hover {
     background-color: #EACB89;
   }

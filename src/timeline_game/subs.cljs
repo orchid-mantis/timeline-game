@@ -48,3 +48,15 @@
  :game/result
  (fn [db]
    (get-in db [:game :result])))
+
+(rf/reg-sub
+ :allow-new-game?
+ (fn []
+   [(rf/subscribe [:game/result])
+    (rf/subscribe [:game/turn])
+    (rf/subscribe [:game/current-player])])
+ (fn [[game-result turn curr-player]]
+   (let [game-ended? (not= game-result :await)
+         players-turn? (and (= curr-player :player) (= turn :ready))]
+     (or players-turn?
+         game-ended?))))

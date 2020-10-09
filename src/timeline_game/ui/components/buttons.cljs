@@ -4,8 +4,10 @@
    [timeline-game.ui.components.views :as ui]))
 
 (defn start-game-button []
-  [ui/button {:on-click #(rf/dispatch [:new-game])
-              :label "Start a new game"}])
+  (let [allow-new-game? (rf/subscribe [:allow-new-game?])]
+    [ui/button {:on-click #(rf/dispatch [:new-game])
+                :label "Start a new game"
+                :enabled @allow-new-game?}]))
 
 (defn played-cards-button []
   [ui/button {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])
