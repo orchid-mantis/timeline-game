@@ -10,11 +10,11 @@
 
 ;;; Views ;;;
 
-(def timeline-view timeline/view)
-(def hand-view hand/view)
-(def status-bar-view status-bar/view)
-(def players-stats-view players-stats/view)
-(def card-history-view card-history/view)
-(def game-result-view game-result/view)
+(def timeline timeline/view)
+(def hand hand/view)
+(def status-bar status-bar/view)
+(def players-stats players-stats/view)
+(def card-history card-history/view)
+(def game-result game-result/view)
 
-(def card-set-view card-set/view)
+(def card-set card-set/view)

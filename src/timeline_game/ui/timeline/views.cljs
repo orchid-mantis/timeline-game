@@ -5,7 +5,7 @@
    [reagent.dom :as reagent-dom]
    [timeline-game.ui.timeline.events]
    [timeline-game.ui.timeline.subs]
-   [timeline-game.ui.components :as uic]
+   [timeline-game.ui.components :as ui]
    [timeline-game.ui.utils :as utils]))
 
 (defn drop-zone [pos highlight-drop-zones?]
@@ -75,7 +75,7 @@
                [:div.scroll-item {:key pos}
                 (if (= item :drop-zone)
                   [drop-zone pos @highlight-drop-zones?]
-                  [uic/basic-card-view
+                  [ui/basic-card-view
                    item
                    true
                    (utils/cs (when (= id @last-added-id) @animation))

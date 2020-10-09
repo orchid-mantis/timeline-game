@@ -1,7 +1,7 @@
 (ns timeline-game.views
   (:require [re-frame.core :as rf]
-            [timeline-game.ui.views :as ui]
-            [timeline-game.ui.components :as uic]))
+            [timeline-game.ui.views :as view]
+            [timeline-game.ui.components :as ui]))
 
 (defn main-panel []
   [:div.site
@@ -18,25 +18,25 @@
        {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])}
        "Played cards"]]]]
 
-   [ui/status-bar-view]
+   [view/status-bar]
 
    [:div.players
-    [ui/players-stats-view]]
+    [view/players-stats]]
 
    [:div.table
-    [ui/timeline-view]
-    [ui/hand-view]]
+    [view/timeline]
+    [view/hand]]
 
-   [uic/overlay-view
+   [ui/overlay-view
     :history-overlay
-    [ui/card-history-view]]
+    [view/card-history]]
 
-   [ui/game-result-view]])
+   [view/game-result]])
 
 (defn card-set-panel []
   [:div
    [:a.button {:href "#/"} "Return to game"]
-   [ui/card-set-view]])
+   [view/card-set]])
 
 (defn- panels [panel-name]
   (case panel-name
