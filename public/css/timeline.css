@@ -25,6 +25,9 @@
 
 .timeline .scroll-item:last-child {
     margin-right: 30px;
+}
+
+.timeline .scrollable .scroll-item:last-child {
     width: 250px;
 }
 

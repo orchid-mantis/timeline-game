@@ -4,6 +4,28 @@
    [timeline-game.common :refer [put-before remove-card]]))
 
 (rf/reg-event-fx
+ :timeline/update-scrollable
+ (fn [{:keys [db]} _]
+   (let [node (get-in db [:dom-nodes :timeline])
+         old-value (get-in db [:timeline :scrollable?])]
+     {:db db
+      :update-scrollable [node old-value]})))
+
+(rf/reg-fx
+ :update-scrollable
+ (fn [[node old-value]]
+   (when node
+     (let [new-value (- (.-scrollWidth node) (.-clientWidth node))
+           scrollable? (not (zero? new-value))]
+       (when (not= scrollable? old-value)
+         (rf/dispatch [:scrollable-changed scrollable?]))))))
+
+(rf/reg-event-db
+ :scrollable-changed
+ (fn [db [_ value]]
+   (assoc-in db [:timeline :scrollable?] value)))
+
+(rf/reg-event-fx
  :user/place-card
  (fn [{:keys [db]} [_ id pos]]
    {:db (-> db

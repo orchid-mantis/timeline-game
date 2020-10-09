@@ -21,6 +21,11 @@
    (vec (map cards timeline))))
 
 (rf/reg-sub
+ :timeline/scrollable?
+ (fn [db]
+   (get-in db [:timeline :scrollable?])))
+
+(rf/reg-sub
  :move-animation
  (fn []
    (rf/subscribe [:game/turn]))

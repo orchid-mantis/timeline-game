@@ -20,7 +20,8 @@
 (defn ^:dev/after-load render []
   (rf/clear-subscription-cache!)
   (reagent-dom/render [views/root]
-                      (js/document.getElementById "app")))
+                      (js/document.getElementById "app"))
+  (js/window.addEventListener "resize" #(rf/dispatch [:timeline/update-scrollable])))
 
 (defn init-key-bindings []
   (mousetrap/bind "left"  #(rf/dispatch [:user/scroll-timeline -100]))

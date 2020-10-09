@@ -50,24 +50,41 @@
 (defn view []
   (let [cards (rf/subscribe [:timeline/cards])
         last-added-id (rf/subscribe [:timeline/last-added])
+        scrollable? (rf/subscribe [:timeline/scrollable?])
         animation (rf/subscribe [:move-animation])
         highlight-drop-zones? (rf/subscribe [:highlight-drop-zones?])]
-    (fn []
-      (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
-        [:div.timeline
-         [:div.scrolling-wrapper
-          {:ref #(rf/dispatch [:DOM/store-node :timeline %])
+    (reagent/create-class
+     {:reagent-render
+      (fn []
+        (let [items (concat [:drop-zone] (interpose :drop-zone @cards) [:drop-zone])]
+          [:div.timeline
+           [:div
+            {:class (utils/cs :scrolling-wrapper
+                              (when @scrollable? :scrollable))
 
-           :on-wheel (fn [e]
-                       (rf/dispatch [:user/scroll-timeline (.-deltaY e)]))}
-          (doall
-           (for [[item pos] (map vector items (range))
-                 :let [id (:id item)]]
-             [:div.scroll-item {:key pos}
-              (if (= item :drop-zone)
-                [drop-zone pos @highlight-drop-zones?]
-                [uic/basic-card-view
-                 item
-                 true
-                 (utils/cs (when (= id @last-added-id) @animation))
-                 {:margin "10px 0 10px 0"}])]))]]))))
+             :ref #(rf/dispatch [:DOM/store-node :timeline %])
+
+             :on-wheel (fn [e]
+                         (rf/dispatch [:user/scroll-timeline (.-deltaY e)]))
+
+             :style {:display :flex
+                     :justify-content (when (not @scrollable?) :center)}}
+            (doall
+             (for [[item pos] (map vector items (range))
+                   :let [id (:id item)]]
+               [:div.scroll-item {:key pos}
+                (if (= item :drop-zone)
+                  [drop-zone pos @highlight-drop-zones?]
+                  [uic/basic-card-view
+                   item
+                   true
+                   (utils/cs (when (= id @last-added-id) @animation))
+                   {:margin "10px 0 10px 0"}])]))]]))
+
+      :component-did-update
+      (fn []
+        (rf/dispatch [:timeline/update-scrollable]))
+
+      :component-did-mount
+      (fn []
+        (rf/dispatch [:timeline/update-scrollable]))})))
