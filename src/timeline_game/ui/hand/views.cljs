@@ -5,7 +5,7 @@
    [reagent.dom :as reagent-dom]
    [timeline-game.ui.hand.events]
    [timeline-game.ui.hand.subs]
-   [timeline-game.ui.components :as uic]
+   [timeline-game.ui.components :as ui]
    [timeline-game.ui.utils :as utils]))
 
 (defn draggable [card allow-drag? drawn-card-id]
@@ -25,7 +25,7 @@
                     :z-index z-index
                     :transform (str "translate(" x "px, " y "px)")
                     :transition (when (not dragged?) "0.5s")}}
-           [uic/basic-card-view
+           [ui/basic-card-view
             card
             false
             (utils/cs (when @allow-drag? :selectable)

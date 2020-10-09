@@ -1,7 +1,7 @@
 (ns timeline-game.ui.card-set.views
   (:require
    [re-frame.core :as rf]
-   [timeline-game.ui.components :as uic]))
+   [timeline-game.ui.components :as ui]))
 
 (rf/reg-sub
  :card-set/ordered
@@ -21,4 +21,4 @@
            [:li {:id id
                  :key pos
                  :style {:display :inline-block}}
-            [uic/basic-card-view item true]]))]])))
+            [ui/basic-card-view item true]]))]])))
