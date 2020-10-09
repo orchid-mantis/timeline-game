@@ -68,19 +68,23 @@
  :side-scroll
  (fn [[node pos callback]]
    (let [max-dist (- (.-scrollWidth node) (.-clientWidth node))
+
          current-pos (.-scrollLeft node)
+
          target-pos (-> (* pos (+ 166 20))
                         (#(if (> pos 0)
                             (+ % 40)
                             %))
                         (min max-dist))
+
          diff (- current-pos target-pos)
-         distance (if (< diff 0)
-                    (- diff)
-                    diff)]
-     (if (< target-pos current-pos)
-       (side-scroll node :left  25 distance 10 callback)
-       (side-scroll node :right 25 distance 10 callback)))))
+
+         options (if (< diff 0)
+                   {:direction :right
+                    :distance (- diff)}
+                   {:direction :left
+                    :distance diff})]
+     (side-scroll node (:direction options) 25 (:distance options) 10 callback))))
 
 (rf/reg-event-fx
  :side-scroll-finished
