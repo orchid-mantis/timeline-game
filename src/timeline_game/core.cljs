@@ -6,6 +6,7 @@
             [timeline-game.routes :as routes]
             [timeline-game.init]
             [timeline-game.events]
+            [timeline-game.effects]
             [timeline-game.subs]
             [timeline-game.views :as views]
             [timeline-game.db :as db]))
@@ -22,8 +23,8 @@
                       (js/document.getElementById "app")))
 
 (defn init-key-bindings []
-  (mousetrap/bind "left"  #(rf/dispatch [:scroll-timeline -100]))
-  (mousetrap/bind "right" #(rf/dispatch [:scroll-timeline  100])))
+  (mousetrap/bind "left"  #(rf/dispatch [:user/scroll-timeline -100]))
+  (mousetrap/bind "right" #(rf/dispatch [:user/scroll-timeline  100])))
 
 (defn ^:export init []
   (routes/app-routes)

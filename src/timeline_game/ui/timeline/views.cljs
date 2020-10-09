@@ -45,7 +45,7 @@
                                    (let [draggableElement (.-relatedTarget e)
                                          str-id (.. draggableElement -dataset -id)
                                          id (js/parseInt str-id)]
-                                     (rf/dispatch [:place-card id (/ pos 2)])))}])))})))
+                                     (rf/dispatch [:user/place-card id (/ pos 2)])))}])))})))
 
 (defn view []
   (let [cards (rf/subscribe [:timeline/cards])
@@ -59,7 +59,7 @@
           {:ref #(rf/dispatch [:DOM/store-node :timeline %])
 
            :on-wheel (fn [e]
-                       (rf/dispatch [:scroll-timeline (.-deltaY e)]))}
+                       (rf/dispatch [:user/scroll-timeline (.-deltaY e)]))}
           (doall
            (for [[item pos] (map vector items (range))
                  :let [id (:id item)]]

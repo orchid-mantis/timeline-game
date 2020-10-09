@@ -4,7 +4,7 @@
    [timeline-game.common :refer [put-before remove-card]]))
 
 (rf/reg-event-fx
- :place-card
+ :user/place-card
  (fn [{:keys [db]} [_ id pos]]
    {:db (-> db
             (update-in [:player :hand :ids] remove-card id)
@@ -13,7 +13,7 @@
     :dispatch [:eval-move :player id]}))
 
 (rf/reg-event-fx
- :scroll-timeline
+ :user/scroll-timeline
  (fn [{:keys [db]} [_ delta]]
    (let [node (get-in db [:dom-nodes :timeline])
          turn (get-in db [:game :turn])
@@ -24,13 +24,4 @@
                            game-ended?)]
      (merge {:db db}
             (when allow-scroll?
-              {:apply-scroll-timeline [node delta]})))))
-
-(defn horizontal-scroll [node delta]
-  (when node
-    (set! (.-scrollLeft node) (+ (.-scrollLeft node) delta))))
-
-(rf/reg-fx
- :apply-scroll-timeline
- (fn [[node delta]]
-   (horizontal-scroll node delta)))
+              {:scroll-timeline [node delta]})))))

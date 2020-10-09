@@ -15,11 +15,6 @@
                      (fsm/update-turn event))}
             (when (= player :bot) {:dispatch [:play-bot-move]})))))
 
-(rf/reg-fx
- :timeout
- (fn [[time event]]
-   (js/setTimeout #(rf/dispatch event) time)))
-
 (defn update-stats [stats card-id valid-move?]
   (let [count-key (if valid-move? :well-played-count :wrong-played-count)]
     (-> stats
