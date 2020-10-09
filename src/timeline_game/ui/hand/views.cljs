@@ -8,12 +8,12 @@
    [timeline-game.ui.components :as uic]
    [timeline-game.ui.utils :as utils]))
 
-(defn draggable [card action-allowed? drawn-card-id]
-  (let [s (reagent/atom {:pos [0 0] :z-index 0 :action-allowed? @action-allowed?})
+(defn draggable [card allow-drag? drawn-card-id]
+  (let [s (reagent/atom {:pos [0 0] :z-index 0 :allow-drag? @allow-drag?})
         id (:id card)]
     (reagent/create-class
      {:reagent-render
-      (fn [card action-allowed? drawn-card-id]
+      (fn [card allow-drag? drawn-card-id]
         (let [z-index (:z-index @s)
               [x y] (:pos @s)
               dragged? (:dragged? @s)]
@@ -28,17 +28,17 @@
            [uic/basic-card-view
             card
             false
-            (utils/cs (when @action-allowed? :selectable)
+            (utils/cs (when @allow-drag? :selectable)
                       (when (= id @drawn-card-id) :slide-in-top))
-            {:cursor (when (not @action-allowed?) :not-allowed)
-             :opacity (when (not @action-allowed?) 0.3)}]]))
+            {:cursor (when (not @allow-drag?) :not-allowed)
+             :opacity (when (not @allow-drag?) 0.3)}]]))
 
       :component-did-update
       (fn [this]
         (let [node (reagent-dom/dom-node this)]
-          (when (not= @action-allowed? (:action-allowed? @s))
-            (swap! s update :action-allowed? not)
-            (rf/dispatch [:dnd/enable-drag node @action-allowed?]))))
+          (when (not= @allow-drag? (:allow-drag? @s))
+            (swap! s update :allow-drag? not)
+            (rf/dispatch [:dnd/enable-drag node @allow-drag?]))))
 
       :component-did-mount
       (fn [this]
@@ -63,10 +63,10 @@
                                                     :z-index 0
                                                     :pos [0 0]})
                                     (rf/dispatch [:deselect-card id]))}])
-          (rf/dispatch [:dnd/enable-drag node @action-allowed?])))})))
+          (rf/dispatch [:dnd/enable-drag node @allow-drag?])))})))
 
 (defn view []
-  (let [action-allowed? (rf/subscribe [:user-action/allowed?])
+  (let [allow-drag? (rf/subscribe [:allow-drag?])
         cards (rf/subscribe [:hand/cards])
         drawn-card-id (rf/subscribe [:drawn-card-id])]
     (fn []
@@ -74,4 +74,4 @@
        (doall
         (for [card @cards]
           [:div {:key (:id card)}
-           [draggable card action-allowed? drawn-card-id]]))])))
+           [draggable card allow-drag? drawn-card-id]]))])))
