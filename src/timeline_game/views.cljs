@@ -9,14 +9,8 @@
     [:div.menu-wrapper
      [:div.menu
       [:span.title "Bible Timeline Game"]
-
-      [:a.button
-       {:on-click #(rf/dispatch [:new-game])}
-       "Start a new game"]
-
-      [:a.button
-       {:on-click #(rf/dispatch [:overlay/toggle :history-overlay])}
-       "Played cards"]]]]
+      [ui/start-game-button]
+      [ui/played-cards-button]]]]
 
    [view/status-bar]
 
@@ -35,7 +29,7 @@
 
 (defn card-set-panel []
   [:div
-   [:a.button {:href "#/"} "Return to game"]
+   [ui/main-panel-button]
    [view/card-set]])
 
 (defn- panels [panel-name]
