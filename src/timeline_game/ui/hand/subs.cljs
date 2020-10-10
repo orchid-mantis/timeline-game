@@ -3,15 +3,6 @@
    [re-frame.core :as rf]))
 
 (rf/reg-sub
- :allow-drag?
- (fn []
-   [(rf/subscribe [:game/current-player])
-    (rf/subscribe [:game/turn])])
- (fn [[player turn]]
-   (and (= player :player)
-        (= turn :ready))))
-
-(rf/reg-sub
  :hand/state
  (fn [db _]
    (get-in db [:player :hand :state])))

@@ -66,7 +66,7 @@
           (rf/dispatch [:dnd/enable-drag node @allow-drag?])))})))
 
 (defn view []
-  (let [allow-drag? (rf/subscribe [:allow-drag?])
+  (let [allow-drag? (rf/subscribe [:game/player-active?])
         cards (rf/subscribe [:hand/cards])
         drawn-card-id (rf/subscribe [:drawn-card-id])]
     (fn []

@@ -23,6 +23,13 @@
    (get-in db [:game :turn])))
 
 (rf/reg-sub
+ :game/turn-ready?
+ (fn []
+   (rf/subscribe [:game/turn]))
+ (fn [turn]
+   (= turn :ready)))
+
+(rf/reg-sub
  :game/current-player
  (fn [db _]
    (get-in db [:game :curr-player])))
@@ -33,6 +40,14 @@
    (rf/subscribe [:game/current-player]))
  (fn [curr-player]
    (= curr-player :player)))
+
+(rf/reg-sub
+ :game/player-active?
+ (fn []
+   [(rf/subscribe [:game/players-turn?])
+    (rf/subscribe [:game/turn-ready?])])
+ (fn [[players-turn? turn-ready?]]
+   (and players-turn? turn-ready?)))
 
 (rf/reg-sub
  :game/round
@@ -50,13 +65,16 @@
    (get-in db [:game :result])))
 
 (rf/reg-sub
+ :game/ended?
+ (fn []
+   (rf/subscribe [:game/result]))
+ (fn [game-result]
+   (not= game-result :await)))
+
+(rf/reg-sub
  :allow-new-game?
  (fn []
-   [(rf/subscribe [:game/result])
-    (rf/subscribe [:game/turn])
-    (rf/subscribe [:game/current-player])])
- (fn [[game-result turn curr-player]]
-   (let [game-ended? (not= game-result :await)
-         players-turn? (and (= curr-player :player) (= turn :ready))]
-     (or players-turn?
-         game-ended?))))
+   [(rf/subscribe [:game/player-active?])
+    (rf/subscribe [:game/ended?])])
+ (fn [[player-active? game-ended?]]
+   (or player-active? game-ended?)))
