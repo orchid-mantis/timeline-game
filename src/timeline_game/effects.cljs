@@ -41,7 +41,7 @@
 
 (defn random-delay [scroll-duration min-delay max-delay]
   (cond
-    (>= scroll-duration min-delay) 0
+    (> scroll-duration max-delay) 0
 
     (and (>= scroll-duration min-delay)
          (<= scroll-duration max-delay)) (rand-int (- max-delay scroll-duration))
