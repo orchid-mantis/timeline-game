@@ -39,6 +39,16 @@
     (+ position offset)
     position))
 
+(defn random-delay [scroll-duration min-delay max-delay]
+  (cond
+    (>= scroll-duration min-delay) 0
+
+    (and (>= scroll-duration min-delay)
+         (<= scroll-duration max-delay)) (rand-int (- max-delay scroll-duration))
+
+    :else (max min-delay
+               (rand-int (- max-delay scroll-duration)))))
+
 (rf/reg-fx
  :side-scroll
  (fn [[node pos callback]]
@@ -56,5 +66,31 @@
                    {:direction :right
                     :distance (- diff)}
                    {:direction :left
-                    :distance diff})]
-     (side-scroll node (:direction options) 25 (:distance options) 10 callback))))
+                    :distance diff})
+
+         direction (:direction options)
+         distance (:distance options)
+         speed 25
+         step 10
+
+         ; 500ms is rounded average diff (estimate vs real durations) based on real scroll durations
+         estimated-scroll-duration (if (zero? distance)
+                                     0
+                                     (+ 500 (* speed (/ distance step))))
+
+         delay (random-delay estimated-scroll-duration 2000 6000)]
+    ;;  (js/console.log "delay = " delay)
+    ;;  (js/console.log "scroll-duration = " estimated-scroll-duration)
+    ;;  (js/console.log "total-wait-time = " (+ delay estimated-scroll-duration))
+     (js/setTimeout
+      #(side-scroll node direction speed distance step callback)
+      delay))))
+
+;; (rf/reg-event-fx
+;;  :test-scroll
+;;  (fn [{:keys [db]} [_ pos]]
+;;    (let [timeline-node (get-in db [:dom-nodes :timeline])]
+;;      {:db db
+;;       :side-scroll [timeline-node pos #(do)]})))
+
+;; (rf/dispatch [:test-scroll 0])

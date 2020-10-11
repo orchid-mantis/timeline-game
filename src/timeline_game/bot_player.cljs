@@ -55,13 +55,3 @@
               (assoc-in [:bot :hand :ids] (:hand last-move))
               (assoc-in [:timeline :ids] (:timeline last-move)))
       :dispatch [:eval-move :bot (:id last-move)]})))
-
-
-;; (rf/reg-event-fx
-;;  :test-scroll
-;;  (fn [{:keys [db]} [_ pos]]
-;;    (let [timeline-node (get-in db [:dom-nodes :timeline])]
-;;      {:db db
-;;       :side-scroll [timeline-node pos #(do)]})))
-
-;; (rf/dispatch [:test-scroll 5])
