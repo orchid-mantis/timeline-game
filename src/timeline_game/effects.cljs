@@ -33,6 +33,12 @@
                                              (js/clearInterval @timer)
                                              (callback))))
                                   speed))))
+
+(defn add-offset [position offset]
+  (if (pos? position)
+    (+ position offset)
+    position))
+
 (rf/reg-fx
  :side-scroll
  (fn [[node pos callback]]
@@ -41,9 +47,7 @@
          current-pos (.-scrollLeft node)
 
          target-pos (-> (* pos (+ 166 20))
-                        (#(if (> pos 0)
-                            (+ % 40)
-                            %))
+                        (add-offset 40)
                         (min max-dist))
 
          diff (- current-pos target-pos)
