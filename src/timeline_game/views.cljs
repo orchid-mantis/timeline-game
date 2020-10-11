@@ -17,8 +17,9 @@
    [:div.players
     [view/players-stats]]
 
+   [ui/hourglass]
+
    [:div.table
-    [ui/hourglass]
     [view/timeline]
     [view/hand]]
 
