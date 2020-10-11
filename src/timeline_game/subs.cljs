@@ -50,6 +50,14 @@
    (and players-turn? turn-ready?)))
 
 (rf/reg-sub
+ :game/opponent-active?
+ (fn []
+   [(rf/subscribe [:game/players-turn?])
+    (rf/subscribe [:game/turn-ready?])])
+ (fn [[players-turn? turn-ready?]]
+   (and (not players-turn?) turn-ready?)))
+
+(rf/reg-sub
  :game/round
  (fn [db _]
    (get-in db [:game :round])))

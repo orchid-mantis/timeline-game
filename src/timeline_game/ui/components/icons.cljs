@@ -11,3 +11,10 @@
 
 (defn caret-right []
   [:i.fas.fa-caret-right {:style {:color :black}}])
+
+(defn hourglass-animated []
+  [:div.hourglass.fa-stack
+   [:i.fas.fa-stack-1x.fa-hourglass-start]
+   [:i.fas.fa-stack-1x.fa-hourglass-half]
+   [:i.fas.fa-stack-1x.fa-hourglass-end]
+   [:i.fas.fa-stack-1x.fa-hourglass-end.spin]])
