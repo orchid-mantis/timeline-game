@@ -46,8 +46,8 @@
     (and (>= scroll-duration min-delay)
          (<= scroll-duration max-delay)) (rand-int (- max-delay scroll-duration))
 
-    :else (max min-delay
-               (rand-int (- max-delay scroll-duration)))))
+    :else (+ min-delay
+               (rand-int (- max-delay min-delay)))))
 
 (rf/reg-fx
  :side-scroll
