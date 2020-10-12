@@ -25,7 +25,7 @@
                     :z-index z-index
                     :transform (str "translate(" x "px, " y "px)")
                     :transition (when (not dragged?) "0.5s")}}
-           [ui/basic-card-view
+           [ui/game-card
             card
             false
             (utils/cs (when @allow-drag? :selectable)

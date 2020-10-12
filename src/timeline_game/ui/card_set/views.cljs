@@ -21,4 +21,4 @@
            [:li {:id id
                  :key pos
                  :style {:display :inline-block}}
-            [ui/basic-card-view item true]]))]])))
+            [ui/game-card item true]]))]])))

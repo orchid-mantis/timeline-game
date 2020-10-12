@@ -77,7 +77,7 @@
                [:div.scroll-item {:key pos}
                 (if (= item :drop-zone)
                   [drop-zone pos @highlight-drop-zones?]
-                  [ui/basic-card-view
+                  [ui/game-card
                    item
                    true
                    (utils/cs (when (= id @last-added-id) @animation))
