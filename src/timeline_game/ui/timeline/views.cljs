@@ -51,6 +51,7 @@
   (let [cards (rf/subscribe [:timeline/cards])
         last-added-id (rf/subscribe [:timeline/last-added])
         scrollable? (rf/subscribe [:timeline/scrollable?])
+        allow-action? (rf/subscribe [:allow-action?])
         animation (rf/subscribe [:move-animation])
         highlight-drop-zones? (rf/subscribe [:highlight-drop-zones?])]
     (reagent/create-class
@@ -68,7 +69,8 @@
                          (rf/dispatch [:user/scroll-timeline (.-deltaY e)]))
 
              :style {:display :flex
-                     :justify-content (when (not @scrollable?) :center)}}
+                     :justify-content (when (not @scrollable?) :center)
+                     :touch-action (when (not @allow-action?) :none)}}
             (doall
              (for [[item pos] (map vector items (range))
                    :let [id (:id item)]]

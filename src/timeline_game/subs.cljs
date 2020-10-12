@@ -80,7 +80,7 @@
    (not= game-result :await)))
 
 (rf/reg-sub
- :allow-new-game?
+ :allow-action?
  (fn []
    [(rf/subscribe [:game/player-active?])
     (rf/subscribe [:game/ended?])])
