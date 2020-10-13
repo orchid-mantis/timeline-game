@@ -30,7 +30,8 @@
 
    [view/game-result]
 
-   [svg/card-border-clip]])
+   [svg/card-border-clip]
+   [svg/card-back]])
 
 (defn card-set-panel []
   [:div
