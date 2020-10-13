@@ -59,3 +59,11 @@
   box-shadow: 0px 13px 30px -10px rgb(214, 122, 64);
   transform: translateY(-10px);
 }
+
+.draggable.can-drop .card--normal {
+  background: linear-gradient(110deg, yellowgreen 0%, green 100%);
+}
+
+.draggable.can-drop .card--normal:hover {
+  box-shadow: none;
+}
