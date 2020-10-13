@@ -3,10 +3,10 @@
     top: 0;
     left: 0;
     float: left;
-    margin: 5px;
+    margin: 10px;
     width: 140px;
     height: 231px;
-    transition: all .2s ease-in-out;
+    transition: 0.4s;
   }
 
   .parent.selectable:hover {
@@ -36,7 +36,6 @@
   }
 
   .card-title {
-    font-family: "Open Sans", Helvetica, sans-serif;
     padding: 0 5px 0 5px;
     font-weight: bold;
     font-size: 0.8em;
