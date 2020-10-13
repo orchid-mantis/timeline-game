@@ -36,7 +36,10 @@
 (defn card-set-panel []
   [:div
    [ui/main-panel-button]
-   [view/card-set]])
+   [view/card-set]
+
+   [svg/card-border-clip]
+   [svg/card-back]])
 
 (defn- panels [panel-name]
   (case panel-name

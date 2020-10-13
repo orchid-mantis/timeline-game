@@ -12,13 +12,10 @@
 
 (defn view []
   (let [cards (rf/subscribe [:card-set/ordered])]
-    (fn []
-      [:div
-       [:ul
-        (doall
-         (for [[item pos] (map vector @cards (range))
-               :let [id (:id item)]]
-           [:li {:id id
-                 :key pos
-                 :style {:display :inline-block}}
-            [ui/game-card item true]]))]])))
+    [:div
+     (doall
+      (for [[item pos] (map vector @cards (range))
+            :let [id (:id item)]]
+        [:div {:id id
+               :key pos}
+         [ui/game-card item true]]))]))
