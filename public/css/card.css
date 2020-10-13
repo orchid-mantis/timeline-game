@@ -14,7 +14,7 @@
     transform: translateY(-10px);
   }
 
-  .border {
+  .card-back {
     position: absolute;
     width: 140px;
     height: 231px;
@@ -52,7 +52,20 @@
   }
 
   #card-back path {
+    fill: inherit;
+    stroke: inherit;
+  }
+
+  .card-back use {
     fill: #F1BF53;
     stroke: #F1BF53;
-    stroke-width: 1;
+  }
+
+  .draggable.can-drop use {
+    fill: limegreen;
+    stroke: limegreen;
+  }
+
+  .draggable.can-drop .content {
+    background: linear-gradient(110deg, rgb(201, 224, 155) 0%, rgb(84, 209, 84) 100%);
   }

@@ -1,6 +1,4 @@
-(ns timeline-game.ui.components.game-cards
-   (:require
-    [timeline-game.ui.components.svg-images :as svg]))
+(ns timeline-game.ui.components.game-cards)
 
 (defn basic-card [card show-face? class style]
   (fn [card show-face? class style]
@@ -15,9 +13,11 @@
   [:div.parent
    {:class class
     :style style}
-   [svg/ref
-    "#card-back"
-    {:class :border}]
+
+   [:svg.card-back
+    [:use
+     {:href "#card-back"}]]
+
    [:div.card-border-clip
     [:img.image {:src "images/cards/adam-eva.png"}]
     [:div.content
