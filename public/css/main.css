@@ -266,6 +266,11 @@
     margin-left: .5em;
   }
 
+  .draggable {
+    width: 100%;
+    height: 100%;
+  }
+
   .draggable.can-drop .card--normal {
     background: linear-gradient(110deg, yellowgreen 0%, green 100%);
   }
