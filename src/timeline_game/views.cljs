@@ -1,7 +1,8 @@
 (ns timeline-game.views
   (:require [re-frame.core :as rf]
             [timeline-game.ui.views :as view]
-            [timeline-game.ui.components :as ui]))
+            [timeline-game.ui.components :as ui]
+            [timeline-game.ui.components.svg-images :as svg]))
 
 (defn main-panel []
   [:div.site
@@ -27,7 +28,9 @@
     :history-overlay
     [view/card-history]]
 
-   [view/game-result]])
+   [view/game-result]
+
+   [svg/card-border-clip]])
 
 (defn card-set-panel []
   [:div
