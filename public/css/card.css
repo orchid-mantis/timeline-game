@@ -1,13 +1,4 @@
   @import url("https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300,700");
-  .main-parent {
-    border-radius: 6px;
-    margin: 10px;
-    background: black;
-    height: 210px;
-    width: 130px;
-    background-color: #3e8e41;
-    /* padding: 10px; */
-  }
 
   .parent {
     float: left;
@@ -31,16 +22,15 @@
     left: 0;
     /* border: 1px green solid; */
     width: 120px;
-    z-index: 2;
-    margin-bottom: 1px;
+    height: 198px;
+    z-index: 1;
+    /* margin-bottom: 1px; */
     /* box-shadow: 0px 5px 20px -10px #3A1C71; */
   }
 
   .image {
     position: relative;
-    width: 118px;
-    height: 152px;
-    padding: 1px;
+    height: 154px;
     display: block;
   }
 
@@ -48,12 +38,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: rgb(240, 235, 211); */
-    /* background-image: url("/images/cards/papyrus.png"); */
-    /* background-image: url("/images/cards/papyrus-small.png");  */
     background: linear-gradient(110deg, rgb(240, 235, 211) 0%, rgb(240, 229, 175) 100%);
     margin: 0;
-    height: 42px;
+    height: 44.24px;
   }
 
   .card-title {
@@ -63,4 +50,8 @@
     font-weight: bold;
     font-size: 11px;
     letter-spacing: 0.02em;
+  }
+
+  .card-border-clip {
+    clip-path: url("#card-border-clip");
   }

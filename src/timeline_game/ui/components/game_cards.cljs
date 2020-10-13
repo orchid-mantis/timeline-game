@@ -10,10 +10,10 @@
       (when show-face? [:h3.card__time-desc (:time-desc card)])]]))
 
 (defn image-card [card show-face? class style]
-  [:div.parent
+  [:div.parent.card-border-clip
    {:class class
     :style style}
-   [:img.border {:src "images/cards/card-border-back.svg"}]
+   [:img.border {:src "images/cards/card-back-side.svg"}]
    [:img.image {:src "images/cards/adam-eva.png"}]
    [:div.content
     [:h3.card-title (:title card)]]])
