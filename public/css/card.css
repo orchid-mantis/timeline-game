@@ -16,8 +16,8 @@
 
   .card-back {
     position: absolute;
-    width: 140px;
-    height: 231px;
+    width: inherit;
+    height: inherit;
     z-index: 1;
   }
 
