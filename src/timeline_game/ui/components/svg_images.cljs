@@ -12,12 +12,6 @@
       :stroke-width 1
       :d path}]]])
 
-(defn ref [id attributes]
-  [:svg
-   attributes
-   [:use
-    {:href id}]])
-
 (defn embed-clip [id path [width height]]
   [:svg
    {:width 0
