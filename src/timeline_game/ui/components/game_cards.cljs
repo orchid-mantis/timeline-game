@@ -19,6 +19,6 @@
      {:href "#card-back"}]]
 
    [:div.card-border-clip
-    [:img.image {:src "images/cards/adam-eva.png"}]
+    [:img.image {:src (str "images/cards/" (:img-name card) ".png")}]
     [:div.content
      [:h3.card-title (:title card)]]]])
