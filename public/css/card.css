@@ -24,6 +24,7 @@
   .image {
     position: relative;
     height: 177px;
+    width: inherit;
     display: block;
   }
 
