@@ -1,15 +1,8 @@
 body,
 html {
+  font-family: "Open Sans", helvetica, sans-serif;
   padding: 0;
   margin: 0;
-}
-
-ul {
-  padding-inline-start: 0;
-}
-
-.site {
-  font-family: "Open Sans", helvetica, sans-serif;
 }
 
 .menu-wrapper {
@@ -25,37 +18,21 @@ ul {
 .menu {
   background-color: rgba(255, 255, 255, 0.65);
   padding: 0.25em;
-  position: relative;
   border-radius: 0 0 3px 3px;
 }
 
-header {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.players {
-  margin: 10px 0 10px 0;
-  display: flex;
-  justify-content: center;
-}
-
-.status-bar {
-  display: flex;
-  justify-content: center;
-}
-
-.timeline {
-  padding-top: 100px;
-}
-
+header,
+.status-bar,
+.players,
 .hand {
   display: flex;
   justify-content: center;
 }
 
-footer {
-  display: flex;
-  justify-content: center;
+.players {
+  margin: 10px 0 10px 0;
+}
+
+.timeline {
+  padding-top: 100px;
 }

@@ -37,10 +37,11 @@
   }
 
   .card-title {
-    padding: 0 5px 0 5px;
+    font-family: "Open Sans", Helvetica, sans-serif;
     font-weight: bold;
     font-size: 0.8em;
     letter-spacing: 0.02em;
+    padding: 0 5px 0 5px;
   }
 
   .card-border-clip {

@@ -5,7 +5,7 @@
             [timeline-game.ui.components.svg-images :as svg]))
 
 (defn main-panel []
-  [:div.site
+  [:div
    [:header
     [:div.menu-wrapper
      [:div.menu
