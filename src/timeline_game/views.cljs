@@ -31,7 +31,8 @@
    [view/game-result]
 
    [svg/card-border-clip]
-   [svg/card-back]])
+   [svg/card-back]
+   [svg/card-front]])
 
 (defn card-set-panel []
   [:div
@@ -39,7 +40,7 @@
    [view/card-set]
 
    [svg/card-border-clip]
-   [svg/card-back]])
+   [svg/card-front]])
 
 (defn- panels [panel-name]
   (case panel-name

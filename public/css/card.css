@@ -14,7 +14,7 @@
     transform: translateY(-10px);
   }
 
-  .card-back {
+  .card-border {
     position: absolute;
     width: inherit;
     height: inherit;
@@ -53,12 +53,17 @@
     clip-path: url("#card-border-clip");
   }
 
-  #card-back path {
+  .card-front {
+    --primary-color: white;
+  }
+
+  #card-back path,
+  #card-front path {
     fill: inherit;
     stroke: inherit;
   }
 
-  .card-back use {
+  .card-border use {
     fill: #F1BF53;
     stroke: #F1BF53;
   }

@@ -14,9 +14,14 @@
    {:class class
     :style style}
 
-   [:svg.card-back
-    [:use
-     {:href "#card-back"}]]
+   (if show-face?
+     [:svg.card-border
+      [:use.card-front
+       {:href "#card-front"}]]
+
+     [:svg.card-border
+      [:use
+       {:href "#card-back"}]])
 
    [:div.card-border-clip
     [:img.image {:src (str "images/cards/" (:img-name card) ".png")}]
