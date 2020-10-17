@@ -1,18 +1,18 @@
 (ns timeline-game.ui.components.svg-images)
 
-(defn embed [id path [x y width height]]
+(defn embed [{:keys [id path view-box]}]
   [:svg
    {:style {:display :none}}
    [:symbol
     {:id id
-     :viewBox (str x " " y " " width " " height)}
-    [:path.path
+     :viewBox view-box}
+    [:path
      {:fill "none"
       :stroke "black"
       :stroke-width 1
       :d path}]]])
 
-(defn embed-clip [id path [width height]]
+(defn embed-clip [{:keys [id path width height]}]
   [:svg
    {:width 0
     :height 0}
@@ -54,7 +54,12 @@
       :d scroll-background}]]])
 
 (defn card-border-clip []
-  [embed-clip "card-border-clip" card-border-clip-path [457 755]])
+  [embed-clip {:id "card-border-clip"
+               :path card-border-clip-path
+               :width 457
+               :height 755}])
 
 (defn card-back []
-  [embed "card-back" card-back-path [0 0 458 755]])
+  [embed {:id "card-back"
+          :path card-back-path
+          :view-box "0 0 458 755"}])
