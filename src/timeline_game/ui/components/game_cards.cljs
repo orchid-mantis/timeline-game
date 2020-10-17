@@ -10,20 +10,17 @@
       (when show-face? [:h3.card__time-desc (:time-desc card)])]]))
 
 (defn image-card [card show-face? class style]
-  [:div.parent
-   {:class class
-    :style style}
-
-   (if show-face?
-     [:svg.card-border
-      [:use.card-front
-       {:href "#card-front"}]]
+  (let [href (if show-face? "#card-front" "#card-back")]
+    [:div.parent
+     {:class class
+      :style style}
 
      [:svg.card-border
       [:use
-       {:href "#card-back"}]])
+       {:class (when show-face? :card-front)
+        :href href}]]
 
-   [:div.card-border-clip
-    [:img.image {:src (str "images/cards/" (:img-name card) ".png")}]
-    [:div.content
-     [:h3.card-title (:title card)]]]])
+     [:div.card-border-clip
+      [:img.image {:src (str "images/cards/" (:img-name card) ".png")}]
+      [:div.content
+       [:h3.card-title (:title card)]]]]))
