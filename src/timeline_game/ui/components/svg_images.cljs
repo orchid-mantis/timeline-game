@@ -73,6 +73,8 @@
              C 500 200 600 300 700 200
              C 800 100 900 100 900 100")
 
+(def text-curve "M165,626.4575c12.8907,-2.4369,34.9695,-10.1751,60.5,-21.2041c39.807,-17.1965,57.6311,-23.4003,77,-26.8004c12.7663,-2.241,33.9766,-2.2682,45,-0.0576c10.2861,2.0627,13.2061,2.0331,14.3425,-0.1454l-261.0745,41.1322c6.4437,3.265,20.3411,7.4968,28.232,8.5968c8.564,1.1938,25.4006,0.4823,36,-1.5214")
+
 (defn text-over-path-dy [path-id max-text-len]
   (let [curve (js/document.getElementById path-id)
         curve-len (. curve getTotalLength)
@@ -147,3 +149,39 @@
  :SVG/char-offsets
  (fn [db [_ path-id]]
    (get-in db [:svg :char-offsets (keyword path-id)])))
+
+(defn wrap-text-curve []
+  (let [path-id "text-curve-path"]
+    [text-path
+     {:id "text-curve"
+      :path text-curve
+      :path-id path-id
+      :view-box "0 0 458 755"}
+     (count "2370 př.n.l")
+     #(rf/dispatch [:SVG/store-char-offsets % path-id])]))
+
+(defn scroll-text [text]
+  (let [char-offsets (rf/subscribe [:SVG/char-offsets "text-curve-path"])]
+    (fn [text]
+      (when (seq @char-offsets)
+        [:svg.scroll-text
+         {:width 120
+          ;; :height 755
+          :viewBox "0 0 458 755"}
+         [:use
+          {:href "#text-curve"
+           :fill "none"
+           :stroke "red"}]
+         [:text
+          {:x 165
+           :y 262
+           :font-size 45
+           :font-family "Verdana"}
+          (let [char-dy (map vector (seq text) @char-offsets)]
+            (doall
+             (map-indexed
+              (fn [i [char dy]]
+                [:tspan
+                 {:key i
+                  :dy dy}
+                 char]) char-dy)))]]))))
