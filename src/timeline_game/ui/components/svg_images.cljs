@@ -1,13 +1,17 @@
-(ns timeline-game.ui.components.svg-images)
+(ns timeline-game.ui.components.svg-images
+  (:require
+   [re-frame.core :as rf]
+   [reagent.core :as reagent]))
 
-(defn inline-svg [{:keys [id path view-box]}]
+(defn inline-svg [{:keys [id path path-id view-box]}]
   [:svg
    {:style {:display :none}}
    [:symbol
     {:id id
      :viewBox view-box}
     [:path
-     {:fill "none"
+     {:id path-id
+      :fill "none"
       :stroke "black"
       :stroke-width 1
       :d path}]]])
@@ -63,3 +67,83 @@
   [inline-svg {:id "card-back"
                :path card-back-path
                :view-box "0 0 458 755"}])
+
+(def curve-path "M 100 200
+             C 200 100 300   0 400 100
+             C 500 200 600 300 700 200
+             C 800 100 900 100 900 100")
+
+(defn text-over-path-dy [path-id max-text-len]
+  (let [curve (js/document.getElementById path-id)
+        curve-len (. curve getTotalLength)
+        step (/ curve-len max-text-len)]
+    (loop [i 0
+           dx 0
+           point (. curve getPointAtLength dx)
+           result []]
+      (if (>= i max-text-len)
+        result
+        (let [next-point (. curve getPointAtLength dx)]
+          (recur (inc i)
+                 (+ dx step)
+                 next-point
+                 (conj result (- (.-y next-point) (.-y point)))))))))
+
+(defn text-path [{:keys [path-id] :as options} max-text-len callback]
+  (let [char-offsets (rf/subscribe [:SVG/char-offsets path-id])]
+    (reagent/create-class
+     {:reagent-render
+      (fn []
+        [inline-svg options])
+
+      :component-did-mount
+      (fn []
+        (when (nil? @char-offsets)
+          (-> (text-over-path-dy path-id max-text-len)
+              (callback))))})))
+
+(defn wrap-curve []
+  (let [path-id "curve-path"]
+    [text-path
+     {:id "curve"
+      :path curve-path
+      :path-id path-id
+      :view-box "0 0 900 400"}
+     (count "We go up, then we go down, then up again")
+     #(rf/dispatch [:SVG/store-char-offsets % path-id])]))
+
+(defn text-over-path [text]
+  (let [char-offsets (rf/subscribe [:SVG/char-offsets "curve-path"])]
+    (fn [text]
+      (when (seq @char-offsets)
+        [:svg
+         {:width 450
+          :height 200
+          :viewBox "0 0 900 400"}
+         [:use
+          {:href "#curve-path"
+           :fill "none"
+           :stroke "red"}]
+         [:text
+          {:x 90
+           :y 200
+           :font-size 36
+           :font-family "Verdana"}
+          (let [char-dy (map vector (seq text) @char-offsets)]
+            (doall
+             (map-indexed
+              (fn [i [char dy]]
+                [:tspan
+                 {:key i
+                  :dy dy}
+                 char]) char-dy)))]]))))
+
+(rf/reg-event-db
+ :SVG/store-char-offsets
+ (fn [db [_ offsets path-id]]
+   (assoc-in db [:svg :char-offsets (keyword path-id)] offsets)))
+
+(rf/reg-sub
+ :SVG/char-offsets
+ (fn [db [_ path-id]]
+   (get-in db [:svg :char-offsets (keyword path-id)])))
