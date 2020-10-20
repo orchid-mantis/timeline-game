@@ -30,7 +30,7 @@
           (rf/dispatch [:dnd/dropzone
                         node
                         {:accept ".draggable"
-                         :overlap 0.04
+                         :overlap 0.03
                          :ondragenter (fn [e]
                                         (let [draggableElement (.-relatedTarget e)
                                               dropzoneElement (.-target e)]
