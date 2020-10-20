@@ -60,7 +60,7 @@
 (defn card-border-clip []
   [inline-svg-clip {:id "card-border-clip"
                     :path card-border-clip-path
-                    :width 457
+                    :width 458
                     :height 755}])
 
 (defn card-back []
