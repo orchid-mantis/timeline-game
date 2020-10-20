@@ -14,7 +14,8 @@
     transform: translateY(-10px);
   }
 
-  .card-border {
+  .card-border,
+  .scroll-text {
     position: absolute;
     width: inherit;
     height: inherit;
@@ -77,4 +78,11 @@
 
   .draggable.can-drop .content {
     background: linear-gradient(110deg, rgb(201, 224, 155) 0%, rgb(84, 209, 84) 100%);
+  }
+
+  .scroll-text {
+    visibility: visible;
+    font-size: 0.7em;
+    font-weight: bold;
+    top: -0.3em;
   }
