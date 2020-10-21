@@ -1,6 +1,20 @@
 (ns timeline-game.common_test
   (:require [cljs.test :refer-macros [deftest testing is]]
-            [timeline-game.common :refer [ordered?]]))
+            [timeline-game.common :refer [put-before ordered?]]))
+
+(deftest test-put-before
+  (testing "Place item on start"
+    (let [items [1 2 3 4]]
+      (is (= [5 1 2 3 4]
+             (put-before items 0 5)))))
+  (testing "Put item in middle"
+    (let [items [1 2 3 4]]
+      (is (= [1 2 5 3 4]
+             (put-before items 2 5)))))
+  (testing "Put item at end"
+    (let [items [1 2 3 4]]
+      (is (= [1 2 3 4 5]
+             (put-before items 4 5))))))
 
 (deftest test-ordered?
   (testing "Order doesnt matter for same years"
