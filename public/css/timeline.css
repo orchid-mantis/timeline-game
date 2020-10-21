@@ -10,7 +10,8 @@
 }
 
 .scrolling-wrapper .scroll-item {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     -webkit-box-flex: 0;
     flex: 0 0 auto;
 }
