@@ -74,12 +74,12 @@
            [drop-zone 0 @highlight-drop-zones?]]
 
           (doall
-           (for [[item pos] (map vector @cards (range))
-                 :let [id (:id item)
+           (for [[card pos] (map vector @cards (range))
+                 :let [id (:id card)
                        pos (inc pos)]]
              [:div.scroll-item {:key (str id "-" pos)}
               ^{:key id} [ui/game-card
-                          item
+                          card
                           true
                           (utils/cs (when (= id @last-added-id) @animation))
                           {:margin "10px 0 10px 0"}]
