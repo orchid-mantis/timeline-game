@@ -56,7 +56,7 @@
          (doall
           (map-indexed
            (fn [index item]
-             [:div.column {:key index}
+             [:div.grid-cell {:key index}
               (if (even? index)
                 [player-name item @curr-player]
                 [players-stats item])])
