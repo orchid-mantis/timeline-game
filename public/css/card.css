@@ -82,7 +82,7 @@
   }
 
   .scroll-text {
-    /* user-select: none; */
+    user-select: none;
     visibility: visible;
     font-size: 0.7em;
     font-weight: bold;
