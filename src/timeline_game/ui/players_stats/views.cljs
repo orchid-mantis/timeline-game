@@ -4,9 +4,9 @@
    [timeline-game.ui.players-stats.subs]
    [timeline-game.ui.components.icons :as icon]))
 
-(defn players-stats [player]
-  (let [stats (rf/subscribe [:player/stats-view player])
-        hand-size (rf/subscribe [:hand/size player])]
+(defn players-stats [player-id]
+  (let [stats (rf/subscribe [:player/stats-view player-id])
+        hand-size (rf/subscribe [:hand/size player-id])]
     (fn []
       (let [last-played-card (:last-played-card @stats)
             last-valid-move? (:last-valid-move? @stats)]
@@ -54,8 +54,10 @@
       (let [items (interleave (vals @players) (keys @players))]
         [:div.players-stats
          (doall
-          (for [[p index] (map vector items (range))]
-            [:div.column {:key index}
-             (if (keyword? p)
-               [players-stats p]
-               [player-name p @curr-player])]))]))))
+          (map-indexed
+           (fn [index item]
+             [:div.column {:key index}
+              (if (even? index)
+                [player-name item @curr-player]
+                [players-stats item])])
+           items))]))))
