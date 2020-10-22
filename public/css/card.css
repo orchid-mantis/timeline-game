@@ -86,3 +86,7 @@
     font-weight: bold;
     top: -0.3em;
   }
+
+  .timeline .parent {
+    margin: 10px 0;
+  }

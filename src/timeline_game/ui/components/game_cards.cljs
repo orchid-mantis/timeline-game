@@ -3,14 +3,13 @@
    [re-frame.core :as rf]
    [reagent.core :as reagent]))
 
-(defn basic-card [card show-face? class style]
-  (fn [card show-face? class style]
-    [:figure.card.card--normal
-     {:class class
-      :style style}
-     [:figcaption.card__caption
-      [:h1.card__title (:title card)]
-      (when show-face? [:h3.card__time-desc (:time-desc card)])]]))
+(defn basic-card [card show-face? class]
+  [:figure.card.card--normal
+   {:class class}
+   [:figcaption.card__caption
+    [:h1.card__title (:title card)]
+    (when show-face?
+      [:h3.card__time-desc (:time-desc card)])]])
 
 (defn warp-text [target]
   (js/cssWarp (clj->js {:path [[35.2688 216.7838]
@@ -23,16 +22,15 @@
                         ;;            :thickness 1}
                         })))
 
-(defn image-card [card show-face? class style]
+(defn image-card [card show-face? class]
   (let [card-id (:id card)
         scroll-text-id (str "text-" card-id)]
     (reagent/create-class
      {:reagent-render
-      (fn [card show-face? class style]
+      (fn [card show-face? class]
         (let [href (if show-face? "#card-front" "#card-back")]
           [:div.parent
-           {:class class
-            :style style}
+           {:class class}
 
            [:svg.card-border
             [:use

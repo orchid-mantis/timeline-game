@@ -81,8 +81,7 @@
               ^{:key id} [ui/game-card
                           card
                           true
-                          (utils/cs (when (= id @last-added-id) @animation))
-                          {:margin "10px 0 10px 0"}]
+                          (utils/cs (when (= id @last-added-id) @animation))]
 
               ^{:key pos} [drop-zone pos @highlight-drop-zones?]]))]])
 
