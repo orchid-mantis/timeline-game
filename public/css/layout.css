@@ -29,6 +29,10 @@ header,
   justify-content: center;
 }
 
+.hand .cards {
+  display: flex;
+}
+
 .players {
   margin: 10px 0 10px 0;
 }

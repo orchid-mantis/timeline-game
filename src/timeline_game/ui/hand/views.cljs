@@ -71,7 +71,8 @@
         drawn-card-id (rf/subscribe [:drawn-card-id])]
     (fn []
       [:div.hand
-       (doall
-        (for [card @cards]
-          [:div {:key (:id card)}
-           [draggable card allow-drag? drawn-card-id]]))])))
+       [:div.cards
+        (doall
+         (for [card @cards]
+           ^{:key (:id card)}
+           [draggable card allow-drag? drawn-card-id]))]])))

@@ -14,8 +14,6 @@
   (let [cards (rf/subscribe [:card-set/ordered])]
     [:div
      (doall
-      (for [[item pos] (map vector @cards (range))
-            :let [id (:id item)]]
-        [:div {:id id
-               :key pos}
-         [ui/game-card item true]]))]))
+      (for [card @cards]
+        ^{:key (:id card)}
+        [ui/game-card card true]))]))
