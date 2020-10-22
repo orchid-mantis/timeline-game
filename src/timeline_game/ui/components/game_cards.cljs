@@ -12,6 +12,17 @@
       [:h1.card__title (:title card)]
       (when show-face? [:h3.card__time-desc (:time-desc card)])]]))
 
+(defn warp-text [target]
+  (js/cssWarp (clj->js {:path [[35.2688 216.7838]
+                               [38.2112 217.7934 42.4588 220.438 50.7617 219.9646]
+                               [76.0438 218.5233 94.8823 196.9491 123.872 202.8383]]
+                        :targets target
+                        :rotationMode "skew"
+                        :indent "1em"
+                        ;; :showPath {:color "red"
+                        ;;            :thickness 1}
+                        })))
+
 (defn image-card [card show-face? class style]
   (let [card-id (:id card)
         scroll-text-id (str "text-" card-id)]
@@ -41,26 +52,4 @@
       :component-did-mount
       (fn []
         (when show-face?
-          (rf/dispatch [:warp-scroll-text (str "#" scroll-text-id)])))})))
-
-(defn warp-text [targets]
-  (js/cssWarp (clj->js {:path [[35.2688 216.7838]
-                               [38.2112 217.7934 42.4588 220.438 50.7617 219.9646]
-                               [76.0438 218.5233 94.8823 196.9491 123.872 202.8383]]
-                        :targets targets
-                        :rotationMode "skew"
-                        :indent "1em"
-                        ;; :showPath {:color "red"
-                        ;;            :thickness 1}
-                        })))
-
-(rf/reg-event-fx
- :warp-scroll-text
- (fn [{:keys [db]} [_ targets]]
-   {:db db
-    :warp-text [targets]}))
-
-(rf/reg-fx
- :warp-text
- (fn [[targets]]
-   (warp-text targets)))
+          (warp-text (str "#" scroll-text-id))))})))
