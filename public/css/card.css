@@ -4,8 +4,6 @@
     left: 0;
     float: left;
     margin: 10px;
-    width: 160px;
-    height: 264px;
     transition: 0.4s;
   }
 
@@ -47,12 +45,6 @@
 
   .card-border-clip {
     position: relative;
-    left: 2px;
-    top: 2px;
-    /* width: 136px;
-    height: 227px; */
-    width: 158px;
-    height: 262px;
     clip-path: url("#card-border-clip");
   }
 

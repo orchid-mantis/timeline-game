@@ -28,9 +28,13 @@
     (reagent/create-class
      {:reagent-render
       (fn [card show-face? class]
-        (let [href (if show-face? "#card-front" "#card-back")]
+        (let [href (if show-face? "#card-front" "#card-back")
+              width 160
+              height 264]
           [:div.parent
-           {:class class}
+           {:class class
+            :style {:width width
+                    :height height}}
 
            [:svg.card-border
             [:use
@@ -43,6 +47,10 @@
               (:time-desc card)])
 
            [:div.card-border-clip
+            {:style {:width (- width 2)
+                     :height (- height 2)
+                     :top 2
+                     :left 2}}
             [:img.image {:src (str "images/cards/" (:img-name card) ".png")}]
             [:div.content
              [:h3.card-title (:title card)]]]]))
