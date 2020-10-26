@@ -3,9 +3,9 @@
    [reagent.core :as reagent]
    [timeline-game.ui.utils :as utils]))
 
-(defn basic-card [card show-face? class]
+(defn basic-card [card show-face? attributes]
   [:figure.card.card--normal
-   {:class class}
+   attributes
    [:figcaption.card__caption
     [:h1.card__title (:title card)]
     (when show-face?
@@ -30,25 +30,26 @@
     {:indent "0"
      :css ""}))
 
-(defn image-card [card show-face? class]
+(defn image-card [card show-face? attributes]
   (let [card-id (:id card)
         scroll-text-id (str "text-" card-id)
         options (warp-text-options (:scroll-text card))]
     (reagent/create-class
      {:reagent-render
-      (fn [card show-face? class]
-        (let [href (if show-face? "#card-front" "#card-back")
-              border-class (if show-face? :card-front :card-back)
+      (fn [card show-face? attributes]
+        (let [{:keys [class style]} attributes
               width 160
               height 264]
           [:div.parent
-           {:class (utils/cs class border-class)
-            :style {:width width
-                    :height height}}
-
+           (merge attributes
+                  {:class (utils/cs class
+                                    (if show-face? :card-front :card-back))
+                   :style (merge style
+                                 {:width width
+                                  :height height})})
            [:svg.card-border
             [:use
-             {:href href}]]
+             {:href (if show-face? "#card-front" "#card-back")}]]
 
            (when show-face?
              [:div.scroll-text

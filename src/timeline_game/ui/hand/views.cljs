@@ -28,10 +28,10 @@
            [ui/game-card
             card
             false
-            (utils/cs (when @allow-drag? :selectable)
-                      (when (= id @drawn-card-id) :slide-in-top))
-            {:cursor (when (not @allow-drag?) :not-allowed)
-             :opacity (when (not @allow-drag?) 0.3)}]]))
+            {:class (utils/cs (when @allow-drag? :selectable)
+                              (when (= id @drawn-card-id) :slide-in-top))
+             :style {:cursor (when (not @allow-drag?) :not-allowed)
+                     :opacity (when (not @allow-drag?) 0.3)}}]]))
 
       :component-did-update
       (fn [this]
