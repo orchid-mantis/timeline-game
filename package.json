@@ -7,7 +7,10 @@
     "server": "shadow-cljs server;"
   },
   "dependencies": {
-    "create-react-class": "^15.6.3",
+    "@emotion/core": "^10.0.35",
+    "@emotion/styled": "^10.0.27",
+    "create-react-class": "^15.7.0",
+    "emotion-theming": "^10.0.27",
     "highlight.js": "9.18.1",
     "interactjs": "^1.9.22",
     "mousetrap": "^1.6.5",
