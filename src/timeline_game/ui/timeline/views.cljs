@@ -83,7 +83,7 @@
                           true
                           {:class (utils/cs (when (= id @last-added-id) @animation))}]
 
-              ^{:key pos} [drop-zone pos @highlight-drop-zones?]]))]])
+              ^{:key (str "dz-" pos)} [drop-zone pos @highlight-drop-zones?]]))]])
 
       :component-did-update
       (fn []
