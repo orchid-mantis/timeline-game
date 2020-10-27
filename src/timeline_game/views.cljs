@@ -2,37 +2,41 @@
   (:require [re-frame.core :as rf]
             [timeline-game.ui.views :as view]
             [timeline-game.ui.components :as ui]
-            [timeline-game.ui.components.svg-images :as svg]))
+            [timeline-game.ui.components.svg-images :as svg]
+            [dv.cljs-emotion-reagent :refer [theme-provider]]))
 
 (defn main-panel []
-  [:div
-   [:header
-    [:div.menu-wrapper
-     [:div.menu
-      [:span.title "Bible Timeline Game"]
-      [ui/start-game-button]
-      [ui/played-cards-button]]]]
+  (let [theme (rf/subscribe [:app/theme])]
+    (theme-provider
+     @theme
+     [:div
+      [:header
+       [:div.menu-wrapper
+        [:div.menu
+         [:span.title "Bible Timeline Game"]
+         [ui/start-game-button]
+         [ui/played-cards-button]]]]
 
-   [view/status-bar]
+      [view/status-bar]
 
-   [:div.players
-    [view/players-stats]]
+      [:div.players
+       [view/players-stats]]
 
-   [ui/hourglass]
+      [ui/hourglass]
 
-   [:div.table
-    [view/timeline]
-    [view/hand]]
+      [:div.table
+       [view/timeline]
+       [view/hand]]
 
-   [ui/overlay-view
-    :history-overlay
-    [view/card-history]]
+      [ui/overlay-view
+       :history-overlay
+       [view/card-history]]
 
-   [view/game-result]
+      [view/game-result]
 
-   [svg/card-border-clip]
-   [svg/card-back]
-   [svg/card-front]])
+      [svg/card-border-clip]
+      [svg/card-back]
+      [svg/card-front]])))
 
 (defn card-set-panel []
   [:div
