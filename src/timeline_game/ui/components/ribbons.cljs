@@ -9,8 +9,8 @@
           transparent-border (str "15px solid transparent")]
       {:position :absolute
        :top "25px"
-       :left "-180px"
-       :width "200px"
+       :left (get-in theme [:ribbon :left])
+       :width (get-in theme [:ribbon :width])
        :height "30px"
        :background color
        :z-index -1

@@ -4,12 +4,16 @@
 (def default-theme
   {:theme
    {:ribbon
-    {:color "crimson"}}})
+    {:color "crimson"
+     :width "200px"
+     :left "-180px"}}})
 
 (def image-card-theme
   {:theme
    {:ribbon
-    {:color "grey"}}})
+    {:color "rgb(219, 212, 204)"
+     :width "210px"
+     :left "-180px"}}})
 
 (rf/reg-event-db
  :app/set-theme
