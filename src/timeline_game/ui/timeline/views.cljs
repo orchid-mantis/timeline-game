@@ -6,45 +6,7 @@
    [timeline-game.ui.timeline.events]
    [timeline-game.ui.timeline.subs]
    [timeline-game.ui.components :as ui]
-   [timeline-game.ui.utils :as utils]
-   [dv.cljs-emotion-reagent :refer [defstyled]]))
-
-(defstyled ribbon :div
-  (fn [{:keys [color hide]}]
-    (let [border             (str "15px solid " color)
-          transparent-border (str "15px solid transparent")]
-      {:position :absolute
-       :top "25px"
-       :left "-180px"
-       :width "200px"
-       :height "30px"
-       :background color
-       :z-index -1
-
-       :visibility (when hide :hidden)
-       ".scroll-item:first-of-type &" {:visibility :hidden}
-
-       ":before" {:content "''"
-                  :position :absolute
-                  :top 0
-                  :left "-20px"
-                  :border-left transparent-border
-                  :border-right border
-                  :border-top border
-                  :border-bottom border}
-
-       ":after"  {:content "''"
-                  :position :absolute
-                  :top 0
-                  :right "-30px"
-                  :border transparent-border
-                  :border-left border}})))
-
-(defn crimson-ribbon [highlight-drop-zones?]
-  (ribbon
-   {:color :crimson
-    :hide highlight-drop-zones?}
-   []))
+   [timeline-game.ui.utils :as utils]))
 
 (defn drop-zone [pos highlight-drop-zones?]
   (let [allow-drop? (rf/subscribe [:allow-drop?])]
@@ -52,7 +14,7 @@
      {:reagent-render
       (fn [_ highlight-drop-zones?]
         [:div.drop-zone {:class (when highlight-drop-zones? :highlight-all)}
-         (crimson-ribbon highlight-drop-zones?)])
+         (ui/ribbon highlight-drop-zones?)])
 
       :component-did-update
       (fn [this]
