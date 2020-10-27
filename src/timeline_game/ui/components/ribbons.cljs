@@ -3,8 +3,9 @@
    [dv.cljs-emotion-reagent :refer [defstyled]]))
 
 (defstyled ribbon :div
-  (fn [{:keys [color hide]}]
-    (let [border             (str "15px solid " color)
+  (fn [{:keys [theme hide]}]
+    (let [color              (get-in theme [:ribbon :color])
+          border             (str "15px solid " color)
           transparent-border (str "15px solid transparent")]
       {:position :absolute
        :top "25px"
@@ -33,8 +34,7 @@
                   :border transparent-border
                   :border-left border}})))
 
-(defn basic-card-ribbon [highlight-drop-zones?]
+(defn timeline-ribbon [highlight-drop-zones?]
   (ribbon
-   {:color :crimson
-    :hide highlight-drop-zones?}
+   {:hide highlight-drop-zones?}
    []))

@@ -14,7 +14,7 @@
      {:reagent-render
       (fn [_ highlight-drop-zones?]
         [:div.drop-zone {:class (when highlight-drop-zones? :highlight-all)}
-         (ui/ribbon highlight-drop-zones?)])
+         (ui/timeline-ribbon highlight-drop-zones?)])
 
       :component-did-update
       (fn [this]

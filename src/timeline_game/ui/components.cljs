@@ -10,7 +10,7 @@
 ;;; Components ;;;
 (def game-card cards/basic-card)
 ; (def game-card cards/image-card)
-(def ribbon ribbons/basic-card-ribbon)
+(def timeline-ribbon ribbons/timeline-ribbon)
 
 (def start-game-button buttons/start-game-button)
 (def played-cards-button buttons/played-cards-button)
