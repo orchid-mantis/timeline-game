@@ -24,7 +24,8 @@ html {
 header,
 .status-bar,
 .players,
-.hand {
+.hand,
+.hourglass-wrapper {
   display: flex;
   justify-content: center;
 }
@@ -37,6 +38,6 @@ header,
   margin: 10px 0 10px 0;
 }
 
-.timeline {
-  padding-top: 100px;
+.hourglass-wrapper {
+  height: 128px;
 }

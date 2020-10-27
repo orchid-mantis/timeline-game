@@ -17,11 +17,8 @@
 
 (defn hourglass []
   (let [opponent-active? (rf/subscribe [:game/opponent-active?])]
-    [:div {:style {:position :absolute
-                   :left "50%"}}
-     [:div {:style {:position :relative
-                    :left "-50%"}}
-      (when @opponent-active?
-        [:div {:style {:font-size "4em"
-                       :color "rgb(155, 127, 91)"}}
-         [icon/hourglass-animated]])]]))
+    [:div.hourglass-wrapper
+     (when @opponent-active?
+       [:div {:style {:font-size "4em"
+                      :color "rgb(155, 127, 91)"}}
+        [icon/hourglass-animated]])]))
