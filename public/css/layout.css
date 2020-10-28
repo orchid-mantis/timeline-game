@@ -41,3 +41,7 @@ header,
 .hourglass-wrapper {
   height: 128px;
 }
+
+.timeline {
+  margin-bottom: 20px;
+}
