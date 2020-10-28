@@ -41,11 +41,12 @@
    (let [[id new-hand] (select-card (get-in db [:bot :hand :ids]))
          timeline (get-in db [:timeline :ids])
          [pos new-timeline] (bot-place-card timeline id bot-success?)
-         timeline-node (get-in db [:dom-nodes :timeline])]
+         timeline-node (get-in db [:dom-nodes :timeline])
+         card-width (get-in db [:app :game-card :width])]
      {:db (assoc-in db [:bot :last-move] {:id id
                                           :hand new-hand
                                           :timeline new-timeline})
-      :side-scroll [timeline-node pos #(rf/dispatch [:side-scroll-finished])]})))
+      :side-scroll [timeline-node card-width pos #(rf/dispatch [:side-scroll-finished])]})))
 
 (rf/reg-event-fx
  :side-scroll-finished

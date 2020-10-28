@@ -51,12 +51,12 @@
 
 (rf/reg-fx
  :side-scroll
- (fn [[node pos callback]]
+ (fn [[node card-width pos callback]]
    (let [max-dist (- (.-scrollWidth node) (.-clientWidth node))
 
          current-pos (.-scrollLeft node)
 
-         target-pos (-> (* pos (+ 166 20))
+         target-pos (-> (* pos (+ card-width 20))
                         (add-offset 40)
                         (min max-dist))
 
