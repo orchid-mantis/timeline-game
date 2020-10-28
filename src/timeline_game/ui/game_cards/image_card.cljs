@@ -8,7 +8,7 @@
 (def theme
   {:theme
    {:ribbon
-    {:color "rgb(219, 212, 204)"
+    {:color "#e4e0d5"
      :width "210px"
      :left "-180px"}}})
 
