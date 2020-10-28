@@ -3,6 +3,11 @@
    [re-frame.core :as rf]))
 
 (rf/reg-sub
+ :app/theme
+ (fn [db _]
+   (get-in db [:app :theme])))
+
+(rf/reg-sub
  :players
  (fn [db _]
    (get-in db [:players])))

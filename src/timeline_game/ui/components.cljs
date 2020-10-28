@@ -1,6 +1,5 @@
 (ns timeline-game.ui.components
   (:require
-   [timeline-game.ui.components.game-cards :as cards]
    [timeline-game.ui.components.ribbons :as ribbons]
    [timeline-game.ui.components.views :as views]
    [timeline-game.ui.components.buttons :as buttons]
@@ -8,8 +7,6 @@
    [timeline-game.ui.components.overlay :as overlay]))
 
 ;;; Components ;;;
-(def game-card cards/basic-card)
-; (def game-card cards/image-card)
 (def timeline-ribbon ribbons/timeline-ribbon)
 
 (def start-game-button buttons/start-game-button)

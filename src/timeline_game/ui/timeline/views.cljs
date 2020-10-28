@@ -47,7 +47,8 @@
                                      (rf/dispatch [:user/place-card id pos])))}])))})))
 
 (defn view []
-  (let [cards (rf/subscribe [:timeline/cards])
+  (let [game-card (rf/subscribe [:game-card/comp])
+        cards (rf/subscribe [:timeline/cards])
         last-added-id (rf/subscribe [:timeline/last-added])
         scrollable? (rf/subscribe [:timeline/scrollable?])
         allow-action? (rf/subscribe [:allow-action?])
@@ -77,7 +78,7 @@
                  :let [id (:id card)
                        pos (inc pos)]]
              [:div.scroll-item {:key (str id "-" pos)}
-              ^{:key id} [ui/game-card
+              ^{:key id} [@game-card
                           card
                           true
                           {:class (utils/cs (when (= id @last-added-id) @animation))}]

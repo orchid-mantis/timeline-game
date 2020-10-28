@@ -3,6 +3,7 @@
             [reagent.dom :as reagent-dom]
             ["mousetrap" :as mousetrap]
             [timeline-game.ui.dnd]
+            [timeline-game.ui.card-provider]
             [timeline-game.routes :as routes]
             [timeline-game.init]
             [timeline-game.events]
@@ -15,7 +16,8 @@
  ::load-app
  (fn [{:keys [db]} _]
    {:db (merge db (-> db/default-db))
-    :dispatch [:new-game]}))
+    :dispatch-n [[:game-card/init :basic-card]
+                 [:new-game]]}))
 
 (defn ^:dev/after-load render []
   (rf/clear-subscription-cache!)

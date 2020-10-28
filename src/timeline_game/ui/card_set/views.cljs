@@ -13,6 +13,7 @@
 
 (defn view []
   (let [timer (atom nil)
+        game-card (rf/subscribe [:game-card/comp])
         cards (rf/subscribe [:card-set/ordered])]
     (reagent/create-class
      {:reagent-render
@@ -21,7 +22,7 @@
          (doall
           (for [card @cards]
             ^{:key (:id card)}
-            [ui/game-card card true]))])
+            [@game-card card true]))])
 
       :component-did-mount
       (fn []

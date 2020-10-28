@@ -1,15 +1,16 @@
-(ns timeline-game.ui.components.game-cards
+(ns timeline-game.ui.game-cards.image-card
   (:require
    [reagent.core :as reagent]
    [timeline-game.ui.utils :as utils]))
 
-(defn basic-card [card show-face? attributes]
-  [:figure.card.card--normal
-   attributes
-   [:figcaption.card__caption
-    [:h1.card__title (:title card)]
-    (when show-face?
-      [:h3.card__time-desc (:time-desc card)])]])
+(def card-width 160)
+
+(def theme
+  {:theme
+   {:ribbon
+    {:color "rgb(219, 212, 204)"
+     :width "210px"
+     :left "-180px"}}})
 
 (defn warp-text [target {:keys [indent css]}]
   (js/cssWarp (clj->js {:path [[35.2688 216.7838]
@@ -30,7 +31,7 @@
     {:indent "0"
      :css ""}))
 
-(defn image-card [card show-face? attributes]
+(defn view [card show-face? attributes]
   (let [card-id (:id card)
         scroll-text-id (str "text-" card-id)
         options (warp-text-options (:scroll-text card))]

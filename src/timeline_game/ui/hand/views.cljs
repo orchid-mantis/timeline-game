@@ -8,12 +8,12 @@
    [timeline-game.ui.components :as ui]
    [timeline-game.ui.utils :as utils]))
 
-(defn draggable [card allow-drag? drawn-card-id]
+(defn draggable [game-card card allow-drag? drawn-card-id]
   (let [s (reagent/atom {:pos [0 0] :z-index 0 :allow-drag? @allow-drag?})
         id (:id card)]
     (reagent/create-class
      {:reagent-render
-      (fn [card allow-drag? drawn-card-id]
+      (fn [game-card card allow-drag? drawn-card-id]
         (let [z-index (:z-index @s)
               [x y] (:pos @s)
               dragged? (:dragged? @s)]
@@ -25,7 +25,7 @@
                     :z-index z-index
                     :transform (str "translate(" x "px, " y "px)")
                     :transition (when (not dragged?) "0.5s")}}
-           [ui/game-card
+           [game-card
             card
             false
             {:class (utils/cs (when @allow-drag? :selectable)
@@ -66,7 +66,8 @@
           (rf/dispatch [:dnd/enable-drag node @allow-drag?])))})))
 
 (defn view []
-  (let [allow-drag? (rf/subscribe [:game/player-active?])
+  (let [game-card (rf/subscribe [:game-card/comp])
+        allow-drag? (rf/subscribe [:game/player-active?])
         cards (rf/subscribe [:hand/cards])
         drawn-card-id (rf/subscribe [:drawn-card-id])]
     (fn []
@@ -75,4 +76,4 @@
         (doall
          (for [card @cards]
            ^{:key (:id card)}
-           [draggable card allow-drag? drawn-card-id]))]])))
+           [draggable @game-card card allow-drag? drawn-card-id]))]])))
