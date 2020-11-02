@@ -8,7 +8,8 @@
   [dv/cljs-emotion "2020-10-13"]]
 
  :source-paths
- ["src"]
+ ["src/main"
+  "src/test"]
 
  ;; set an nrepl port for connection to a REPL.
  :nrepl
