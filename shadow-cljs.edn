@@ -1,7 +1,18 @@
-{:deps true
+{:dependencies
+ [[re-frame "0.12.0"]
+  [reagent "0.10.0"]
+  [day8.re-frame/re-frame-10x "0.6.2"]
+  [secretary "1.2.3"]
+  [kixi/stats "0.5.2"]
+  [telewatt/re-frame-datatable "0.6.1"]
+  [dv/cljs-emotion "2020-10-13"]]
+
+ :source-paths
+ ["src"]
 
  ;; set an nrepl port for connection to a REPL.
- :nrepl {:port 8777}
+ :nrepl
+ {:port 8777}
 
  :builds {;; example build config, usage suitable for user apps
           :app {:target :browser

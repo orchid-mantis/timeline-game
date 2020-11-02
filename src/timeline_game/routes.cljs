@@ -20,7 +20,7 @@
   (doto (History.)
     (gevents/listen
      EventType/NAVIGATE
-     (fn [event]
+     (fn [^EventType/NAVIGATE event]
        (secretary/dispatch! (.-token event))))
     (.setEnabled true)))
 
