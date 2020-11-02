@@ -4,7 +4,8 @@
   "scripts": {
     "watch": "shadow-cljs watch app;",
     "release": "shadow-cljs release --verbose app;",
-    "server": "shadow-cljs server;"
+    "server": "shadow-cljs server;",
+    "test": "shadow-cljs watch test;"
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",

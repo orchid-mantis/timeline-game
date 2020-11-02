@@ -1,4 +1,4 @@
-(ns timeline-game.common_test
+(ns timeline-game.common-test
   (:require [cljs.test :refer-macros [deftest testing is]]
             [timeline-game.common :refer [put-before ordered?]]))
 

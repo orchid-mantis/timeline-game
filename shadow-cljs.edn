@@ -24,4 +24,9 @@
                 :devtools {:http-root "public"
                            :http-port 9090
                            :preloads [devtools.preload
-                                      day8.re-frame-10x.preload]}}}}
+                                      day8.re-frame-10x.preload]}}
+
+          :test {:target :node-test
+                 :output-to "target/test.js"
+                 :ns-regexp "test$"
+                 :autorun   true}}}
