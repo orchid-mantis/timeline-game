@@ -1,0 +1,2 @@
+{:game-card #profile {:dev      :image-card
+                      :netlify  :basic-card}}

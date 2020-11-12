@@ -10,13 +10,14 @@
             [timeline-game.effects]
             [timeline-game.subs]
             [timeline-game.views :as views]
-            [timeline-game.db :as db]))
+            [timeline-game.db :as db]
+            [timeline-game.env :as env]))
 
 (rf/reg-event-fx
  ::load-app
  (fn [{:keys [db]} _]
    {:db (merge db (-> db/default-db))
-    :dispatch-n [[:game-card/init :basic-card]
+    :dispatch-n [[:game-card/init (env/get :game-card)]
                  [:new-game]]}))
 
 (defn ^:dev/after-load render []

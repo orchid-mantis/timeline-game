@@ -6,11 +6,14 @@
   [secretary "1.2.3"]
   [kixi/stats "0.5.2"]
   [telewatt/re-frame-datatable "0.6.1"]
-  [dv/cljs-emotion "2020-10-13"]]
+  [dv/cljs-emotion "2020-10-13"]
+  [mhuebert/shadow-env "0.1.6"]
+  [aero "1.1.6"]]
 
  :source-paths
  ["src/main"
-  "src/test"]
+  "src/test"
+  "resource"]
 
  ;; set an nrepl port for connection to a REPL.
  :nrepl
@@ -22,6 +25,7 @@
                 :output-dir "public/js/compiled"
                 :asset-path "/js/compiled"
                 :compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}
+                :build-hooks [(shadow-env.core/hook)]
                 :devtools {:http-root "public"
                            :http-port 9090
                            :preloads [devtools.preload
