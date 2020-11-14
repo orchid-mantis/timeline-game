@@ -19,6 +19,7 @@
  :nrepl
  {:port 8777}
 
+ :cache-blockers #{timeline-game.env}
  :builds {;; example build config, usage suitable for user apps
           :app {:target :browser
                 :modules {:base {:init-fn timeline-game.core/init}}
