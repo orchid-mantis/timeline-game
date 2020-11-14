@@ -1,0 +1,9 @@
+{
+    "browserWindow": {
+        "resizable": true,
+        "backgroundColor": "#fff",
+        "webPreferences": {
+            "nodeIntegration": false
+        }
+    }
+}

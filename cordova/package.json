@@ -1,0 +1,28 @@
+{
+  "name": "timeline-game",
+  "displayName": "Bible Timeline Game",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "cordova-electron": "^1.1.1",
+    "cordova-plugin-console": "^1.1.0",
+    "cordova-plugin-whitelist": "^1.3.4"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-console": {}
+    },
+    "platforms": [
+      "electron"
+    ]
+  }
+}
