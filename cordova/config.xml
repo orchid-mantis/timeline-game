@@ -16,5 +16,4 @@
     <platform name="electron">
         <preference name="ElectronSettingsFilePath" value="resource/electron/settings.json" />
     </platform>
-</platform>
 </widget>
