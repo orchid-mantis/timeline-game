@@ -6,7 +6,8 @@
 
 #?(:clj
    (defn read-env [build-state]
-     (let [aero-config {:profile (or (System/getenv "ENV") :dev)}]
+     (let [profile (keyword (System/getenv "ENV"))
+           aero-config {:profile (or profile :dev)}]
        {:cljs (-> (io/resource "config.edn")
                   (aero/read-config aero-config))})))
 
