@@ -29,5 +29,4 @@ clean:
 	cd cordova && \
 	rm -rf node_modules/ && \
 	rm -rf platforms/ && \
-	rm -rf plugins/ && \
-	rm -rf www/
+	rm -rf plugins/
