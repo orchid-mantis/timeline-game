@@ -9,17 +9,12 @@ release: node_modules
 sync-www: release
 	rsync -avu public/ cordova/www
 
-cordova/www:
-	cd cordova && \
-	mkdir www
-	touch $@
-
 cordova/node_modules: cordova/package.json
 	cd cordova && \
 	npm install
 	touch $@
 
-cordova/platforms/electron: cordova/config.xml cordova/www
+cordova/platforms/electron:
 	cd cordova && \
 	cordova platform add electron
 	touch $@
