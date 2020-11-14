@@ -15,7 +15,7 @@
 (rf/reg-event-db
  :game-card/init
  (fn [db [_ key]]
-   (let [card (get game-card key (:basic-card game-card))]
+   (let [card (get game-card key)]
      (-> db
          (assoc-in [:app :game-card] (select-keys card [:comp :width]))
          (assoc-in [:app :theme] (:theme card))))))
