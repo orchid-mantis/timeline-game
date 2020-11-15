@@ -1,3 +1,6 @@
+electron-main-res := cordova/resource/electron/cdv-electron-main.js
+electron-main := cordova/platforms/electron/platform_www/cdv-electron-main.js
+
 node_modules: package.json
 	npm install
 	touch $@
@@ -20,6 +23,7 @@ cordova/platforms/electron:
 	touch $@
 
 electron: cordova/node_modules cordova/platforms/electron sync-www
+	cp $(electron-main-res) $(electron-main)
 	cd cordova && \
 	cordova build electron --release
 
