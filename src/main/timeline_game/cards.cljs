@@ -115,7 +115,7 @@
             {:title "Eutychos", :year 52, :time-desc "52-56 n.l." :img-name "114" :scroll-text {:font-size "0.8em" :indent "14%" :top "-0.35em"}}
             {:title "Ztroskotání", :year 58, :time-desc "58-59 n.l." :img-name "116" :scroll-text {:font-size "0.8em" :indent "14%" :top "-0.35em"}}
             {:title "Pavel v Římě", :year 59, :time-desc "59-61 n.l." :img-name "117" :scroll-text {:font-size "0.8em" :indent "14%" :top "-0.35em"}}
-            {:title "Zjevení Janovi", :year 96, :time-desc "96 n.l." :img-name "119" :scroll-text {:font-size "0.8em" :indent "14%" :top "-0.35em"}}
+            {:title "Zjevení Janovi", :year 96, :time-desc "96 n.l." :img-name "119" :scroll-text {:font-size "0.8em" :indent "18%" :top "-0.35em"}}
             {:title "„Nová země“", :year 9999, :time-desc "Již brzy..." :img-name "120" :scroll-text {:font-size "0.8em" :indent "12%" :top "-0.35em"}}])
 
 (defn indexed-cards []
