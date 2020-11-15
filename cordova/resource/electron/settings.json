@@ -2,6 +2,7 @@
     "browserWindow": {
         "resizable": true,
         "backgroundColor": "#fff",
+        "autoHideMenuBar": true,
         "webPreferences": {
             "nodeIntegration": false
         }
