@@ -2,8 +2,10 @@
 <widget id="timeline-game" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Bible Timeline Game</name>
     <description>
+        BTG is card based game. Goal is to arrange cards in chronological order.
     </description>
     <author>
+        BTG Team
     </author>
     <content src="index.html" />
     <access origin="*" />
