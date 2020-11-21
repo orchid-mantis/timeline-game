@@ -1,7 +1,7 @@
 (ns timeline-game.init
   (:require
    [re-frame.core :as rf]
-   [timeline-game.env :as env]))
+   [timeline-game.config :as conf]))
 
 (def players {:player {:id :player :name "Player"}
               :bot    {:id :bot :name "Bot"}})
@@ -15,7 +15,7 @@
   [(take hand-size deck) (vec (drop hand-size deck))])
 
 (defn init-hand [db player]
-  (let [[hand deck] (deal-cards (env/get :hand-size) (:deck db))]
+  (let [[hand deck] (deal-cards (conf/hand-size) (:deck db))]
     (-> db
         (assoc-in [player :hand :ids] hand)
         (assoc-in [player :hand :state] :ready)
