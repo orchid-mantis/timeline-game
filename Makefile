@@ -6,7 +6,7 @@ node_modules: package.json
 	touch $@
 
 release: node_modules
-	export ENV=dev; \
+	export ENV=offline; \
 	shadow-cljs release app
 
 sync-www: release
