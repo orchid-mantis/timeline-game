@@ -1,2 +1,3 @@
 {:game-card #profile {:dev      :image-card
-                      :netlify  :basic-card}}
+                      :netlify  :basic-card}
+ :hand-size 6}
