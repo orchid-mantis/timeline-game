@@ -1,3 +1,8 @@
 {:game-card #profile {:dev      :image-card
                       :netlify  :basic-card}
- :hand-size 6}
+ :hand-size 6
+ :auto-side-scroll
+ {:delay-enabled? #profile {:dev false
+                            :netlify true}
+  :min-delay 2000
+  :max-delay 6000}}

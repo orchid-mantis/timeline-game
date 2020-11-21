@@ -1,6 +1,7 @@
 (ns timeline-game.effects
   (:require
-   [re-frame.core :as rf]))
+   [re-frame.core :as rf]
+   [timeline-game.config :as conf]))
 
 (rf/reg-fx
  :timeout
@@ -78,7 +79,9 @@
                                      0
                                      (+ 500 (* speed (/ distance step))))
 
-         delay (random-delay estimated-scroll-duration 2000 6000)]
+         delay (if (conf/delay-enabled?)
+                 (random-delay estimated-scroll-duration (conf/min-delay) (conf/max-delay))
+                 0)]
     ;;  (js/console.log "delay = " delay)
     ;;  (js/console.log "scroll-duration = " estimated-scroll-duration)
     ;;  (js/console.log "total-wait-time = " (+ delay estimated-scroll-duration))
