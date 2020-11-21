@@ -79,8 +79,8 @@
                                      0
                                      (+ 500 (* speed (/ distance step))))
 
-         delay (if (conf/delay-enabled?)
-                 (random-delay estimated-scroll-duration (conf/min-delay) (conf/max-delay))
+         delay (if (conf/auto-scroll-delay-enabled?)
+                 (random-delay estimated-scroll-duration (conf/auto-scroll-min-delay) (conf/auto-scroll-max-delay))
                  0)]
     ;;  (js/console.log "delay = " delay)
     ;;  (js/console.log "scroll-duration = " estimated-scroll-duration)

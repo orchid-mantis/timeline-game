@@ -8,11 +8,11 @@
 (defn hand-size []
   (env/get :hand-size))
 
-(defn delay-enabled? []
-  (get (env/get :auto-side-scroll) :delay-enabled?))
+(defn auto-scroll-delay-enabled? []
+  (get (env/get :auto-scroll) :delay-enabled?))
 
-(defn min-delay []
-  (get (env/get :auto-side-scroll) :min-delay))
+(defn auto-scroll-min-delay []
+  (get (env/get :auto-scroll) :min-delay))
 
-(defn max-delay []
-  (get (env/get :auto-side-scroll) :max-delay))
+(defn auto-scroll-max-delay []
+  (get (env/get :auto-scroll) :max-delay))
