@@ -40,7 +40,7 @@
        :margin "0 -10px"
        ":hover" {:transform "translateY(-50px) rotate(0deg)"
                  :transition-duration "450ms"
-                 :z-index 100}})))
+                 :z-index 1}})))
 
 (defn card-in-hand [{:keys [index] :as options} el]
   (card
@@ -55,15 +55,14 @@
     (reagent/create-class
      {:reagent-render
       (fn [game-card card index total-cards allow-drag? drawn-card-id]
-        (let [z-index (:z-index @s)
-              [x y] (:pos @s)
+        (let [[x y] (:pos @s)
               dragged? (:dragged? @s)]
           [:div.draggable
            {:data-id id
+            :class (when dragged? :dragged)
             :style {:touch-action :none
                     :user-select :none
                     :position :relative
-                    ;; :z-index z-index
                     :transform (str "translate(" x "px, " y "px)")
                     :transition (when (not dragged?) "0.5s")}}
            (card-in-hand
@@ -99,13 +98,11 @@
                                      (swap! s assoc :pos [new-x new-y])))
 
                          :onstart (fn []
-                                    (swap! s merge {:dragged? true
-                                                    :z-index 1})
+                                    (swap! s merge {:dragged? true})
                                     (rf/dispatch [:select-card id]))
 
                          :onend   (fn []
                                     (swap! s merge {:dragged? false
-                                                    :z-index 0
                                                     :pos [0 0]})
                                     (rf/dispatch [:deselect-card id]))}])
           (rf/dispatch [:dnd/enable-drag node @allow-drag?])))})))

@@ -85,6 +85,14 @@
   stroke: #F1BF53;
 }
 
+.draggable.dragged {
+  z-index: 1;
+}
+
+.draggable:hover {
+  z-index: 1;
+}
+
 .draggable.can-drop use {
   fill: limegreen;
   stroke: limegreen;
