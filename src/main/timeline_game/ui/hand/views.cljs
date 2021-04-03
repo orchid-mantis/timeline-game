@@ -5,9 +5,8 @@
    [reagent.dom :as reagent-dom]
    [timeline-game.ui.hand.events]
    [timeline-game.ui.hand.subs]
-   [timeline-game.ui.components :as ui]
    [timeline-game.ui.utils :as utils]
-   [dv.cljs-emotion-reagent :refer [defstyled]]))
+   [dv.cljs-emotion-reagent :refer [defstyled keyframes]]))
 
 (defn rotation [i o range]
   (* range (/ (- o (/ (- i 1) 2))
@@ -32,6 +31,12 @@
 (defn ->keyword [value]
   (keyword (str value)))
 
+(def fade-animation
+  (keyframes {"0%"   {:opacity 0.9
+                      :transform "scale(1)"}
+              "100%" {:opacity 0
+                      :transform "scale(1.15)"}}))
+
 (defstyled card :div
   (fn [{:keys [card-transform total-cards n dragged?]}]
     (let [[rotation offset] (get-in card-transform [(->keyword total-cards) (->keyword n)])]
@@ -41,7 +46,18 @@
        ":hover" {:transform "translateY(-50px) rotate(0deg)"
                  :transition-duration "450ms"
                  :z-index 1}
-       :transition "800ms cubic-bezier(0.19, 1, 0.22, 1) transform"})))
+       :transition "800ms cubic-bezier(0.19, 1, 0.22, 1) transform"
+       ".parent:after" {:animation :none
+                        :background "#fff"
+                        :bottom 0
+                        :content "''"
+                        :left 0
+                        :opacity 0
+                        :position :absolute
+                        :right 0
+                        :top 0}
+       ":hover .parent:after" {:animation (str fade-animation " 450ms ease-out forwards")
+                               :z-index 1}})))
 
 (defn card-in-hand [{:keys [index] :as options} el]
   (card
