@@ -22,7 +22,7 @@
  :cache-blockers #{timeline-game.env}
  :builds {;; example build config, usage suitable for user apps
           :app {:target :browser
-                :modules {:base {:init-fn timeline-game.core/init}}
+                :modules {:base {:init-fn btg.app.core/init}}
                 :output-dir "public/js/compiled"
                 :asset-path "/js/compiled"
                 :compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}
