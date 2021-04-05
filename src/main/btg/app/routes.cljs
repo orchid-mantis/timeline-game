@@ -33,6 +33,9 @@
 
   (defroute "/card-set" []
     (rf/dispatch [:set-active-panel :card-set-panel]))
+  
+  (defroute "/comm-test" []
+    (rf/dispatch [:set-active-panel :comm-test-panel]))
 
   ;; --------------------
   (hook-browser-navigation!))

@@ -46,10 +46,24 @@
    [svg/card-border-clip]
    [svg/card-front]])
 
+(defn connect-button []
+  [:input {:type     :button
+           :value    "Connect"
+           :disabled @(rf/subscribe [:comm/connected])
+           :on-click #(rf/dispatch [:comm/connect])}])
+
+(defn comm-test-panel []
+  (let [push-count (or @(rf/subscribe [:comm/push-count]) 0)]
+    [:div
+     [:p (str "Push count: " push-count)]
+     [connect-button]
+     [:p "(push data is logged to the console)"]]))
+
 (defn- panels [panel-name]
   (case panel-name
     :main-panel [main-panel]
     :card-set-panel [card-set-panel]
+    :comm-test-panel [comm-test-panel]
     [:div]))
 
 (defn show-panel [panel-name]
