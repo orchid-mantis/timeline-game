@@ -8,7 +8,8 @@
   [telewatt/re-frame-datatable "0.6.1"]
   [dv/cljs-emotion "2020-10-13"]
   [mhuebert/shadow-env "0.1.6"]
-  [aero "1.1.6"]]
+  [aero "1.1.6"]
+  [com.taoensso/sente "1.16.2"]]
 
  :source-paths
  ["src/main"

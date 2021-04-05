@@ -5,6 +5,9 @@
             [btg.app.ui.dnd]
             [btg.app.ui.card-provider]
             [btg.app.routes :as routes]
+            [btg.app.comm.client]
+            [btg.app.comm.events]
+            [btg.app.comm.subs]
             [btg.app.init]
             [btg.app.events]
             [btg.app.effects]
@@ -18,7 +21,9 @@
  (fn [{:keys [db]} _]
    {:db (merge db (-> db/default-db))
     :dispatch-n [[:game-card/init (conf/game-card)]
-                 [:new-game]]}))
+                 [:new-game]
+                 [:comm/init]
+                 ]}))
 
 (defn ^:dev/after-load render []
   (rf/clear-subscription-cache!)
