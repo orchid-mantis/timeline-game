@@ -8,6 +8,11 @@ RUN apt-get update \
 # Install git, process tools, lsb-release (common in install instructions for CLIs)
 RUN apt-get -y install git procps lsb-release rsync
 
+# install leiningen
+RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein \
+    && chmod a+x lein && mv lein /usr/local/bin/lein \
+    && lein version
+
 # Clean up
 RUN apt-get autoremove -y \
     && apt-get clean -y \
