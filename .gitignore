@@ -9,3 +9,5 @@ pom.xml
 public/js/compiled/
 public/images/
 .calva/
+.lsp/
+.clj-kondo/
